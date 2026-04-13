@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI기반 예측형 물류공급망 통합관제 — SW/AI 구성도</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== VIEWPORT BASE ===== */
+html, body { height: 100%; overflow-x: hidden; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide {
+    width: 100vw; height: 100vh; height: 100dvh;
+    overflow: hidden; scroll-snap-align: start;
+    display: flex; flex-direction: column; position: relative;
+    background: var(--bg);
+}
+.slide-content {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    max-height: 100%; overflow: hidden; padding: var(--slide-padding);
+}
+:root {
+    --title-size: clamp(1.4rem, 4.5vw, 3rem);
+    --h2-size: clamp(1.15rem, 3vw, 1.9rem);
+    --h3-size: clamp(0.9rem, 2vw, 1.3rem);
+    --body-size: clamp(0.65rem, 1.2vw, 0.92rem);
+    --small-size: clamp(0.58rem, 0.95vw, 0.78rem);
+    --mono-size: clamp(0.52rem, 0.85vw, 0.72rem);
+    --slide-padding: clamp(1.2rem, 3.5vw, 3.5rem);
+    --content-gap: clamp(0.5rem, 1.8vw, 1.4rem);
+
+    --bg: #ffffff;
+    --bg-alt: #f8f9fb;
+    --surface: #ffffff;
+    --surface2: #f1f5f9;
+    --surface3: #e8edf3;
+    --border: #d1d9e6;
+    --border-light: #e8edf3;
+    --text: #1e293b;
+    --text-mid: #475569;
+    --text-dim: #94a3b8;
+    --primary: #1d4ed8;
+    --primary-light: #dbeafe;
+    --accent-blue: #2563eb;
+    --accent-cyan: #0891b2;
+    --accent-green: #059669;
+    --accent-orange: #d97706;
+    --accent-pink: #db2777;
+    --accent-purple: #7c3aed;
+    --accent-red: #dc2626;
+    --accent-teal: #0d9488;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+}
+* { box-sizing: border-box; }
+body { font-family: 'IBM Plex Sans', 'Noto Sans KR', sans-serif; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+code, .mono { font-family: 'IBM Plex Mono', monospace; }
+
+/* ===== SLIDE HEADER BAR ===== */
+.slide-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: clamp(0.4rem,1vw,0.8rem) var(--slide-padding);
+    border-bottom: 1px solid var(--border-light);
+    flex-shrink: 0;
+}
+.slide-header .brand {
+    font-size: var(--small-size); font-weight: 600; color: var(--primary);
+    letter-spacing: 0.02em;
+}
+.slide-header .page-info {
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--mono-size);
+    color: var(--text-dim);
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3 { margin: 0; line-height: 1.25; color: var(--text); }
+h1 { font-size: var(--title-size); font-weight: 900; letter-spacing: -0.02em; }
+h2 { font-size: var(--h2-size); font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: var(--h3-size); font-weight: 600; }
+p { font-size: var(--body-size); line-height: 1.55; margin: 0; color: var(--text-mid); }
+
+.section-label {
+    display: inline-flex; align-items: center; gap: 0.4em;
+    font-size: var(--small-size); font-weight: 600; color: var(--primary);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.3em;
+}
+.section-label::before {
+    content: ''; width: 1.2em; height: 2px; background: var(--primary); flex-shrink: 0;
+}
+.tag {
+    display: inline-block; padding: 0.12em 0.55em; border-radius: 4px;
+    font-size: var(--mono-size); font-weight: 600; font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ===== 3-TIER ARCHITECTURE ===== */
+.tier-container {
+    display: flex; gap: clamp(0.4rem,1.2vw,1.2rem); align-items: stretch;
+    width: 100%; max-width: 1400px; margin: 0 auto;
+}
+.tier-column {
+    flex: 1; border: 1px solid var(--border); border-radius: 10px;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+.tier-column.wide { flex: 1.6; }
+.tier-head {
+    padding: clamp(0.35rem,0.8vw,0.7rem) clamp(0.5rem,1vw,1rem);
+    font-size: var(--small-size); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #fff; display: flex; align-items: center; gap: 0.5em;
+}
+.tier-body {
+    padding: clamp(0.3rem,0.7vw,0.7rem);
+    display: flex; flex-direction: column; gap: clamp(0.2rem,0.4vw,0.4rem);
+    flex: 1;
+}
+.tier-item {
+    display: flex; align-items: flex-start; gap: clamp(0.3rem,0.6vw,0.6rem);
+    padding: clamp(0.25rem,0.5vw,0.5rem); background: var(--bg-alt);
+    border-radius: 6px; border: 1px solid var(--border-light);
+}
+.tier-item .ti-icon {
+    width: clamp(1.1rem,2vw,1.8rem); height: clamp(1.1rem,2vw,1.8rem);
+    border-radius: 5px; display: flex; align-items: center; justify-content: center;
+    font-size: clamp(0.5rem,0.9vw,0.8rem); flex-shrink: 0; color: #fff;
+}
+.tier-item .ti-text { flex: 1; min-width: 0; }
+.tier-item .ti-name { font-size: var(--small-size); font-weight: 600; color: var(--text); line-height: 1.2; }
+.tier-item .ti-desc { font-size: calc(var(--small-size)*0.88); color: var(--text-dim); line-height: 1.3; }
+.tier-item .ti-tech {
+    font-family: 'IBM Plex Mono', monospace; font-size: calc(var(--mono-size)*0.9);
+    color: var(--accent-blue); margin-top: 0.1em;
+}
+
+/* ===== DATA FLOW ===== */
+.flow-container {
+    display: flex; flex-direction: column; gap: clamp(0.15rem,0.4vw,0.4rem);
+    max-width: 1300px; margin: 0 auto; width: 100%;
+}
+.flow-stage {
+    display: flex; align-items: center; gap: clamp(0.15rem,0.4vw,0.4rem);
+}
+.flow-stage-label {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    font-size: calc(var(--mono-size)*0.9); font-weight: 700; color: #fff;
+    padding: 0.3em 0.25em; border-radius: 5px; text-align: center;
+    min-height: clamp(2.5rem,5vw,4.5rem); display: flex; align-items: center;
+    justify-content: center; letter-spacing: 0.05em; flex-shrink: 0;
+    width: clamp(1.2rem,2vw,1.8rem);
+}
+.flow-items {
+    display: flex; gap: clamp(0.15rem,0.3vw,0.35rem); flex: 1; flex-wrap: wrap;
+}
+.flow-item {
+    flex: 1; min-width: clamp(5rem,10vw,9rem); background: var(--surface);
+    border: 1px solid var(--border-light); border-radius: 7px;
+    padding: clamp(0.25rem,0.5vw,0.55rem) clamp(0.35rem,0.7vw,0.7rem);
+    box-shadow: var(--shadow-sm);
+}
+.flow-item .fi-name { font-size: var(--small-size); font-weight: 600; color: var(--text); line-height: 1.2; }
+.flow-item .fi-detail { font-size: calc(var(--small-size)*0.88); color: var(--text-dim); line-height: 1.25; }
+.flow-item .fi-tech { font-family: 'IBM Plex Mono', monospace; font-size: calc(var(--mono-size)*0.9); color: var(--accent-blue); }
+.flow-connector {
+    text-align: center; color: var(--border); font-size: clamp(0.6rem,1vw,1rem);
+    line-height: 1; padding: 0 0 0 clamp(1.2rem,2vw,1.8rem);
+}
+
+/* ===== MODULE CARDS ===== */
+.mod-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: clamp(0.3rem,0.8vw,0.8rem); width: 100%; max-width: 1400px; margin: 0 auto;
+}
+.mod-card {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: 9px; overflow: hidden; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column;
+}
+.mod-card-head {
+    padding: clamp(0.3rem,0.6vw,0.6rem) clamp(0.4rem,0.8vw,0.8rem);
+    display: flex; align-items: center; gap: 0.5em;
+    border-bottom: 1px solid var(--border-light);
+}
+.mod-card-head .mc-icon {
+    width: clamp(1.3rem,2.2vw,2rem); height: clamp(1.3rem,2.2vw,2rem);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: clamp(0.55rem,1vw,0.9rem); flex-shrink: 0; color: #fff;
+}
+.mod-card-head .mc-title { font-size: var(--small-size); font-weight: 700; color: var(--text); line-height: 1.2; }
+.mod-card-head .mc-fp { font-family: 'IBM Plex Mono', monospace; font-size: calc(var(--mono-size)*0.95); color: var(--text-dim); }
+.mod-card-body {
+    padding: clamp(0.3rem,0.6vw,0.55rem) clamp(0.4rem,0.8vw,0.8rem);
+    flex: 1; display: flex; flex-direction: column; gap: clamp(0.1rem,0.2vw,0.2rem);
+}
+.mod-func {
+    font-size: calc(var(--small-size)*0.92); color: var(--text-mid); line-height: 1.3;
+    padding: 0.08em 0; display: flex; align-items: baseline; gap: 0.3em;
+}
+.mod-func::before { content: ''; width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; margin-top: 0.35em; }
+.mod-func-sub {
+    font-size: calc(var(--mono-size)); color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace; padding-left: 0.9em;
+}
+
+/* ===== FP TABLE ===== */
+.fp-table-wrap { max-width: 1300px; margin: 0 auto; width: 100%; }
+.fp-tbl {
+    width: 100%; border-collapse: collapse; font-size: var(--small-size);
+}
+.fp-tbl th {
+    text-align: left; padding: clamp(0.25rem,0.5vw,0.5rem) clamp(0.3rem,0.6vw,0.6rem);
+    font-weight: 600; color: var(--text-mid); border-bottom: 2px solid var(--text);
+    font-size: calc(var(--small-size)*0.95);
+}
+.fp-tbl td {
+    padding: clamp(0.2rem,0.4vw,0.4rem) clamp(0.3rem,0.6vw,0.6rem);
+    border-bottom: 1px solid var(--border-light); vertical-align: middle;
+}
+.fp-tbl tr:last-child td { border-bottom: 2px solid var(--text); }
+.fp-tbl .bar-cell { padding-right: clamp(0.5rem,1vw,1rem); }
+.fp-bar-bg {
+    height: clamp(0.5rem,1vw,0.9rem); background: var(--surface2); border-radius: 3px;
+    overflow: hidden; min-width: 60px;
+}
+.fp-bar-fill { height: 100%; border-radius: 3px; transition: width 1.2s ease; }
+.fp-type-legend {
+    display: flex; gap: clamp(0.4rem,1.2vw,1.5rem); flex-wrap: wrap;
+    font-size: var(--mono-size); color: var(--text-dim);
+}
+.fp-type-legend span { display: flex; align-items: center; gap: 0.3em; }
+.fp-type-legend .dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* ===== COST SUMMARY CARDS ===== */
+.cost-row {
+    display: flex; gap: clamp(0.4rem,1vw,1rem); justify-content: center;
+    flex-wrap: wrap; max-width: 1100px; margin: 0 auto;
+}
+.cost-card {
+    flex: 1; min-width: clamp(6rem,12vw,10rem); background: var(--bg-alt);
+    border: 1px solid var(--border-light); border-radius: 8px;
+    padding: clamp(0.4rem,0.8vw,0.8rem) clamp(0.5rem,1vw,1rem);
+    text-align: center;
+}
+.cost-card .cc-value { font-family: 'IBM Plex Mono', monospace; font-size: var(--h3-size); font-weight: 700; color: var(--text); }
+.cost-card .cc-label { font-size: calc(var(--small-size)*0.9); color: var(--text-dim); margin-top: 0.15em; }
+
+/* ===== TECH STACK ===== */
+.tech-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(0.3rem,0.8vw,0.8rem); max-width: 1300px; margin: 0 auto; width: 100%;
+}
+.tech-card {
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: 9px; overflow: hidden; box-shadow: var(--shadow-sm);
+}
+.tech-card-head {
+    padding: clamp(0.25rem,0.5vw,0.5rem) clamp(0.4rem,0.8vw,0.8rem);
+    font-size: calc(var(--small-size)*0.9); font-weight: 700; color: #fff;
+    text-transform: uppercase; letter-spacing: 0.08em;
+}
+.tech-card-body {
+    padding: clamp(0.3rem,0.5vw,0.5rem) clamp(0.4rem,0.8vw,0.8rem);
+    display: flex; flex-direction: column; gap: 0.15em;
+}
+.tech-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 0.1em 0; border-bottom: 1px solid var(--border-light);
+    font-size: calc(var(--small-size)*0.92);
+}
+.tech-row:last-child { border-bottom: none; }
+.tech-row .tr-name { font-weight: 500; color: var(--text); }
+.tech-row .tr-ver { font-family: 'IBM Plex Mono', monospace; font-size: var(--mono-size); color: var(--text-dim); }
+
+/* ===== ANIMATIONS ===== */
+.reveal { opacity: 0; transform: translateY(15px); transition: all 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-height: 700px) {
+    :root { --slide-padding: clamp(0.5rem,2vw,1.5rem); --title-size: clamp(1.1rem,3.5vw,2.2rem); }
+}
+@media (max-height: 500px) {
+    :root { --slide-padding: clamp(0.3rem,1.5vw,1rem); --title-size: clamp(0.95rem,3vw,1.6rem); --body-size: clamp(0.55rem,0.9vw,0.75rem); }
+    .slide-header { display: none; }
+}
+@media (max-width: 900px) {
+    .mod-grid { grid-template-columns: repeat(2, 1fr); }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .tier-container { flex-direction: column; }
+    .mod-grid { grid-template-columns: 1fr 1fr; }
+    .tech-grid { grid-template-columns: 1fr; }
+    .flow-stage-label { writing-mode: horizontal-tb; width: auto; min-height: auto; padding: 0.2em 0.5em; }
+    .flow-stage { flex-direction: column; align-items: stretch; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.15s !important; }
+    html { scroll-behavior: auto; }
+}
+
+/* ===== PROGRESS ===== */
+.progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--primary); z-index: 100; transition: width 0.3s; }
+.nav-dots {
+    position: fixed; right: clamp(0.3rem,0.8vw,0.8rem); top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 5px; z-index: 100;
+}
+.nav-dots .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--border);
+    cursor: pointer; transition: all 0.3s; border: 1.5px solid transparent;
+}
+.nav-dots .dot.active { background: var(--primary); border-color: var(--primary); transform: scale(1.4); }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ============================================================
+     SLIDE 1: TITLE
+     ============================================================ -->
+<section class="slide" style="background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 40%, #f8fafe 100%);">
+    <div class="slide-header">
+        <span class="brand">AI 응용제품 신속 상용화 지원사업</span>
+        <span class="page-info">SW/AI Architecture</span>
+    </div>
+    <div class="slide-content" style="align-items:center;text-align:center;gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label" style="justify-content:center;">2026 제조분야 AX 전환</div>
+            <h1 style="margin-top:0.15em;">SW · AI <span style="color:var(--primary);">구성도</span></h1>
+            <p style="margin-top:0.4em;max-width:650px;">AI기반 예측형 물류공급망 통합관제 구축<br>
+            <span class="mono" style="font-size:var(--small-size);color:var(--text-dim);">8 Modules &middot; 129 Functions &middot; 815.4 FP &middot; SW개발비 7.7억원</span></p>
+        </div>
+        <div class="reveal reveal-d1" style="display:flex;gap:0.5em;flex-wrap:wrap;justify-content:center;margin-top:0.3em;">
+            <span class="tag" style="background:#dbeafe;color:#1e40af;">도입 덕양가스</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">공급 한솔피엔에스</span>
+            <span class="tag" style="background:#fef3c7;color:#92400e;">참여 코어닷투데이</span>
+            <span class="tag" style="background:#ede9fe;color:#5b21b6;">기획 울산TP</span>
+        </div>
+        <div class="reveal reveal-d2" style="display:flex;gap:clamp(0.8rem,2vw,2.5rem);margin-top:clamp(0.5rem,1.5vw,1.2rem);flex-wrap:wrap;justify-content:center;">
+            <div style="text-align:center;">
+                <div class="mono" style="font-size:var(--h3-size);font-weight:700;color:var(--accent-green);">3-Tier</div>
+                <div style="font-size:var(--mono-size);color:var(--text-dim);">시스템 아키텍처</div>
+            </div>
+            <div style="text-align:center;">
+                <div class="mono" style="font-size:var(--h3-size);font-weight:700;color:var(--accent-blue);">4종</div>
+                <div style="font-size:var(--mono-size);color:var(--text-dim);">데이터 소스</div>
+            </div>
+            <div style="text-align:center;">
+                <div class="mono" style="font-size:var(--h3-size);font-weight:700;color:var(--accent-purple);">3개</div>
+                <div style="font-size:var(--mono-size);color:var(--text-dim);">AI 추론 엔진</div>
+            </div>
+            <div style="text-align:center;">
+                <div class="mono" style="font-size:var(--h3-size);font-weight:700;color:var(--accent-orange);">3채널</div>
+                <div style="font-size:var(--mono-size);color:var(--text-dim);">사용자 인터페이스</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 2: 3-TIER ARCHITECTURE
+     ============================================================ -->
+<section class="slide">
+    <div class="slide-header">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">02 / 08 &mdash; System Architecture</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">Architecture</div>
+            <h2>3-Tier 시스템 아키텍처</h2>
+        </div>
+        <div class="tier-container reveal reveal-d1">
+            <!-- EDGE -->
+            <div class="tier-column">
+                <div class="tier-head" style="background:var(--accent-green);">Edge Layer</div>
+                <div class="tier-body">
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-green);">S</div>
+                        <div class="ti-text">
+                            <div class="ti-name">IoT 탱크 레벨 센서</div>
+                            <div class="ti-desc">초음파 방식, 방폭인증 Ex ia IIC T4</div>
+                            <div class="ti-tech">MQTT / LoRaWAN &middot; 200대 &middot; 15분</div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-green);">G</div>
+                        <div class="ti-text">
+                            <div class="ti-name">GPS / OBD-II 차량 단말</div>
+                            <div class="ti-desc">위치, 속도, RPM, 연료 실시간 수집</div>
+                            <div class="ti-tech">LTE TCP/IP &middot; 15대 &middot; 30초</div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-green);">C</div>
+                        <div class="ti-text">
+                            <div class="ti-name">Around-View 카메라</div>
+                            <div class="ti-desc">4ch 어안 1920x1080@30fps, IP67</div>
+                            <div class="ti-tech">GigE Vision &middot; 10대(차량)</div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-green);">J</div>
+                        <div class="ti-text">
+                            <div class="ti-name">엣지 AI 컴퓨팅</div>
+                            <div class="ti-desc">NVIDIA Jetson Orin Nano 8GB</div>
+                            <div class="ti-tech">TensorRT &middot; YOLOv8 추론 15ms</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PLATFORM -->
+            <div class="tier-column wide">
+                <div class="tier-head" style="background:var(--accent-blue);">Platform Layer &mdash; AI 추론 &amp; 데이터</div>
+                <div class="tier-body">
+                    <div style="display:flex;gap:clamp(0.2rem,0.4vw,0.4rem);">
+                        <div class="tier-item" style="flex:1;">
+                            <div class="ti-icon" style="background:var(--accent-blue);">K</div>
+                            <div class="ti-text">
+                                <div class="ti-name">Apache Kafka 3.x</div>
+                                <div class="ti-desc">실시간 IoT/GPS 스트림 수집</div>
+                            </div>
+                        </div>
+                        <div class="tier-item" style="flex:1;">
+                            <div class="ti-icon" style="background:var(--accent-blue);">T</div>
+                            <div class="ti-text">
+                                <div class="ti-name">TimescaleDB</div>
+                                <div class="ti-desc">시계열 파티셔닝, 리텐션</div>
+                            </div>
+                        </div>
+                        <div class="tier-item" style="flex:1;">
+                            <div class="ti-icon" style="background:var(--accent-blue);">P</div>
+                            <div class="ti-text">
+                                <div class="ti-name">PostgreSQL 16</div>
+                                <div class="ti-desc">마스터 데이터, 트랜잭션</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:clamp(0.2rem,0.4vw,0.4rem);">
+                        <div class="tier-item" style="flex:1;border-left:3px solid var(--accent-cyan);">
+                            <div class="ti-text">
+                                <div class="ti-name" style="color:var(--accent-cyan);">수요예측 AI</div>
+                                <div class="ti-tech">PyTorch LSTM + Prophet + XGBoost 앙상블</div>
+                            </div>
+                        </div>
+                        <div class="tier-item" style="flex:1;border-left:3px solid var(--accent-orange);">
+                            <div class="ti-text">
+                                <div class="ti-name" style="color:var(--accent-orange);">배차최적화 엔진</div>
+                                <div class="ti-tech">Google OR-Tools CVRPTW 솔버</div>
+                            </div>
+                        </div>
+                        <div class="tier-item" style="flex:1;border-left:3px solid var(--accent-red);">
+                            <div class="ti-text">
+                                <div class="ti-name" style="color:var(--accent-red);">안전보조 AI</div>
+                                <div class="ti-tech">YOLOv8 + DeepSORT + TTC 판단</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-blue);">A</div>
+                        <div class="ti-text">
+                            <div class="ti-name">FastAPI REST Gateway</div>
+                            <div class="ti-desc">JWT 인증, RBAC, API 로깅/모니터링, Swagger 자동문서</div>
+                            <div class="ti-tech">Python 3.12 &middot; Celery 비동기 &middot; Redis 캐시</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- APPLICATION -->
+            <div class="tier-column">
+                <div class="tier-head" style="background:var(--accent-purple);">Application Layer</div>
+                <div class="tier-body">
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-purple);">W</div>
+                        <div class="ti-text">
+                            <div class="ti-name">통합관제 대시보드</div>
+                            <div class="ti-desc">잔량/배차/안전/KPI 통합 화면</div>
+                            <div class="ti-tech">React 18 + TypeScript + D3.js</div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-purple);">M</div>
+                        <div class="ti-text">
+                            <div class="ti-name">기사용 모바일 앱</div>
+                            <div class="ti-desc">배송지시, 경로, AVM, 비상신고</div>
+                            <div class="ti-tech">React Native &middot; Android/iOS</div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-purple);">P</div>
+                        <div class="ti-text">
+                            <div class="ti-name">고객 셀프서비스 포털</div>
+                            <div class="ti-desc">잔량 확인, 배송 예정, 수동 주문</div>
+                            <div class="ti-tech">Responsive Web (React)</div>
+                        </div>
+                    </div>
+                    <div class="tier-item">
+                        <div class="ti-icon" style="background:var(--accent-purple);">G</div>
+                        <div class="ti-text">
+                            <div class="ti-name">시스템 모니터링</div>
+                            <div class="ti-desc">서버/AI 모델 성능 추적</div>
+                            <div class="ti-tech">Grafana + Prometheus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 연동 범례 -->
+        <div class="reveal reveal-d2" style="display:flex;gap:1em;justify-content:center;flex-wrap:wrap;">
+            <span class="tag" style="background:#dcfce7;color:#166534;">5G/LTE 무선</span>
+            <span class="tag" style="background:#dbeafe;color:#1e40af;">VPN 유선망</span>
+            <span class="tag" style="background:#fef3c7;color:#92400e;">ERP DB Link</span>
+            <span class="tag" style="background:#fee2e2;color:#991b1b;">엣지 로컬</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 3: DATA FLOW PIPELINE
+     ============================================================ -->
+<section class="slide">
+    <div class="slide-header">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">03 / 08 &mdash; Data Pipeline</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">Data Flow</div>
+            <h2>데이터 수집 &rarr; 처리 &rarr; AI 추론 &rarr; 서비스 파이프라인</h2>
+        </div>
+        <div class="flow-container">
+            <!-- Stage 1: 수집 -->
+            <div class="flow-stage reveal reveal-d1">
+                <div class="flow-stage-label" style="background:var(--accent-green);">수집</div>
+                <div class="flow-items">
+                    <div class="flow-item" style="border-top:2px solid var(--accent-green);">
+                        <div class="fi-name">IoT 센서</div>
+                        <div class="fi-detail">탱크 잔량(%), 온도, 압력</div>
+                        <div class="fi-tech">MQTT &middot; 15분 주기 &middot; 200대</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-green);">
+                        <div class="fi-name">GPS / OBD</div>
+                        <div class="fi-detail">위도/경도, 속도, RPM, 연료</div>
+                        <div class="fi-tech">TCP/IP &middot; 30초 주기 &middot; 15대</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-orange);">
+                        <div class="fi-name">ERP (SAP)</div>
+                        <div class="fi-detail">주문, 배송이력, 고객/제품 마스터</div>
+                        <div class="fi-tech">DB Link &middot; 일 배치 &middot; 20만건/3년</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-orange);">
+                        <div class="fi-name">기상청 API</div>
+                        <div class="fi-detail">기온, 강수, 풍속 단기예보</div>
+                        <div class="fi-tech">REST &middot; 1시간 주기</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-red);">
+                        <div class="fi-name">AVM 카메라</div>
+                        <div class="fi-detail">4ch 영상, 30fps</div>
+                        <div class="fi-tech">GigE &middot; 엣지 로컬 처리</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-connector reveal reveal-d1">&#9660;</div>
+            <!-- Stage 2: 저장/전처리 -->
+            <div class="flow-stage reveal reveal-d2">
+                <div class="flow-stage-label" style="background:var(--accent-blue);">처리</div>
+                <div class="flow-items">
+                    <div class="flow-item" style="border-top:2px solid var(--accent-blue);">
+                        <div class="fi-name">Apache Kafka</div>
+                        <div class="fi-detail">실시간 스트림 수집, 토픽 분리</div>
+                        <div class="fi-tech">Producer → Topic → Consumer</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-blue);">
+                        <div class="fi-name">데이터 전처리</div>
+                        <div class="fi-detail">이상치 필터링, 결측값 보간, 정규화</div>
+                        <div class="fi-tech">Python ETL Pipeline</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-blue);">
+                        <div class="fi-name">TimescaleDB</div>
+                        <div class="fi-detail">시계열 데이터, Hypertable 파티셔닝</div>
+                        <div class="fi-tech">Continuous Aggregate &middot; 리텐션</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-blue);">
+                        <div class="fi-name">PostgreSQL</div>
+                        <div class="fi-detail">고객, 차량, 주문 마스터 데이터</div>
+                        <div class="fi-tech">ACID 트랜잭션 &middot; 인덱싱</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-connector reveal reveal-d2">&#9660;</div>
+            <!-- Stage 3: AI 추론 -->
+            <div class="flow-stage reveal reveal-d3">
+                <div class="flow-stage-label" style="background:var(--accent-cyan);">AI</div>
+                <div class="flow-items">
+                    <div class="flow-item" style="border-top:2px solid var(--accent-cyan);background:#f0fdfa;">
+                        <div class="fi-name" style="color:var(--accent-cyan);font-weight:700;">수요예측 (VMI)</div>
+                        <div class="fi-detail">고객별 D+1~D+14 잔량 고갈 예측</div>
+                        <div class="fi-tech">LSTM + Prophet + XGBoost 앙상블</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-orange);background:#fffbeb;">
+                        <div class="fi-name" style="color:var(--accent-orange);font-weight:700;">배차 최적화</div>
+                        <div class="fi-detail">다중 제약 최적 경로 생성</div>
+                        <div class="fi-tech">OR-Tools CVRPTW &middot; OSRM 거리</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-red);background:#fef2f2;">
+                        <div class="fi-name" style="color:var(--accent-red);font-weight:700;">안전보조 AI</div>
+                        <div class="fi-detail">객체 감지 + 궤적 추적 + 충돌 예측</div>
+                        <div class="fi-tech">YOLOv8 + DeepSORT &middot; 300ms</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-connector reveal reveal-d3">&#9660;</div>
+            <!-- Stage 4: 서비스 -->
+            <div class="flow-stage reveal reveal-d4">
+                <div class="flow-stage-label" style="background:var(--accent-purple);">서비스</div>
+                <div class="flow-items">
+                    <div class="flow-item" style="border-top:2px solid var(--accent-purple);">
+                        <div class="fi-name">FastAPI Gateway</div>
+                        <div class="fi-tech">REST API &middot; JWT &middot; Swagger</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-purple);">
+                        <div class="fi-name">관제 대시보드</div>
+                        <div class="fi-tech">React &middot; WebSocket 실시간</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-purple);">
+                        <div class="fi-name">기사 모바일 앱</div>
+                        <div class="fi-tech">React Native &middot; Push 알림</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-purple);">
+                        <div class="fi-name">고객 포털</div>
+                        <div class="fi-tech">Responsive &middot; 잔량/배송 조회</div>
+                    </div>
+                    <div class="flow-item" style="border-top:2px solid var(--accent-purple);">
+                        <div class="fi-name">ERP 반영</div>
+                        <div class="fi-tech">배송 실적 Write-back API</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 4: AI MODULE DETAIL — 수요예측 VMI
+     ============================================================ -->
+<section class="slide">
+    <div class="slide-header">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">04 / 08 &mdash; AI Module #1</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">Module Detail</div>
+            <h2><span style="color:var(--accent-cyan);">[VMI]</span> 수요예측 및 자동보충 &mdash; 33개 기능, 217.8 FP</h2>
+        </div>
+        <div style="display:flex;gap:clamp(0.4rem,1vw,1rem);max-width:1400px;margin:0 auto;width:100%;" class="reveal reveal-d1">
+            <!-- 왼쪽: 아키텍처 -->
+            <div style="flex:1.2;display:flex;flex-direction:column;gap:clamp(0.2rem,0.4vw,0.4rem);">
+                <div style="background:var(--bg-alt);border:1px solid var(--border-light);border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.9);font-weight:700;color:var(--accent-cyan);margin-bottom:0.3em;">데이터 입력</div>
+                    <div style="display:flex;gap:0.3em;flex-wrap:wrap;">
+                        <span class="tag" style="background:#ecfdf5;color:#065f46;">탱크잔량 IoT</span>
+                        <span class="tag" style="background:#fef3c7;color:#92400e;">배송이력 ERP</span>
+                        <span class="tag" style="background:#dbeafe;color:#1e40af;">기상 API</span>
+                        <span class="tag" style="background:#f3e8ff;color:#6b21a8;">산업가동 캘린더</span>
+                    </div>
+                </div>
+                <div style="text-align:center;color:var(--border);font-size:0.8em;">&#9660;</div>
+                <div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.9);font-weight:700;color:var(--accent-cyan);margin-bottom:0.3em;">AI 모델 파이프라인</div>
+                    <div style="display:flex;gap:0.3em;align-items:center;flex-wrap:wrap;font-size:var(--mono-size);font-family:'IBM Plex Mono',monospace;">
+                        <span class="tag" style="background:#ccfbf1;color:#0f766e;">LSTM</span>
+                        <span style="color:var(--text-dim);">+</span>
+                        <span class="tag" style="background:#ccfbf1;color:#0f766e;">Prophet</span>
+                        <span style="color:var(--text-dim);">+</span>
+                        <span class="tag" style="background:#ccfbf1;color:#0f766e;">XGBoost</span>
+                        <span style="color:var(--text-dim);">&rarr;</span>
+                        <span class="tag" style="background:#0d9488;color:#fff;">앙상블 결합</span>
+                    </div>
+                    <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-dim);margin-top:0.3em;">
+                        배치 학습 (일 1회 새벽 3시) &middot; 온라인 추론 (D+1~D+14)
+                    </div>
+                </div>
+                <div style="text-align:center;color:var(--border);font-size:0.8em;">&#9660;</div>
+                <div style="background:var(--bg-alt);border:1px solid var(--border-light);border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.9);font-weight:700;color:var(--accent-green);margin-bottom:0.3em;">VMI 자동보충 로직</div>
+                    <div style="font-size:calc(var(--small-size)*0.88);color:var(--text-mid);line-height:1.4;">
+                        잔량 고갈 예측 → 안전재고선(20%) 도달 D-2 판단 → 자동 보충 주문 생성 → 배차 담당 승인 → 배송 실행 → 실적 피드백 → 모델 재학습
+                    </div>
+                </div>
+            </div>
+            <!-- 오른쪽: 기능 목록 -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:clamp(0.2rem,0.4vw,0.4rem);">
+                <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.85);font-weight:600;color:var(--text-dim);margin-bottom:0.2em;">탱크 잔량 관리 (10 func)</div>
+                    <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-mid);line-height:1.4;">
+                        IoT 데이터 수신/저장 &middot; 실시간 모니터링 &middot; 이상치 탐지 &middot; 센서 CRUD &middot; 소비율 산출 &middot; 트렌드 분석
+                    </div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.85);font-weight:600;color:var(--text-dim);margin-bottom:0.2em;">수요 예측 엔진 (12 func)</div>
+                    <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-mid);line-height:1.4;">
+                        LSTM/Prophet/XGBoost 학습 &middot; 앙상블 결합 &middot; 파라미터 설정 UI &middot; 추론 실행 &middot; 정확도 모니터링 (MAPE/MAE) &middot; 성능 비교 &middot; 자동 재학습 트리거
+                    </div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.85);font-weight:600;color:var(--text-dim);margin-bottom:0.2em;">외부 데이터 연동 (4 func)</div>
+                    <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-mid);line-height:1.4;">
+                        기상청 API &middot; 산업가동 캘린더 &middot; ERP 배송이력 동기화 &middot; 고객마스터 동기화
+                    </div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:8px;padding:clamp(0.3rem,0.6vw,0.6rem);">
+                    <div style="font-size:calc(var(--small-size)*0.85);font-weight:600;color:var(--text-dim);margin-bottom:0.2em;">VMI 자동보충 (7 func)</div>
+                    <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-mid);line-height:1.4;">
+                        보충 판단 &middot; 주문 생성 &middot; 승인/거부 &middot; 긴급도 분류 &middot; 이력 관리 &middot; 성과 리포트 &middot; 정책 설정
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 5: AI MODULE DETAIL — 배차최적화 + 안전보조
+     ============================================================ -->
+<section class="slide">
+    <div class="slide-header">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">05 / 08 &mdash; AI Module #2 #3</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">Module Detail</div>
+            <h2>배차 경로 최적화 + Around-View 안전보조</h2>
+        </div>
+        <div style="display:flex;gap:clamp(0.5rem,1.2vw,1.2rem);max-width:1400px;margin:0 auto;width:100%;" class="reveal reveal-d1">
+            <!-- 배차최적화 -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:clamp(0.2rem,0.4vw,0.4rem);">
+                <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:9px;overflow:hidden;box-shadow:var(--shadow-sm);">
+                    <div style="background:var(--accent-orange);color:#fff;padding:clamp(0.25rem,0.5vw,0.5rem) clamp(0.4rem,0.8vw,0.8rem);font-size:var(--small-size);font-weight:700;">
+                        [VRP] 배차 · 경로 최적화 &mdash; 21 func, 124.7 FP
+                    </div>
+                    <div style="padding:clamp(0.3rem,0.6vw,0.6rem);display:flex;flex-direction:column;gap:0.3em;">
+                        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:clamp(0.2rem,0.4vw,0.4rem);text-align:center;">
+                            <div style="font-size:calc(var(--small-size)*0.9);font-weight:600;color:var(--accent-orange);">CVRPTW 솔버 (Google OR-Tools 9.x)</div>
+                            <div style="font-size:var(--mono-size);color:var(--text-dim);font-family:'IBM Plex Mono',monospace;">
+                                차량용량 + 시간창 + 위험물경로 + 기사근무 제약
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:0.3em;">
+                            <div style="flex:1;background:var(--bg-alt);border-radius:5px;padding:0.3em;font-size:calc(var(--small-size)*0.85);">
+                                <div style="font-weight:600;color:var(--text);">차량/기사 관리</div>
+                                <div style="color:var(--text-dim);">CRUD, GPS/OBD 수신, 운행기록 (8 func)</div>
+                            </div>
+                            <div style="flex:1;background:var(--bg-alt);border-radius:5px;padding:0.3em;font-size:calc(var(--small-size)*0.85);">
+                                <div style="font-weight:600;color:var(--text);">최적화 엔진</div>
+                                <div style="color:var(--text-dim);">솔버실행, 긴급삽입, 효율분석 (10 func)</div>
+                            </div>
+                        </div>
+                        <div style="background:var(--bg-alt);border-radius:5px;padding:0.3em;font-size:calc(var(--small-size)*0.85);">
+                            <div style="font-weight:600;color:var(--text);">지도/거리 서비스</div>
+                            <div style="color:var(--text-dim);">OSRM 거리행렬, 위험물경로 필터, 실시간 교통 (3 func)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 안전보조 -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:clamp(0.2rem,0.4vw,0.4rem);">
+                <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:9px;overflow:hidden;box-shadow:var(--shadow-sm);">
+                    <div style="background:var(--accent-red);color:#fff;padding:clamp(0.25rem,0.5vw,0.5rem) clamp(0.4rem,0.8vw,0.8rem);font-size:var(--small-size);font-weight:700;">
+                        [AVM] Around-View 안전보조 &mdash; 19 func, 157.6 FP
+                    </div>
+                    <div style="padding:clamp(0.3rem,0.6vw,0.6rem);display:flex;flex-direction:column;gap:0.3em;">
+                        <div style="display:flex;gap:0.3em;">
+                            <div style="flex:1;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:clamp(0.2rem,0.4vw,0.4rem);">
+                                <div style="font-size:calc(var(--small-size)*0.9);font-weight:600;color:var(--accent-red);">영상 처리</div>
+                                <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-dim);">4ch 수신 &middot; 360&deg; 합성(IPM) &middot; 전처리 (3 func)</div>
+                            </div>
+                            <div style="flex:1;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:clamp(0.2rem,0.4vw,0.4rem);">
+                                <div style="font-size:calc(var(--small-size)*0.9);font-weight:600;color:var(--accent-red);">객체 감지 엔진</div>
+                                <div style="font-size:calc(var(--small-size)*0.85);color:var(--text-dim);">YOLOv8 추론 &middot; TensorRT &middot; DeepSORT &middot; TTC (4 func)</div>
+                            </div>
+                        </div>
+                        <div style="background:var(--bg-alt);border-radius:5px;padding:0.3em;font-size:calc(var(--small-size)*0.85);">
+                            <div style="font-weight:600;color:var(--text);">3단계 경고 시스템 (5 func)</div>
+                            <div style="display:flex;gap:0.3em;margin-top:0.2em;font-family:'IBM Plex Mono',monospace;font-size:var(--mono-size);">
+                                <span class="tag" style="background:#fef9c3;color:#854d0e;">L1 주의 HUD</span>
+                                <span class="tag" style="background:#fed7aa;color:#9a3412;">L2 경고 음성</span>
+                                <span class="tag" style="background:#fecaca;color:#991b1b;">L3 긴급 관제전송</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:0.3em;">
+                            <div style="flex:1;background:var(--bg-alt);border-radius:5px;padding:0.3em;font-size:calc(var(--small-size)*0.85);">
+                                <div style="font-weight:600;color:var(--text);">모델 관리 (4 func)</div>
+                                <div style="color:var(--text-dim);">학습, 데이터셋, OTA 배포, 평가</div>
+                            </div>
+                            <div style="flex:1;background:var(--bg-alt);border-radius:5px;padding:0.3em;font-size:calc(var(--small-size)*0.85);">
+                                <div style="font-weight:600;color:var(--text);">안전 통계 (3 func)</div>
+                                <div style="color:var(--text-dim);">일일/월간 리포트, 반응속도 로그</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 6: 8 MODULES + FP OVERVIEW
+     ============================================================ -->
+<section class="slide">
+    <div class="slide-header">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">06 / 08 &mdash; Module Overview</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">8 Modules</div>
+            <h2>전체 모듈 구성 &mdash; 129개 기능, 815.4 FP</h2>
+        </div>
+        <div class="mod-grid reveal reveal-d1">
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:var(--accent-cyan);">1</div><div><div class="mc-title">수요예측 VMI</div><div class="mc-fp">33 func &middot; 217.8 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func" style="--dot-c:var(--accent-cyan);">탱크 잔량 관리 (10)</div>
+                    <div class="mod-func" style="--dot-c:var(--accent-cyan);">수요 예측 엔진 (12)</div>
+                    <div class="mod-func" style="--dot-c:var(--accent-cyan);">외부 데이터 연동 (4)</div>
+                    <div class="mod-func" style="--dot-c:var(--accent-cyan);">VMI 자동보충 (7)</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:var(--accent-red);">2</div><div><div class="mc-title">Around-View 안전보조</div><div class="mc-fp">19 func &middot; 157.6 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">영상 처리 (3)</div>
+                    <div class="mod-func">객체 감지 엔진 (4)</div>
+                    <div class="mod-func">경고 시스템 (5)</div>
+                    <div class="mod-func">모델 관리 (4) &middot; 통계 (3)</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:var(--accent-orange);">3</div><div><div class="mc-title">배차 경로 최적화</div><div class="mc-fp">21 func &middot; 124.7 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">차량/기사 관리 (8)</div>
+                    <div class="mod-func">CVRPTW 최적화 (10)</div>
+                    <div class="mod-func">지도/거리 서비스 (3)</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:var(--accent-blue);">4</div><div><div class="mc-title">통합관제 플랫폼</div><div class="mc-fp">22 func &middot; 124.9 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">대시보드/KPI (5)</div>
+                    <div class="mod-func">고객/주문/배송 (11)</div>
+                    <div class="mod-func">리포트 (3) &middot; 사용자 (4)</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:#6366f1;">5</div><div><div class="mc-title">데이터 플랫폼</div><div class="mc-fp">10 func &middot; 78.5 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">Kafka 스트림 + ETL (4)</div>
+                    <div class="mod-func">DB 관리/백업 (3)</div>
+                    <div class="mod-func">API Gateway (3)</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:var(--accent-teal);">6</div><div><div class="mc-title">기사 모바일 앱</div><div class="mc-fp">10 func &middot; 44.6 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">배송 관리 (5)</div>
+                    <div class="mod-func">안전 보조 (2)</div>
+                    <div class="mod-func">운행일지/점검/비상 (3)</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:#64748b;">7</div><div><div class="mc-title">시스템 관리</div><div class="mc-fp">8 func &middot; 43.4 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">모니터링 (4) &middot; CI/CD (4)</div>
+                    <div class="mod-func-sub">Grafana + Docker/K8s</div>
+                </div>
+            </div>
+            <div class="mod-card">
+                <div class="mod-card-head"><div class="mc-icon" style="background:var(--accent-pink);">8</div><div><div class="mc-title">고객 포털</div><div class="mc-fp">6 func &middot; 23.9 FP</div></div></div>
+                <div class="mod-card-body">
+                    <div class="mod-func">잔량/배송/주문/리포트 (6)</div>
+                    <div class="mod-func-sub">B2B 셀프서비스</div>
+                </div>
+            </div>
+        </div>
+        <div class="reveal reveal-d2 fp-type-legend" style="justify-content:center;">
+            <span><span class="dot" style="background:var(--accent-blue);"></span> ILF 24개</span>
+            <span><span class="dot" style="background:var(--accent-green);"></span> EIF 6개</span>
+            <span><span class="dot" style="background:var(--accent-orange);"></span> EI 42개</span>
+            <span><span class="dot" style="background:var(--accent-purple);"></span> EO 45개</span>
+            <span><span class="dot" style="background:var(--text-dim);"></span> EQ 12개</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 7: FP COST SUMMARY
+     ============================================================ -->
+<section class="slide">
+    <div class="slide-header">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">07 / 08 &mdash; FP Cost</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">Function Points</div>
+            <h2>기능점수 기반 SW 개발비 산출</h2>
+        </div>
+        <div class="fp-table-wrap reveal reveal-d1">
+            <table class="fp-tbl">
+                <thead><tr><th>모듈</th><th style="width:7%;">기능수</th><th style="width:9%;">FP</th><th style="width:7%;">비중</th><th class="bar-cell" style="width:35%;">규모</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-weight:600;color:var(--accent-cyan);">수요예측 VMI</td><td class="mono">33</td><td class="mono" style="font-weight:600;">217.8</td><td class="mono">26.7%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:100%;background:var(--accent-cyan);"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:var(--accent-red);">AVM 안전보조</td><td class="mono">19</td><td class="mono" style="font-weight:600;">157.6</td><td class="mono">19.3%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:72%;background:var(--accent-red);"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:var(--accent-orange);">배차 최적화</td><td class="mono">21</td><td class="mono" style="font-weight:600;">124.7</td><td class="mono">15.3%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:57%;background:var(--accent-orange);"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:var(--accent-blue);">통합관제</td><td class="mono">22</td><td class="mono" style="font-weight:600;">124.9</td><td class="mono">15.3%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:57%;background:var(--accent-blue);"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:#6366f1;">데이터 플랫폼</td><td class="mono">10</td><td class="mono" style="font-weight:600;">78.5</td><td class="mono">9.6%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:36%;background:#6366f1;"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:var(--accent-teal);">모바일 앱</td><td class="mono">10</td><td class="mono" style="font-weight:600;">44.6</td><td class="mono">5.5%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:20%;background:var(--accent-teal);"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:#64748b;">시스템 관리</td><td class="mono">8</td><td class="mono" style="font-weight:600;">43.4</td><td class="mono">5.3%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:20%;background:#64748b;"></div></div></td></tr>
+                    <tr><td style="font-weight:600;color:var(--accent-pink);">고객 포털</td><td class="mono">6</td><td class="mono" style="font-weight:600;">23.9</td><td class="mono">2.9%</td><td class="bar-cell"><div class="fp-bar-bg"><div class="fp-bar-fill" style="width:11%;background:var(--accent-pink);"></div></div></td></tr>
+                    <tr style="font-weight:700;"><td>합계</td><td class="mono">129</td><td class="mono" style="color:var(--primary);font-size:calc(var(--body-size)*1.05);">815.4</td><td class="mono">100%</td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="cost-row reveal reveal-d2">
+            <div class="cost-card" style="border-top:2px solid var(--text-dim);">
+                <div class="cc-value">553,114</div><div class="cc-label">FP당 단가 (원, KOSA 2024)</div>
+            </div>
+            <div class="cost-card" style="border-top:2px solid var(--accent-orange);">
+                <div class="cc-value">&times; 1.4766</div><div class="cc-label">보정계수 (규모&middot;연계&middot;보안)</div>
+            </div>
+            <div class="cost-card" style="border-top:2px solid var(--accent-blue);">
+                <div class="cc-value">6.66억</div><div class="cc-label">보정후 개발원가</div>
+            </div>
+            <div class="cost-card" style="border-top:2px solid var(--accent-green);">
+                <div class="cc-value" style="color:var(--primary);">7.66억</div><div class="cc-label">SW 개발비 (이윤 15% 포함)</div>
+            </div>
+        </div>
+        <div class="reveal reveal-d3" style="display:flex;gap:1em;justify-content:center;flex-wrap:wrap;font-size:var(--mono-size);color:var(--text-dim);">
+            <span>보정: 규모 1.28</span><span>&middot;</span>
+            <span>연계복잡성 1.12 (11개+)</span><span>&middot;</span>
+            <span>성능 1.00</span><span>&middot;</span>
+            <span>운영환경 1.00</span><span>&middot;</span>
+            <span>보안성 1.03</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 8: TECH STACK
+     ============================================================ -->
+<section class="slide" style="background: var(--bg-alt);">
+    <div class="slide-header" style="border-color:var(--border);">
+        <span class="brand">SW/AI 구성도</span>
+        <span class="page-info">08 / 08 &mdash; Technology Stack</span>
+    </div>
+    <div class="slide-content" style="gap:var(--content-gap);">
+        <div class="reveal">
+            <div class="section-label">Tech Stack</div>
+            <h2>기술 스택 구성</h2>
+        </div>
+        <div class="tech-grid reveal reveal-d1">
+            <div class="tech-card">
+                <div class="tech-card-head" style="background:var(--accent-cyan);">AI / Machine Learning</div>
+                <div class="tech-card-body">
+                    <div class="tech-row"><span class="tr-name">PyTorch</span><span class="tr-ver">2.x</span></div>
+                    <div class="tech-row"><span class="tr-name">Prophet / NeuralProphet</span><span class="tr-ver">latest</span></div>
+                    <div class="tech-row"><span class="tr-name">XGBoost / LightGBM</span><span class="tr-ver">2.x</span></div>
+                    <div class="tech-row"><span class="tr-name">Ultralytics YOLOv8</span><span class="tr-ver">8.x</span></div>
+                    <div class="tech-row"><span class="tr-name">DeepSORT</span><span class="tr-ver">-</span></div>
+                    <div class="tech-row"><span class="tr-name">TensorRT / ONNX Runtime</span><span class="tr-ver">8.x</span></div>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-head" style="background:var(--accent-orange);">Optimization / OR</div>
+                <div class="tech-card-body">
+                    <div class="tech-row"><span class="tr-name">Google OR-Tools</span><span class="tr-ver">9.x</span></div>
+                    <div class="tech-row"><span class="tr-name">OSRM (거리 행렬)</span><span class="tr-ver">5.x</span></div>
+                    <div class="tech-row"><span class="tr-name">Kakao Maps API</span><span class="tr-ver">REST</span></div>
+                    <div class="tech-row"><span class="tr-name">Haversine / Vincenty</span><span class="tr-ver">-</span></div>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-head" style="background:var(--accent-blue);">Backend</div>
+                <div class="tech-card-body">
+                    <div class="tech-row"><span class="tr-name">FastAPI (Python)</span><span class="tr-ver">0.110+</span></div>
+                    <div class="tech-row"><span class="tr-name">Apache Kafka</span><span class="tr-ver">3.x</span></div>
+                    <div class="tech-row"><span class="tr-name">Celery + Redis</span><span class="tr-ver">5.x</span></div>
+                    <div class="tech-row"><span class="tr-name">JWT / OAuth2</span><span class="tr-ver">-</span></div>
+                    <div class="tech-row"><span class="tr-name">SQLAlchemy / Alembic</span><span class="tr-ver">2.x</span></div>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-head" style="background:var(--accent-purple);">Frontend</div>
+                <div class="tech-card-body">
+                    <div class="tech-row"><span class="tr-name">React + TypeScript</span><span class="tr-ver">18.x</span></div>
+                    <div class="tech-row"><span class="tr-name">React Native (Mobile)</span><span class="tr-ver">0.74+</span></div>
+                    <div class="tech-row"><span class="tr-name">D3.js / Recharts</span><span class="tr-ver">7.x</span></div>
+                    <div class="tech-row"><span class="tr-name">Leaflet / Kakao Maps</span><span class="tr-ver">-</span></div>
+                    <div class="tech-row"><span class="tr-name">WebSocket (실시간)</span><span class="tr-ver">-</span></div>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-head" style="background:var(--accent-green);">Database</div>
+                <div class="tech-card-body">
+                    <div class="tech-row"><span class="tr-name">TimescaleDB (시계열)</span><span class="tr-ver">latest</span></div>
+                    <div class="tech-row"><span class="tr-name">PostgreSQL</span><span class="tr-ver">16</span></div>
+                    <div class="tech-row"><span class="tr-name">Redis (캐시/큐)</span><span class="tr-ver">7.x</span></div>
+                    <div class="tech-row"><span class="tr-name">MinIO (객체 저장)</span><span class="tr-ver">-</span></div>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-head" style="background:#64748b;">Infrastructure / DevOps</div>
+                <div class="tech-card-body">
+                    <div class="tech-row"><span class="tr-name">Docker + Kubernetes</span><span class="tr-ver">latest</span></div>
+                    <div class="tech-row"><span class="tr-name">GitLab CI/CD</span><span class="tr-ver">-</span></div>
+                    <div class="tech-row"><span class="tr-name">Grafana + Prometheus</span><span class="tr-ver">10.x</span></div>
+                    <div class="tech-row"><span class="tr-name">NVIDIA Jetson SDK</span><span class="tr-ver">6.0</span></div>
+                    <div class="tech-row"><span class="tr-name">TLS 1.3 / AES-256</span><span class="tr-ver">-</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+class PresentationController {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.currentSlide = 0;
+        this.setupNavDots();
+        this.setupObserver();
+        this.setupKeyboard();
+        this.setupWheel();
+        this.setupTouch();
+        this.updateProgress();
+    }
+    setupNavDots() {
+        const nav = document.getElementById('navDots');
+        this.slides.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            d.addEventListener('click', () => this.goToSlide(i));
+            nav.appendChild(d);
+        });
+        this.dots = nav.querySelectorAll('.dot');
+    }
+    setupObserver() {
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    this.currentSlide = Array.from(this.slides).indexOf(e.target);
+                    this.updateDots();
+                    this.updateProgress();
+                    e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+                }
+            });
+        }, { threshold: 0.5 });
+        this.slides.forEach(s => obs.observe(s));
+    }
+    setupKeyboard() {
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowDown','ArrowRight',' ','PageDown'].includes(e.key)) { e.preventDefault(); this.next(); }
+            else if (['ArrowUp','ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); this.prev(); }
+        });
+    }
+    setupWheel() {
+        let last = 0;
+        document.addEventListener('wheel', (e) => {
+            const now = Date.now();
+            if (now - last < 700) return;
+            last = now;
+            e.deltaY > 0 ? this.next() : this.prev();
+        }, { passive: true });
+    }
+    setupTouch() {
+        let y = 0;
+        document.addEventListener('touchstart', (e) => { y = e.touches[0].clientY; });
+        document.addEventListener('touchend', (e) => {
+            const d = y - e.changedTouches[0].clientY;
+            if (Math.abs(d) > 50) d > 0 ? this.next() : this.prev();
+        });
+    }
+    goToSlide(i) { this.slides[i]?.scrollIntoView({ behavior: 'smooth' }); }
+    next() { if (this.currentSlide < this.slides.length - 1) this.goToSlide(this.currentSlide + 1); }
+    prev() { if (this.currentSlide > 0) this.goToSlide(this.currentSlide - 1); }
+    updateDots() { this.dots.forEach((d, i) => d.classList.toggle('active', i === this.currentSlide)); }
+    updateProgress() { document.getElementById('progress').style.width = ((this.currentSlide + 1) / this.slides.length * 100) + '%'; }
+}
+document.addEventListener('DOMContentLoaded', () => new PresentationController());
+</script>
+</body>
+</html>
