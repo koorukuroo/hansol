@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>어라운드뷰 기반 차량안전관리 구성도</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#fff;width:880px;margin:0 auto;padding:24px 32px;color:#1a1a2e}
+  .title{text-align:center;margin-bottom:16px}
+  .title h2{font-size:16px;font-weight:800;color:#B45309}
+
+  .main{display:flex;gap:12px;align-items:stretch}
+
+  /* Left: truck + cameras */
+  .truck-panel{width:260px;flex-shrink:0;border-radius:12px;border:1.5px solid #FDE68A;overflow:hidden}
+  .tp-head{padding:8px;background:linear-gradient(135deg,#B45309,#F59E0B);color:white;font-size:11px;font-weight:700;text-align:center}
+  .tp-body{padding:12px;background:#FFFBEB;text-align:center;position:relative;height:260px}
+
+  .truck-svg{width:220px;height:240px}
+
+  /* Right: processing */
+  .proc-panel{flex:1;display:flex;flex-direction:column;gap:8px}
+  .proc-card{border-radius:10px;border:1.5px solid;padding:10px 12px}
+  .pc-head{font-size:11px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .pc-items{display:flex;gap:6px;flex-wrap:wrap}
+  .pc-item{flex:1;min-width:120px;padding:6px 8px;border-radius:6px;border:1px solid;font-size:9px;line-height:1.4}
+  .pc-item b{display:block;font-size:9.5px;margin-bottom:1px}
+
+  .p-amber{border-color:#FDE68A}.p-amber .pc-head{color:#92400E}
+  .p-amber .pc-item{border-color:#FEF3C7;background:#FFFBEB}.p-amber .pc-item b{color:#92400E}
+
+  .p-blue{border-color:#BFDBFE}.p-blue .pc-head{color:#1e40af}
+  .p-blue .pc-item{border-color:#DBEAFE;background:#EFF6FF}.p-blue .pc-item b{color:#1e40af}
+
+  .p-red{border-color:#FECDD3}.p-red .pc-head{color:#9F1239}
+  .p-red .pc-item{border-color:#FFE4E6;background:#FFF1F2}.p-red .pc-item b{color:#9F1239}
+
+  .p-green{border-color:#BBF7D0}.p-green .pc-head{color:#047857}
+  .p-green .pc-item{border-color:#D1FAE5;background:#F0FDF4}.p-green .pc-item b{color:#047857}
+
+  .p-purple{border-color:#DDD6FE}.p-purple .pc-head{color:#5B21B6}
+  .p-purple .pc-item{border-color:#EDE9FE;background:#F5F3FF}.p-purple .pc-item b{color:#5B21B6}
+
+  .bottom{display:flex;gap:8px;margin-top:10px}
+  .bcard{flex:1;padding:8px;border-radius:8px;border:1.5px solid #FDE68A;background:#FFFBEB;text-align:center}
+  .bcard .bc-val{font-size:15px;font-weight:900;color:#92400E}
+  .bcard .bc-label{font-size:9px;color:#64748B;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="title"><h2>어라운드뷰 기반 물류 차량 안전 운행 관리 구성도</h2></div>
+<div class="main">
+  <div class="truck-panel">
+    <div class="tp-head">🚛 탱크로리 카메라 배치 (상면도)</div>
+    <div class="tp-body">
+      <svg class="truck-svg" viewBox="0 0 220 240">
+        <!-- Detection zones -->
+        <ellipse cx="110" cy="30" rx="70" ry="22" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <ellipse cx="30" cy="120" rx="20" ry="60" fill="#D97706" opacity="0.1" stroke="#D97706" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <ellipse cx="190" cy="120" rx="20" ry="60" fill="#D97706" opacity="0.1" stroke="#D97706" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <ellipse cx="110" cy="215" rx="70" ry="22" fill="#DC2626" opacity="0.1" stroke="#DC2626" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <!-- Truck body -->
+        <rect x="60" y="45" width="100" height="165" rx="6" fill="#475569" stroke="#334155" stroke-width="1.5"/>
+        <rect x="72" y="48" width="76" height="38" rx="3" fill="#64748B"/>
+        <text x="110" y="70" text-anchor="middle" font-size="9" fill="white" font-weight="700">운전석</text>
+        <rect x="65" y="92" width="90" height="110" rx="4" fill="#64748B"/>
+        <text x="110" y="145" text-anchor="middle" font-size="10" fill="white" font-weight="700">가스탱크</text>
+        <text x="110" y="158" text-anchor="middle" font-size="7" fill="#CBD5E1">(위험물)</text>
+        <!-- Cameras -->
+        <circle cx="110" cy="44" r="5" fill="#3B82F6" stroke="white" stroke-width="1.5"/>
+        <text x="110" y="37" text-anchor="middle" font-size="7" fill="#2563EB" font-weight="700">전방</text>
+        <circle cx="58" cy="120" r="5" fill="#3B82F6" stroke="white" stroke-width="1.5"/>
+        <text x="45" y="115" text-anchor="middle" font-size="7" fill="#2563EB" font-weight="700">좌측</text>
+        <circle cx="162" cy="120" r="5" fill="#3B82F6" stroke="white" stroke-width="1.5"/>
+        <text x="177" y="115" text-anchor="middle" font-size="7" fill="#2563EB" font-weight="700">우측</text>
+        <circle cx="110" cy="210" r="5" fill="#3B82F6" stroke="white" stroke-width="1.5"/>
+        <text x="110" y="225" text-anchor="middle" font-size="7" fill="#2563EB" font-weight="700">후방</text>
+        <!-- 360 -->
+        <circle cx="110" cy="127" r="14" fill="none" stroke="#3B82F6" stroke-width="1" stroke-dasharray="2,1.5"/>
+        <text x="110" y="130" text-anchor="middle" font-size="8" fill="#3B82F6" font-weight="800">360°</text>
+        <!-- Detected objects -->
+        <text x="35" y="90" font-size="12">🚶</text>
+        <text x="175" y="160" font-size="10">🚲</text>
+        <text x="130" y="232" font-size="10">🏗️</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="proc-panel">
+    <div class="proc-card p-amber">
+      <div class="pc-head">📹 HW 구성</div>
+      <div class="pc-items">
+        <div class="pc-item"><b>Brigade Backeye 360 AI</b>4CH 초광각 HD 카메라<br>IP67/IP69K 방진방수<br>상용차 전용 설계</div>
+        <div class="pc-item"><b>Mobileye Shield+ (보완)</b>전방 충돌 방지<br>270° 사각지대 감지<br>보행자/자전거 특화</div>
+        <div class="pc-item"><b>NVIDIA Jetson Orin</b>차량 탑재 엣지 AI<br>실시간 추론 처리<br>클라우드 비의존</div>
+      </div>
+    </div>
+    <div class="proc-card p-blue">
+      <div class="pc-head">🤖 AI 감지 기능 (실시간)</div>
+      <div class="pc-items">
+        <div class="pc-item"><b>👤 보행자/작업자 감지</b>Human Detection<br>산업단지 내 사람·안전모 구분</div>
+        <div class="pc-item"><b>🚗 차량/장비 감지</b>승용차·오토바이·지게차<br>산업단지 특수 장비 인식</div>
+        <div class="pc-item"><b>📐 거리/궤적 예측</b>이동 방향·속도 분석<br>충돌 위험도 실시간 계산</div>
+      </div>
+    </div>
+    <div class="proc-card p-red">
+      <div class="pc-head">🔔 4단계 경고 체계</div>
+      <div class="pc-items">
+        <div class="pc-item"><b>🟢 안전 (5m+)</b>Bird's Eye View 표시</div>
+        <div class="pc-item"><b>🟡 주의 (3~5m)</b>디스플레이 + 부저</div>
+        <div class="pc-item"><b>🔴 위험 (1~3m)</b>적색 플래시+강한 경보</div>
+        <div class="pc-item"><b>🟣 긴급 (<1m)</b>최대경보+녹화+관제알림</div>
+      </div>
+    </div>
+    <div class="proc-card p-purple">
+      <div class="pc-head">📤 관제센터 연동</div>
+      <div class="pc-items">
+        <div class="pc-item"><b>이벤트 자동 녹화</b>위험 이벤트 전후 30초 영상 자동 저장 → 클라우드 전송</div>
+        <div class="pc-item"><b>실시간 관제 알림</b>위험 이벤트 발생 시 관제센터 즉시 통보 → 사고 분석 DB 축적</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="bottom">
+  <div class="bcard"><div class="bc-val">60대 전 차량</div><div class="bc-label">AVM 장착 대상</div></div>
+  <div class="bcard"><div class="bc-val">사고 60%↓</div><div class="bc-label">운송 사고 감소 목표</div></div>
+  <div class="bcard"><div class="bc-val">대당 450만원</div><div class="bc-label">Brigade 360 단가</div></div>
+  <div class="bcard"><div class="bc-val">실시간</div><div class="bc-label">엣지AI 추론 (클라우드 비의존)</div></div>
+</div>
+</body>
+</html>

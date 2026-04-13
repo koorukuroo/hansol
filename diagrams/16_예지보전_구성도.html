@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>예지보전 구성도</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#fff;width:880px;margin:0 auto;padding:24px 32px;color:#1a1a2e}
+  .title{text-align:center;margin-bottom:16px}
+  .title h2{font-size:16px;font-weight:800;color:#5B21B6}
+
+  .flow{display:flex;align-items:stretch;gap:6px}
+  .stage{flex:1;border-radius:12px;border:1.5px solid;overflow:hidden;display:flex;flex-direction:column}
+  .st-head{padding:8px 10px;color:white;font-size:11px;font-weight:700;text-align:center}
+  .st-body{padding:10px;flex:1;display:flex;flex-direction:column;gap:6px}
+  .st-item{padding:7px 8px;border-radius:7px;border:1px solid;font-size:9.5px;line-height:1.4}
+  .st-item b{display:block;font-size:10px;margin-bottom:2px}
+  .arr{display:flex;align-items:center;width:16px;flex-shrink:0;justify-content:center;color:#94A3B8;font-size:14px}
+
+  .s1{border-color:#DDD6FE}.s1 .st-head{background:#5B21B6}.s1 .st-item{border-color:#EDE9FE;background:#F5F3FF}.s1 .st-item b{color:#5B21B6}
+  .s2{border-color:#BFDBFE}.s2 .st-head{background:#1e40af}.s2 .st-item{border-color:#DBEAFE;background:#EFF6FF}.s2 .st-item b{color:#1e40af}
+  .s3{border-color:#BBF7D0}.s3 .st-head{background:#047857}.s3 .st-item{border-color:#D1FAE5;background:#F0FDF4}.s3 .st-item b{color:#047857}
+  .s4{border-color:#FDE68A}.s4 .st-head{background:#B45309}.s4 .st-item{border-color:#FEF3C7;background:#FFFBEB}.s4 .st-item b{color:#92400E}
+  .s5{border-color:#FECDD3}.s5 .st-head{background:#9F1239}.s5 .st-item{border-color:#FFE4E6;background:#FFF1F2}.s5 .st-item b{color:#9F1239}
+
+  .bottom{display:flex;gap:8px;margin-top:12px}
+  .bcard{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid #DDD6FE;background:#F5F3FF;text-align:center}
+  .bcard .bc-val{font-size:15px;font-weight:900;color:#5B21B6}
+  .bcard .bc-label{font-size:9px;color:#64748B;margin-top:2px}
+
+  /* Lifecycle visual */
+  .lifecycle{display:flex;gap:4px;margin-top:10px;padding:8px 12px;border-radius:10px;background:#F8FAFC;border:1px solid #E2E8F0;align-items:center;justify-content:center}
+  .lc-step{text-align:center;padding:4px 8px}
+  .lc-step .lc-icon{font-size:16px}
+  .lc-step .lc-text{font-size:8px;color:#475569;font-weight:600;margin-top:1px}
+  .lc-arr{color:#94A3B8;font-size:12px}
+  .lc-ai{background:#F0FDF4;border-radius:6px;border:1px solid #BBF7D0;padding:4px 8px}
+  .lc-ai .lc-text{color:#047857}
+</style>
+</head>
+<body>
+<div class="title"><h2>예지보전 구성도</h2></div>
+<div class="flow">
+  <div class="stage s1">
+    <div class="st-head">🔧 차량 데이터 수집</div>
+    <div class="st-body">
+      <div class="st-item"><b>KT Smart[Fleet] 텔레매틱스</b>GPS 위치 · 속도 · 가속도<br>주행거리 · 운행시간<br>DTG 디지털 운행기록</div>
+      <div class="st-item"><b>XENLINK 원격진단</b>ECU 데이터 (OBD-II/CAN)<br>엔진RPM · 냉각수온<br>배터리전압 · DTC 고장코드</div>
+      <div class="st-item"><b>운전자 입력</b>이상 징후 보고<br>정비 완료 확인</div>
+    </div>
+  </div>
+  <div class="arr">→</div>
+  <div class="stage s2">
+    <div class="st-head">⚙️ 데이터 분석</div>
+    <div class="st-body">
+      <div class="st-item"><b>DTC 코드 자동 분류</b>~8,000개 고장코드를<br>연간 5~10개 핵심 조치로 압축<br>(Uptake AI 엔진)</div>
+      <div class="st-item"><b>이상 패턴 탐지</b>정상 운행 프로파일 대비<br>이탈 감지 (AutoEncoder)</div>
+      <div class="st-item"><b>주행 패턴 분석</b>장거리/단거리 · 평지/산지<br>차량별 마모도 차등 평가</div>
+    </div>
+  </div>
+  <div class="arr">→</div>
+  <div class="stage s3">
+    <div class="st-head">🧠 AI 예측</div>
+    <div class="st-body">
+      <div class="st-item"><b>잔존수명(RUL) 예측</b>LSTM 기반 부품별<br>잔여 사용 가능 기간 산출<br>(엔진·브레이크·밸브 등)</div>
+      <div class="st-item"><b>고장 확률 예측</b>향후 30일 내 고장 확률<br>부품별 위험도 스코어링</div>
+      <div class="st-item"><b>위험물 차량 특화</b>탱크 밸브·안전장치<br>방폭설비 상태 예측</div>
+    </div>
+  </div>
+  <div class="arr">→</div>
+  <div class="stage s4">
+    <div class="st-head">📅 정비 스케줄링</div>
+    <div class="st-body">
+      <div class="st-item"><b>최적 정비 시점 산출</b>RUL + 법정검사 일정<br>배차 스케줄 연동<br>유휴 시간대 자동 배정</div>
+      <div class="st-item"><b>부품 사전 확보</b>교체 예상 부품<br>재고 자동 확인<br>미보유 시 발주 알림</div>
+      <div class="st-item"><b>비용 최적화</b>정비비 vs 운휴 손실<br>최적 시점 경제성 분석</div>
+    </div>
+  </div>
+  <div class="arr">→</div>
+  <div class="stage s5">
+    <div class="st-head">📱 알림/실행</div>
+    <div class="st-body">
+      <div class="st-item"><b>정비사 알림</b>정비 항목·시기·부품<br>작업 지시서 자동 생성</div>
+      <div class="st-item"><b>관제 대시보드</b>차량 60대 건강 상태<br>위험 차량 하이라이트</div>
+      <div class="st-item"><b>배차 연계</b>정비 예정 차량<br>배차 자동 제외<br>대차 배정</div>
+    </div>
+  </div>
+</div>
+
+<!-- Lifecycle -->
+<div class="lifecycle">
+  <div class="lc-step"><div class="lc-icon">🚛</div><div class="lc-text">정상 운행</div></div>
+  <div class="lc-arr">→</div>
+  <div class="lc-step lc-ai"><div class="lc-icon">🧠</div><div class="lc-text">AI 이상 감지</div></div>
+  <div class="lc-arr">→</div>
+  <div class="lc-step lc-ai"><div class="lc-icon">📊</div><div class="lc-text">RUL 예측</div></div>
+  <div class="lc-arr">→</div>
+  <div class="lc-step"><div class="lc-icon">📅</div><div class="lc-text">정비 스케줄</div></div>
+  <div class="lc-arr">→</div>
+  <div class="lc-step"><div class="lc-icon">🔧</div><div class="lc-text">사전 정비</div></div>
+  <div class="lc-arr">→</div>
+  <div class="lc-step"><div class="lc-icon">✅</div><div class="lc-text">복귀 운행</div></div>
+  <div class="lc-arr" style="color:#059669">⟲</div>
+</div>
+
+<div class="bottom">
+  <div class="bcard"><div class="bc-val">60대</div><div class="bc-label">텔레매틱스 장착 차량</div></div>
+  <div class="bcard"><div class="bc-val">비계획정비↓</div><div class="bc-label">돌발 고장 사전 방지</div></div>
+  <div class="bcard"><div class="bc-val">Uptake AI</div><div class="bc-label">DTC 핵심조치 자동분류</div></div>
+  <div class="bcard"><div class="bc-val">법정검사 연계</div><div class="bc-label">정기/특별검사 자동 스케줄링</div></div>
+</div>
+</body>
+</html>
