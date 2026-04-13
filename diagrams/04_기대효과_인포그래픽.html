@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>기대효과 및 확산 계획</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Pretendard',sans-serif; background:#fff; width:960px; margin:0 auto; padding:36px 40px; color:#1a1a2e; }
+
+  .title { text-align:center; margin-bottom:24px; }
+  .title h1 { font-size:21px; font-weight:800; color:#0F2B46; }
+  .title .sub { font-size:12px; color:#64748B; margin-top:4px; }
+
+  /* ── Effect Cards Grid ── */
+  .effects-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:24px;
+  }
+  .effect-card {
+    border-radius:14px;
+    padding:20px 16px;
+    text-align:center;
+    border:1.5px solid;
+    position:relative;
+    overflow:hidden;
+  }
+  .effect-card::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:4px;
+  }
+  .effect-card .ef-icon { font-size:28px; margin-bottom:8px; }
+  .effect-card .ef-value { font-size:32px; font-weight:900; margin-bottom:2px; }
+  .effect-card .ef-label { font-size:12px; font-weight:600; margin-bottom:4px; }
+  .effect-card .ef-desc { font-size:10px; color:#64748B; line-height:1.5; }
+
+  .ef-blue { border-color:#BFDBFE; background:linear-gradient(180deg,#EFF6FF,#fff); }
+  .ef-blue::before { background:#2563EB; }
+  .ef-blue .ef-value { color:#1e40af; }
+  .ef-blue .ef-label { color:#1e40af; }
+
+  .ef-green { border-color:#BBF7D0; background:linear-gradient(180deg,#F0FDF4,#fff); }
+  .ef-green::before { background:#059669; }
+  .ef-green .ef-value { color:#065F46; }
+  .ef-green .ef-label { color:#065F46; }
+
+  .ef-amber { border-color:#FDE68A; background:linear-gradient(180deg,#FFFBEB,#fff); }
+  .ef-amber::before { background:#D97706; }
+  .ef-amber .ef-value { color:#92400E; }
+  .ef-amber .ef-label { color:#92400E; }
+
+  .ef-purple { border-color:#DDD6FE; background:linear-gradient(180deg,#F5F3FF,#fff); }
+  .ef-purple::before { background:#7C3AED; }
+  .ef-purple .ef-value { color:#5B21B6; }
+  .ef-purple .ef-label { color:#5B21B6; }
+
+  .ef-teal { border-color:#99F6E4; background:linear-gradient(180deg,#F0FDFA,#fff); }
+  .ef-teal::before { background:#0D9488; }
+  .ef-teal .ef-value { color:#115E59; }
+  .ef-teal .ef-label { color:#115E59; }
+
+  .ef-rose { border-color:#FECDD3; background:linear-gradient(180deg,#FFF1F2,#fff); }
+  .ef-rose::before { background:#E11D48; }
+  .ef-rose .ef-value { color:#9F1239; }
+  .ef-rose .ef-label { color:#9F1239; }
+
+  /* ── ESG Section ── */
+  .esg-section {
+    display:flex;
+    gap:14px;
+    margin-bottom:24px;
+  }
+  .esg-card {
+    flex:1;
+    border-radius:12px;
+    padding:16px;
+    border:1.5px solid;
+  }
+  .esg-card .esg-header {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .esg-card .esg-badge {
+    width:32px; height:32px;
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; color:white; font-weight:800;
+  }
+  .esg-card .esg-title { font-size:13px; font-weight:700; }
+  .esg-card .esg-item {
+    font-size:10.5px;
+    color:#475569;
+    line-height:1.6;
+    padding-left:12px;
+    position:relative;
+    margin-bottom:4px;
+  }
+  .esg-card .esg-item::before {
+    content:'•';
+    position:absolute;
+    left:0;
+    color:#94A3B8;
+  }
+
+  .esg-e { border-color:#BBF7D0; }
+  .esg-e .esg-badge { background:#059669; }
+  .esg-e .esg-title { color:#065F46; }
+
+  .esg-s { border-color:#BFDBFE; }
+  .esg-s .esg-badge { background:#2563EB; }
+  .esg-s .esg-title { color:#1e40af; }
+
+  .esg-g { border-color:#DDD6FE; }
+  .esg-g .esg-badge { background:#7C3AED; }
+  .esg-g .esg-title { color:#5B21B6; }
+
+  /* ── Expansion Roadmap ── */
+  .roadmap {
+    background:#F8FAFC;
+    border:1.5px solid #E2E8F0;
+    border-radius:14px;
+    padding:18px 24px;
+  }
+  .roadmap-title {
+    font-size:14px;
+    font-weight:700;
+    color:#0F2B46;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .timeline {
+    display:flex;
+    position:relative;
+    padding-top:8px;
+  }
+  .timeline::before {
+    content:'';
+    position:absolute;
+    top:22px;
+    left:40px;
+    right:40px;
+    height:3px;
+    background:linear-gradient(90deg,#2563EB,#059669,#D97706,#7C3AED);
+    border-radius:2px;
+  }
+  .tl-step {
+    flex:1;
+    text-align:center;
+    position:relative;
+    z-index:1;
+  }
+  .tl-dot {
+    width:18px; height:18px;
+    border-radius:50%;
+    margin:12px auto 10px;
+    border:3px solid white;
+    box-shadow:0 0 0 2px;
+  }
+  .tl-step:nth-child(1) .tl-dot { background:#2563EB; color:#2563EB; }
+  .tl-step:nth-child(2) .tl-dot { background:#059669; color:#059669; }
+  .tl-step:nth-child(3) .tl-dot { background:#D97706; color:#D97706; }
+  .tl-step:nth-child(4) .tl-dot { background:#7C3AED; color:#7C3AED; }
+
+  .tl-period { font-size:10px; font-weight:700; color:#0F2B46; }
+  .tl-label { font-size:11px; font-weight:600; margin-top:4px; }
+  .tl-step:nth-child(1) .tl-label { color:#1e40af; }
+  .tl-step:nth-child(2) .tl-label { color:#047857; }
+  .tl-step:nth-child(3) .tl-label { color:#B45309; }
+  .tl-step:nth-child(4) .tl-label { color:#6D28D9; }
+  .tl-desc { font-size:9.5px; color:#64748B; margin-top:3px; line-height:1.4; }
+
+  /* IP section */
+  .ip-bar {
+    display:flex;
+    gap:14px;
+    margin-top:16px;
+  }
+  .ip-item {
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border-radius:10px;
+    background:#F1F5F9;
+    border:1px solid #E2E8F0;
+  }
+  .ip-item .ip-icon { font-size:20px; }
+  .ip-item .ip-label { font-size:11px; font-weight:600; color:#334155; }
+  .ip-item .ip-sub { font-size:9.5px; color:#64748B; }
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>기대효과 및 확산·ESG 계획</h1>
+    <div class="sub">AI 도입을 통한 정량적 성과와 사회적 가치 창출</div>
+  </div>
+
+  <!-- Effect Cards -->
+  <div class="effects-grid">
+    <div class="effect-card ef-blue">
+      <div class="ef-icon">📦</div>
+      <div class="ef-value">80%</div>
+      <div class="ef-label">긴급배송 감소</div>
+      <div class="ef-desc">IoT 수요예측으로<br>선제적 배송 전환</div>
+    </div>
+    <div class="effect-card ef-green">
+      <div class="ef-icon">🚛</div>
+      <div class="ef-value">50%</div>
+      <div class="ef-label">공차율 감소</div>
+      <div class="ef-desc">AI 배차최적화로<br>빈차 운행 대폭 절감</div>
+    </div>
+    <div class="effect-card ef-amber">
+      <div class="ef-icon">💰</div>
+      <div class="ef-value">1.5억</div>
+      <div class="ef-label">연간 물류비 절감</div>
+      <div class="ef-desc">경로 최적화 + 연료 절감<br>+ 운영 효율화</div>
+    </div>
+    <div class="effect-card ef-rose">
+      <div class="ef-icon">🛡️</div>
+      <div class="ef-value">60%</div>
+      <div class="ef-label">운송 사고 감소</div>
+      <div class="ef-desc">AI 어라운드뷰로<br>위험물 차량 안전 강화</div>
+    </div>
+    <div class="effect-card ef-teal">
+      <div class="ef-icon">🌿</div>
+      <div class="ef-value">120톤</div>
+      <div class="ef-label">연간 CO₂ 감축</div>
+      <div class="ef-desc">주행거리 절감 →<br>탄소배출 저감</div>
+    </div>
+    <div class="effect-card ef-purple">
+      <div class="ef-icon">🏭</div>
+      <div class="ef-value">5개사</div>
+      <div class="ef-label">SaaS 확산 목표</div>
+      <div class="ef-desc">동종업계 연 5억<br>SaaS 매출 목표</div>
+    </div>
+  </div>
+
+  <!-- ESG Section -->
+  <div class="esg-section">
+    <div class="esg-card esg-e">
+      <div class="esg-header">
+        <div class="esg-badge">E</div>
+        <div class="esg-title">환경 (Environment)</div>
+      </div>
+      <div class="esg-item">공차 감소 → 연간 CO₂ 120톤 감축</div>
+      <div class="esg-item">탱크 고갈 방지 → 가스 누출/긴급방출 예방</div>
+      <div class="esg-item">연료 소비 절감 → 대기오염 물질 저감</div>
+    </div>
+    <div class="esg-card esg-s">
+      <div class="esg-header">
+        <div class="esg-badge">S</div>
+        <div class="esg-title">사회 (Social)</div>
+      </div>
+      <div class="esg-item">위험물 운송 사고 감소 → 지역사회 안전</div>
+      <div class="esg-item">AI 데이터분석가 등 신규 고용 창출</div>
+      <div class="esg-item">중소 가스물류사 무상 컨설팅 · AI 교육(연2회)</div>
+    </div>
+    <div class="esg-card esg-g">
+      <div class="esg-header">
+        <div class="esg-badge">G</div>
+        <div class="esg-title">거버넌스 (Governance)</div>
+      </div>
+      <div class="esg-item">AI 배차 추천 근거 시각화 (Explainable AI)</div>
+      <div class="esg-item">데이터 수집→활용→폐기 전주기 거버넌스</div>
+      <div class="esg-item">ISMS-P 준수 · 분기별 보안 교육</div>
+    </div>
+  </div>
+
+  <!-- Expansion Roadmap -->
+  <div class="roadmap">
+    <div class="roadmap-title">🗺️ 상용화 확산 로드맵</div>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-period">~2027.4</div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">1단계: 본사 적용</div>
+        <div class="tl-desc">덕양가스 전면 적용<br>성과 입증 · KPI 달성</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-period">~2027.10</div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">2단계: 지역 확산</div>
+        <div class="tl-desc">울산/경남 산단<br>가스물류사 5개사 파일럿</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-period">~2028.4</div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">3단계: 전국 확대</div>
+        <div class="tl-desc">전국 확대<br>LPG/화학물류 업종 확장</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-period">2028~</div>
+        <div class="tl-dot"></div>
+        <div class="tl-label">4단계: 글로벌</div>
+        <div class="tl-desc">동남아 산업가스 시장<br>베트남·인도네시아 진출</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IP Bar -->
+  <div class="ip-bar">
+    <div class="ip-item">
+      <div class="ip-icon">📜</div>
+      <div><div class="ip-label">특허 출원 2건</div><div class="ip-sub">수요예측 알고리즘 + 배차최적화 방법</div></div>
+    </div>
+    <div class="ip-item">
+      <div class="ip-icon">💿</div>
+      <div><div class="ip-label">SW 등록 1건</div><div class="ip-sub">위험물 물류 AI 플랫폼</div></div>
+    </div>
+    <div class="ip-item">
+      <div class="ip-icon">📊</div>
+      <div><div class="ip-label">AI Hub 데이터 개방</div><div class="ip-sub">비식별화 물류 시계열 데이터 공개</div></div>
+    </div>
+  </div>
+</body>
+</html>

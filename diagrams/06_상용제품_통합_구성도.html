@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>검증된 상용 AI 제품 통합 구성도</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Pretendard',sans-serif; background:#fff; width:960px; margin:0 auto; padding:36px 40px; color:#1a1a2e; }
+
+  .title { text-align:center; margin-bottom:24px; }
+  .title h1 { font-size:20px; font-weight:800; color:#0F2B46; }
+  .title .sub { font-size:12px; color:#64748B; margin-top:4px; }
+  .title .badge {
+    display:inline-block; margin-top:8px;
+    padding:4px 14px; border-radius:20px;
+    background:linear-gradient(135deg,#059669,#10B981);
+    color:white; font-size:11px; font-weight:700;
+  }
+
+  .modules-row { display:flex; gap:12px; margin-bottom:16px; }
+
+  .mod-card {
+    flex:1; border-radius:14px; border:1.5px solid; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .mc-head {
+    padding:12px 14px; color:white;
+    display:flex; align-items:center; gap:8px;
+  }
+  .mc-head .mc-num {
+    width:24px; height:24px; border-radius:6px;
+    background:rgba(255,255,255,0.25);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:800;
+  }
+  .mc-head .mc-name { font-size:13px; font-weight:700; }
+  .mc-body { padding:12px 14px; flex:1; }
+
+  .product-badge {
+    display:flex; align-items:center; gap:8px;
+    padding:8px 10px; border-radius:8px;
+    margin-bottom:8px;
+    border:1px solid;
+  }
+  .product-badge .pb-logo {
+    width:32px; height:32px; border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; color:white; flex-shrink:0;
+  }
+  .product-badge .pb-name { font-size:11.5px; font-weight:700; }
+  .product-badge .pb-desc { font-size:9.5px; color:#64748B; margin-top:1px; }
+
+  .evidence {
+    padding:6px 10px; border-radius:6px;
+    font-size:9.5px; line-height:1.5;
+    margin-top:6px;
+  }
+  .evidence .ev-label { font-weight:700; margin-bottom:2px; }
+
+  /* Module colors */
+  .mc1 { border-color:#BFDBFE; }
+  .mc1 .mc-head { background:linear-gradient(135deg,#1e40af,#3B82F6); }
+  .mc1 .product-badge { border-color:#DBEAFE; background:#EFF6FF; }
+  .mc1 .product-badge .pb-name { color:#1e40af; }
+  .mc1 .evidence { background:#EFF6FF; color:#1e40af; }
+
+  .mc2 { border-color:#BBF7D0; }
+  .mc2 .mc-head { background:linear-gradient(135deg,#047857,#10B981); }
+  .mc2 .product-badge { border-color:#D1FAE5; background:#F0FDF4; }
+  .mc2 .product-badge .pb-name { color:#047857; }
+  .mc2 .evidence { background:#F0FDF4; color:#047857; }
+
+  .mc3 { border-color:#FDE68A; }
+  .mc3 .mc-head { background:linear-gradient(135deg,#B45309,#F59E0B); }
+  .mc3 .product-badge { border-color:#FEF3C7; background:#FFFBEB; }
+  .mc3 .product-badge .pb-name { color:#92400E; }
+  .mc3 .evidence { background:#FFFBEB; color:#92400E; }
+
+  .mc4 { border-color:#DDD6FE; }
+  .mc4 .mc-head { background:linear-gradient(135deg,#6D28D9,#8B5CF6); }
+  .mc4 .product-badge { border-color:#EDE9FE; background:#F5F3FF; }
+  .mc4 .product-badge .pb-name { color:#5B21B6; }
+  .mc4 .evidence { background:#F5F3FF; color:#5B21B6; }
+
+  /* Integration layer */
+  .integ-layer {
+    background:#F8FAFC; border:1.5px solid #E2E8F0; border-radius:12px;
+    padding:14px 20px; margin-bottom:16px;
+  }
+  .integ-title {
+    font-size:13px; font-weight:700; color:#0F2B46;
+    margin-bottom:10px; display:flex; align-items:center; gap:6px;
+  }
+  .integ-items { display:flex; gap:10px; flex-wrap:wrap; }
+  .integ-chip {
+    padding:6px 12px; border-radius:8px;
+    background:white; border:1px solid #E2E8F0;
+    font-size:10.5px; color:#334155;
+    display:flex; align-items:center; gap:6px;
+  }
+  .integ-chip .ic-dot { width:8px; height:8px; border-radius:50%; }
+
+  /* Bottom advantages */
+  .adv-row { display:flex; gap:12px; }
+  .adv-card {
+    flex:1; padding:14px; border-radius:10px;
+    border:1.5px solid #E2E8F0; text-align:center;
+  }
+  .adv-card .adv-icon { font-size:24px; margin-bottom:6px; }
+  .adv-card .adv-title { font-size:12px; font-weight:700; color:#0F2B46; margin-bottom:3px; }
+  .adv-card .adv-desc { font-size:10px; color:#64748B; line-height:1.4; }
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>검증된 상용 AI 제품 통합 구성도</h1>
+    <div class="sub">"AI 모델 개발"이 아닌 "검증된 상용 제품의 현장 맞춤 통합"으로 1년 내 확실한 상용화</div>
+    <div class="badge">범용 LLM 의존 0% · 검증된 상용 제품 + 도메인 커스터마이징 100%</div>
+  </div>
+
+  <div class="modules-row">
+    <!-- Module 1 -->
+    <div class="mod-card mc1">
+      <div class="mc-head">
+        <div class="mc-num">1</div>
+        <div class="mc-name">수요예측 (VMI)</div>
+      </div>
+      <div class="mc-body">
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#0078D4">☁️</div>
+          <div>
+            <div class="pb-name">Azure AutoML Forecasting</div>
+            <div class="pb-desc">10종 알고리즘 자동 앙상블</div>
+          </div>
+        </div>
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#0078D4">📡</div>
+          <div>
+            <div class="pb-name">Azure IoT Hub</div>
+            <div class="pb-desc">150대 센서 MQTT 수집</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="ev-label">✓ 검증 근거</div>
+          Puget Sound Energy 가스예측 MAPE 6%<br>
+          한국 리전 보유 · 배포 3~4개월
+        </div>
+      </div>
+    </div>
+
+    <!-- Module 2 -->
+    <div class="mod-card mc2">
+      <div class="mc-head">
+        <div class="mc-num">2</div>
+        <div class="mc-name">배차 최적화</div>
+      </div>
+      <div class="mc-body">
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#34A853">🔧</div>
+          <div>
+            <div class="pb-name">Google OR-Tools</div>
+            <div class="pb-desc">CVRPTW 오픈소스 솔버</div>
+          </div>
+        </div>
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#FEE500; color:#3C1E1E">🗺️</div>
+          <div>
+            <div class="pb-name">카카오/TMAP 지도 API</div>
+            <div class="pb-desc">실시간 교통 + 한국 도로망</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="ev-label">✓ 검증 근거</div>
+          에어리퀴드(세계1위) 동일 기술구조<br>
+          루티 도입기업 운송비 36% 절감
+        </div>
+      </div>
+    </div>
+
+    <!-- Module 3 -->
+    <div class="mod-card mc3">
+      <div class="mc-head">
+        <div class="mc-num">3</div>
+        <div class="mc-name">물류 차량 안전 운행</div>
+      </div>
+      <div class="mc-body">
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#E65100">👁️</div>
+          <div>
+            <div class="pb-name">Brigade Backeye 360 AI</div>
+            <div class="pb-desc">상용차 전용 4CH HD AVM</div>
+          </div>
+        </div>
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#1565C0">🛡️</div>
+          <div>
+            <div class="pb-name">Mobileye Shield+</div>
+            <div class="pb-desc">전방충돌·사각지대 감지</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="ev-label">✓ 검증 근거</div>
+          IP67 방진방수 · AI 인체감지 내장<br>
+          대당 450만원 · 즉시 장착 가능
+        </div>
+      </div>
+    </div>
+
+    <!-- Module 4 -->
+    <div class="mod-card mc4">
+      <div class="mc-head">
+        <div class="mc-num">4</div>
+        <div class="mc-name">텔레매틱스/예지보전</div>
+      </div>
+      <div class="mc-body">
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#E91E63">📶</div>
+          <div>
+            <div class="pb-name">KT Smart[Fleet]</div>
+            <div class="pb-desc">국내 최대 상용차 플랫폼</div>
+          </div>
+        </div>
+        <div class="product-badge">
+          <div class="pb-logo" style="background:#4A148C">🔧</div>
+          <div>
+            <div class="pb-name">XENLINK 원격진단</div>
+            <div class="pb-desc">ECU/OBD-II 고장예측</div>
+          </div>
+        </div>
+        <div class="evidence">
+          <div class="ev-label">✓ 검증 근거</div>
+          타타대우 적용 실적 · DTG 규정 준수<br>
+          Uptake AI: 비계획정비 10~40%↓
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integration Layer -->
+  <div class="integ-layer">
+    <div class="integ-title">🔗 도메인 특화 통합 계층 (자체 개발 영역)</div>
+    <div class="integ-items">
+      <div class="integ-chip"><div class="ic-dot" style="background:#DC2626"></div>위험물안전관리법 제약 엔진 (혼적금지·적재중량·운행시간)</div>
+      <div class="integ-chip"><div class="ic-dot" style="background:#2563EB"></div>가스 탱크 잔량 패턴 피처 엔지니어링</div>
+      <div class="integ-chip"><div class="ic-dot" style="background:#059669"></div>탱크로리 특화 객체 인식 학습 데이터셋</div>
+      <div class="integ-chip"><div class="ic-dot" style="background:#7C3AED"></div>FastAPI 통합 관제 백엔드 + React 대시보드</div>
+      <div class="integ-chip"><div class="ic-dot" style="background:#D97706"></div>IEC 63278-1 AAS 표준 데이터 모델</div>
+      <div class="integ-chip"><div class="ic-dot" style="background:#475569"></div>MES/ERP 양방향 연동 어댑터</div>
+    </div>
+  </div>
+
+  <!-- Advantages -->
+  <div class="adv-row">
+    <div class="adv-card">
+      <div class="adv-icon">⚡</div>
+      <div class="adv-title">1년 내 확실한 상용화</div>
+      <div class="adv-desc">검증된 제품 통합이므로<br>알고리즘 R&D 실패 리스크 없음</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-icon">🔄</div>
+      <div class="adv-title">지속적 업데이트</div>
+      <div class="adv-desc">글로벌 벤더의 기술지원·<br>보안패치·성능개선 자동 반영</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-icon">📈</div>
+      <div class="adv-title">SaaS 확산 용이</div>
+      <div class="adv-desc">동일 상용제품 스택 적용으로<br>타 기업 도입 비용·기간 최소화</div>
+    </div>
+    <div class="adv-card">
+      <div class="adv-icon">🔒</div>
+      <div class="adv-title">AI 자립도 확보</div>
+      <div class="adv-desc">핵심 도메인 로직은 자체 개발<br>인프라만 상용제품 활용</div>
+    </div>
+  </div>
+</body>
+</html>

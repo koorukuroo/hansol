@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>제조데이터 수집·처리 체계도</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Pretendard',sans-serif; background:#fff; width:960px; margin:0 auto; padding:36px 40px; color:#1a1a2e; }
+
+  .title { text-align:center; margin-bottom:28px; }
+  .title h1 { font-size:21px; font-weight:800; color:#0F2B46; letter-spacing:-0.5px; }
+  .title .sub { font-size:12px; color:#64748B; margin-top:4px; }
+
+  .flow { display:flex; gap:12px; align-items:stretch; }
+
+  /* Column styling */
+  .col { flex:1; min-width:0; }
+  .col-header {
+    text-align:center;
+    padding:10px 8px;
+    border-radius:10px 10px 0 0;
+    color:white;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:-0.3px;
+  }
+  .col-body {
+    border:1.5px solid;
+    border-top:none;
+    border-radius:0 0 10px 10px;
+    padding:12px 10px;
+    min-height:420px;
+  }
+
+  /* Source column */
+  .col-src .col-header { background:linear-gradient(135deg,#0F2B46,#1e3a5f); }
+  .col-src .col-body { border-color:#CBD5E1; }
+
+  /* Ingest column */
+  .col-ing .col-header { background:linear-gradient(135deg,#1e40af,#2563EB); }
+  .col-ing .col-body { border-color:#BFDBFE; }
+
+  /* AI column */
+  .col-ai .col-header { background:linear-gradient(135deg,#059669,#10B981); }
+  .col-ai .col-body { border-color:#A7F3D0; }
+
+  /* Service column */
+  .col-svc .col-header { background:linear-gradient(135deg,#D97706,#F59E0B); }
+  .col-svc .col-body { border-color:#FDE68A; }
+
+  /* Source cards */
+  .src-card {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 10px;
+    border-radius:8px;
+    margin-bottom:8px;
+    background:#F8FAFC;
+    border:1px solid #E2E8F0;
+  }
+  .src-card .s-icon {
+    width:34px; height:34px;
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; color:white; flex-shrink:0;
+  }
+  .src-card .s-info .s-name { font-size:11.5px; font-weight:700; color:#1E293B; }
+  .src-card .s-info .s-detail { font-size:9.5px; color:#64748B; margin-top:1px; }
+  .src-card .s-info .s-qty { font-size:9px; color:#94A3B8; margin-top:1px; }
+
+  /* Process items */
+  .proc-item {
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+    border:1px solid #DBEAFE;
+    background:#EFF6FF;
+  }
+  .proc-item .p-title { font-size:11px; font-weight:700; color:#1e40af; margin-bottom:3px; }
+  .proc-item .p-desc { font-size:9.5px; color:#475569; line-height:1.5; }
+
+  .proc-green {
+    border-color:#A7F3D0; background:#ECFDF5;
+  }
+  .proc-green .p-title { color:#047857; }
+
+  .proc-amber {
+    border-color:#FDE68A; background:#FFFBEB;
+  }
+  .proc-amber .p-title { color:#B45309; }
+
+  /* Arrow connector */
+  .arrow-col {
+    display:flex; flex-direction:column; justify-content:center;
+    align-items:center; width:24px; flex-shrink:0;
+  }
+  .arrow-col svg { width:20px; height:20px; }
+
+  /* Volume bar */
+  .vol-bar {
+    margin-top:20px;
+    display:flex; justify-content:center; gap:24px;
+    background:#F1F5F9; border-radius:10px; padding:12px 20px;
+  }
+  .vol-item { text-align:center; }
+  .vol-num { font-size:22px; font-weight:800; color:#0F2B46; }
+  .vol-label { font-size:10px; color:#64748B; margin-top:2px; }
+
+  /* AAS badge */
+  .aas-badge {
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    padding:10px 16px;
+    border:1.5px solid #BFDBFE;
+    border-radius:10px;
+    background:linear-gradient(135deg,#EFF6FF,#DBEAFE);
+  }
+  .aas-badge .aas-icon { font-size:18px; }
+  .aas-badge .aas-text { font-size:11px; color:#1e40af; font-weight:600; }
+  .aas-badge .aas-sub { font-size:9.5px; color:#64748B; }
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>제조데이터 수집·처리 체계도</h1>
+    <div class="sub">7개 수집 포인트 → 실시간 수집 → AI 추론 → 서비스 제공</div>
+  </div>
+
+  <div class="flow">
+    <!-- Column 1: Data Sources -->
+    <div class="col col-src" style="flex:1.15">
+      <div class="col-header">📡 데이터 수집 계층</div>
+      <div class="col-body">
+        <div class="src-card">
+          <div class="s-icon" style="background:#0F2B46">⛽</div>
+          <div class="s-info">
+            <div class="s-name">고객 탱크 IoT 센서</div>
+            <div class="s-detail">잔량(%) · 온도 · 압력</div>
+            <div class="s-qty">150대 · 10분 주기 · MQTT</div>
+          </div>
+        </div>
+        <div class="src-card">
+          <div class="s-icon" style="background:#1e40af">🚛</div>
+          <div class="s-info">
+            <div class="s-name">텔레매틱스 (GPS+속도)</div>
+            <div class="s-detail">위치 · 속도 · 가속도 · 경로</div>
+            <div class="s-qty">60대 · 실시간(1초) · LTE</div>
+          </div>
+        </div>
+        <div class="src-card">
+          <div class="s-icon" style="background:#7C3AED">🔧</div>
+          <div class="s-info">
+            <div class="s-name">차량 ECU 데이터</div>
+            <div class="s-detail">RPM · 냉각수온 · DTC코드</div>
+            <div class="s-qty">60대 · 1분 주기 · CAN→MQTT</div>
+          </div>
+        </div>
+        <div class="src-card">
+          <div class="s-icon" style="background:#D97706">📹</div>
+          <div class="s-info">
+            <div class="s-name">어라운드뷰 4CH HD</div>
+            <div class="s-detail">영상 스트림 · 객체인식 이벤트</div>
+            <div class="s-qty">60대 · 실시간 · RTSP→엣지</div>
+          </div>
+        </div>
+        <div class="src-card">
+          <div class="s-icon" style="background:#059669">🌤️</div>
+          <div class="s-info">
+            <div class="s-name">기상 · 산업가동률</div>
+            <div class="s-detail">기온 · 강수 · 가동률 · 계절지수</div>
+            <div class="s-qty">API · 1시간/월간 · REST</div>
+          </div>
+        </div>
+        <div class="src-card">
+          <div class="s-icon" style="background:#475569">🏭</div>
+          <div class="s-info">
+            <div class="s-name">MES / ERP</div>
+            <div class="s-detail">주문 · 재고 · 출하 · 고객정보</div>
+            <div class="s-qty">이벤트 기반 · DB 커넥터</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-col">
+      <svg viewBox="0 0 20 20"><polygon points="0,4 14,10 0,16" fill="#94A3B8"/></svg>
+    </div>
+
+    <!-- Column 2: Ingestion & Processing -->
+    <div class="col col-ing" style="flex:0.85">
+      <div class="col-header">⚙️ 수집·전처리 계층</div>
+      <div class="col-body">
+        <div class="proc-item">
+          <div class="p-title">Kafka 메시지 브로커</div>
+          <div class="p-desc">실시간 스트림 수집<br>순서 보장, 버퍼링<br>장애 시 재처리 보장</div>
+        </div>
+        <div class="proc-item">
+          <div class="p-title">결측치 처리</div>
+          <div class="p-desc">Mean/Forward-Fill<br>Multiple Imputation</div>
+        </div>
+        <div class="proc-item">
+          <div class="p-title">이상치 탐지·제거</div>
+          <div class="p-desc">AutoEncoder 기반 탐지<br>PCA · DWT 필터링</div>
+        </div>
+        <div class="proc-item">
+          <div class="p-title">피처 엔지니어링</div>
+          <div class="p-desc">STL 시계열 분해<br>래깅 · 롤링 통계량</div>
+        </div>
+        <div class="proc-item">
+          <div class="p-title">저장</div>
+          <div class="p-desc"><b>TimescaleDB</b> (시계열)<br><b>PostgreSQL</b> (메타)<br><b>S3</b> (원본 아카이브)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-col">
+      <svg viewBox="0 0 20 20"><polygon points="0,4 14,10 0,16" fill="#94A3B8"/></svg>
+    </div>
+
+    <!-- Column 3: AI Engine -->
+    <div class="col col-ai" style="flex:0.85">
+      <div class="col-header">🧠 AI 추론 계층</div>
+      <div class="col-body">
+        <div class="proc-item proc-green">
+          <div class="p-title">① 수요예측 엔진</div>
+          <div class="p-desc">LSTM+Prophet 앙상블<br>XGBoost/LightGBM<br>D+1~D+14 고갈 예측</div>
+        </div>
+        <div class="proc-item proc-green">
+          <div class="p-title">② 배차최적화 엔진</div>
+          <div class="p-desc">OR-Tools CVRPTW<br>ALNS + PPO 강화학습<br>위험물 제약 자동 반영</div>
+        </div>
+        <div class="proc-item proc-green">
+          <div class="p-title">③ 영상분석 AI (엣지)</div>
+          <div class="p-desc">ATALAS + YOLOv8<br>MOD · 보행자 감지<br>Jetson Orin 엣지 처리</div>
+        </div>
+        <div class="proc-item proc-green">
+          <div class="p-title">④ 예지보전 AI</div>
+          <div class="p-desc">LSTM 잔존수명(RUL)<br>이상탐지 · 고장예측<br>정비 스케줄링</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-col">
+      <svg viewBox="0 0 20 20"><polygon points="0,4 14,10 0,16" fill="#94A3B8"/></svg>
+    </div>
+
+    <!-- Column 4: Service -->
+    <div class="col col-svc" style="flex:0.85">
+      <div class="col-header">📊 서비스 계층</div>
+      <div class="col-body">
+        <div class="proc-item proc-amber">
+          <div class="p-title">FastAPI 백엔드</div>
+          <div class="p-desc">RESTful API<br>인증/권한 관리<br>MES/ERP 자동 연동</div>
+        </div>
+        <div class="proc-item proc-amber">
+          <div class="p-title">React 관제 대시보드</div>
+          <div class="p-desc">실시간 물류 현황<br>배차 현황 · KPI 모니터링<br>AI 추천 근거 시각화</div>
+        </div>
+        <div class="proc-item proc-amber">
+          <div class="p-title">모바일 앱 (운전자)</div>
+          <div class="p-desc">배송 경로 안내<br>안전 알림 · 차량 상태<br>배송 완료 확인</div>
+        </div>
+        <div class="proc-item proc-amber">
+          <div class="p-title">경영진 리포트</div>
+          <div class="p-desc">주간/월간 성과 분석<br>물류비 절감 효과<br>ESG 지표 추이</div>
+        </div>
+        <div class="proc-item proc-amber" style="border-style:dashed;">
+          <div class="p-title">🔄 피드백 루프</div>
+          <div class="p-desc">현장 운전자/관제사<br>피드백 → 모델 재학습</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Volume Stats -->
+  <div class="vol-bar">
+    <div class="vol-item"><div class="vol-num">~600만</div><div class="vol-label">일일 데이터 건수</div></div>
+    <div class="vol-item"><div class="vol-num">~1.8억</div><div class="vol-label">월간 데이터 건수</div></div>
+    <div class="vol-item"><div class="vol-num">7</div><div class="vol-label">수집 포인트</div></div>
+    <div class="vol-item"><div class="vol-num">4</div><div class="vol-label">AI 추론 엔진</div></div>
+    <div class="vol-item"><div class="vol-num">실시간</div><div class="vol-label">End-to-End 처리</div></div>
+  </div>
+
+  <!-- AAS Badge -->
+  <div class="aas-badge">
+    <div class="aas-icon">🏗️</div>
+    <div>
+      <div class="aas-text">IEC 63278-1 AAS 표준 적용</div>
+      <div class="aas-sub">탱크·차량·센서 자산을 AAS 서브모델로 정의 · OPC-UA 기반 상호운용성 확보</div>
+    </div>
+  </div>
+</body>
+</html>

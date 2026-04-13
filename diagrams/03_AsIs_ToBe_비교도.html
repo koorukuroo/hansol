@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>As-Is vs To-Be 비교</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Pretendard',sans-serif; background:#fff; width:960px; margin:0 auto; padding:36px 40px; color:#1a1a2e; }
+
+  .title { text-align:center; margin-bottom:28px; }
+  .title h1 { font-size:21px; font-weight:800; color:#0F2B46; }
+  .title .sub { font-size:12px; color:#64748B; margin-top:4px; }
+
+  .compare { display:flex; gap:16px; align-items:stretch; }
+
+  .side {
+    flex:1;
+    border-radius:14px;
+    overflow:hidden;
+    border:1.5px solid;
+  }
+  .side-header {
+    padding:14px 20px;
+    color:white;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .side-header .tag {
+    font-size:11px;
+    font-weight:800;
+    padding:3px 10px;
+    border-radius:6px;
+    background:rgba(255,255,255,0.2);
+  }
+  .side-header .htitle { font-size:15px; font-weight:700; }
+
+  .side-body { padding:16px 18px; }
+
+  /* As-Is */
+  .as-is { border-color:#FCA5A5; }
+  .as-is .side-header { background:linear-gradient(135deg,#991B1B,#DC2626); }
+  .as-is .side-body { background:#FFF5F5; }
+
+  /* To-Be */
+  .to-be { border-color:#86EFAC; }
+  .to-be .side-header { background:linear-gradient(135deg,#065F46,#059669); }
+  .to-be .side-body { background:#F0FDF4; }
+
+  /* Pain points & Solutions */
+  .item {
+    display:flex;
+    gap:12px;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+    align-items:flex-start;
+  }
+  .as-is .item { background:white; border:1px solid #FECACA; }
+  .to-be .item { background:white; border:1px solid #BBF7D0; }
+
+  .item-icon {
+    width:36px; height:36px;
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .as-is .item-icon { background:#FEE2E2; }
+  .to-be .item-icon { background:#D1FAE5; }
+
+  .item-content { flex:1; }
+  .item-title { font-size:12.5px; font-weight:700; margin-bottom:3px; }
+  .as-is .item-title { color:#991B1B; }
+  .to-be .item-title { color:#065F46; }
+  .item-desc { font-size:10.5px; color:#475569; line-height:1.5; }
+  .item-metric {
+    display:inline-block;
+    margin-top:5px;
+    padding:2px 8px;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:700;
+  }
+  .as-is .item-metric { background:#FEE2E2; color:#991B1B; }
+  .to-be .item-metric { background:#D1FAE5; color:#065F46; }
+
+  /* Center arrow */
+  .center-arrow {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width:64px;
+    flex-shrink:0;
+  }
+  .transform-badge {
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    background:linear-gradient(180deg,#1e40af,#2563EB);
+    color:white;
+    padding:12px 8px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:2px;
+  }
+  .arr { font-size:24px; color:#2563EB; margin:6px 0; }
+
+  /* KPI Strip */
+  .kpi-strip {
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+  }
+  .kpi-card {
+    flex:1;
+    text-align:center;
+    padding:16px 12px;
+    border-radius:12px;
+    border:1.5px solid;
+  }
+  .kpi-card .kpi-icon { font-size:22px; margin-bottom:6px; }
+  .kpi-card .kpi-label { font-size:10.5px; color:#475569; font-weight:500; margin-bottom:4px; }
+  .kpi-card .kpi-value { font-size:24px; font-weight:900; }
+  .kpi-card .kpi-unit { font-size:10px; color:#64748B; margin-top:2px; }
+
+  .kpi-blue { border-color:#BFDBFE; background:linear-gradient(135deg,#EFF6FF,#DBEAFE); }
+  .kpi-blue .kpi-value { color:#1e40af; }
+  .kpi-green { border-color:#BBF7D0; background:linear-gradient(135deg,#F0FDF4,#D1FAE5); }
+  .kpi-green .kpi-value { color:#065F46; }
+  .kpi-amber { border-color:#FDE68A; background:linear-gradient(135deg,#FFFBEB,#FEF3C7); }
+  .kpi-amber .kpi-value { color:#92400E; }
+  .kpi-purple { border-color:#DDD6FE; background:linear-gradient(135deg,#F5F3FF,#EDE9FE); }
+  .kpi-purple .kpi-value { color:#5B21B6; }
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>As-Is → To-Be 전환 비교</h1>
+    <div class="sub">수작업 반응형 물류에서 AI 예측형 물류(Predictive Logistics)로의 AX 전환</div>
+  </div>
+
+  <div class="compare">
+    <!-- As-Is -->
+    <div class="side as-is">
+      <div class="side-header">
+        <div class="tag">AS-IS</div>
+        <div class="htitle">수작업 반응형 물류</div>
+      </div>
+      <div class="side-body">
+        <div class="item">
+          <div class="item-icon">📞</div>
+          <div class="item-content">
+            <div class="item-title">수동 주문 접수</div>
+            <div class="item-desc">고객 전화/팩스 주문 → 수기 대장 기록<br>탱크 잔량 정보 없어 고갈 후 긴급 요청</div>
+            <div class="item-metric">긴급배송 비율 높음</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">📋</div>
+          <div class="item-content">
+            <div class="item-title">수작업 배차</div>
+            <div class="item-desc">배차담당자 경험 기반 수기 배정<br>위험물 제약 수동 확인, 공차 빈발</div>
+            <div class="item-metric">공차율 높음 · 경로 비효율</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🚛</div>
+          <div class="item-content">
+            <div class="item-title">사각지대 사고 위험</div>
+            <div class="item-desc">위험물 차량 사각지대 큼<br>산업단지 내 보행자/지게차 충돌 위험</div>
+            <div class="item-metric">운송 사고 위험 상존</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🔧</div>
+          <div class="item-content">
+            <div class="item-title">사후 정비 (Reactive)</div>
+            <div class="item-desc">고장 발생 후 수리 → 돌발 운휴<br>법정 검사 일정 수기 관리</div>
+            <div class="item-metric">비계획 정비로 운휴 발생</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Arrow -->
+    <div class="center-arrow">
+      <div class="arr">→</div>
+      <div class="transform-badge">AX 전환</div>
+      <div class="arr">→</div>
+    </div>
+
+    <!-- To-Be -->
+    <div class="side to-be">
+      <div class="side-header">
+        <div class="tag">TO-BE</div>
+        <div class="htitle">AI 예측형 물류</div>
+      </div>
+      <div class="side-body">
+        <div class="item">
+          <div class="item-icon">🤖</div>
+          <div class="item-content">
+            <div class="item-title">AI 수요예측 선제 배송</div>
+            <div class="item-desc">IoT 센서 실시간 잔량 모니터링<br>D+1~D+14 고갈 시점 자동 예측 → 선제 배송</div>
+            <div class="item-metric">긴급배송 80% 감소</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">🗺️</div>
+          <div class="item-content">
+            <div class="item-title">AI 자동 배차·경로 최적화</div>
+            <div class="item-desc">위험물 제약 자동 반영, 최적 경로 산출<br>실시간 리라우팅, 동적 주문 삽입</div>
+            <div class="item-metric">공차율 50% 감소 · 물류비 1.5억 절감</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">👁️</div>
+          <div class="item-content">
+            <div class="item-title">AI 어라운드뷰 안전 운행</div>
+            <div class="item-desc">4CH AI 영상분석 실시간 객체 감지<br>단계별 자동 경고, 이벤트 녹화</div>
+            <div class="item-metric">운송 사고 60% 감소</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-icon">📊</div>
+          <div class="item-content">
+            <div class="item-title">AI 예지보전 (Predictive)</div>
+            <div class="item-desc">ECU 데이터 기반 잔존수명 예측<br>최적 정비 시점 자동 스케줄링</div>
+            <div class="item-metric">비계획 정비 대폭 감소</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Strip -->
+  <div class="kpi-strip">
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-label">납기 단축률</div>
+      <div class="kpi-value">30%↑</div>
+      <div class="kpi-unit">핵심지표 (D)</div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-label">AI 적용률</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-unit">특화지표</div>
+    </div>
+    <div class="kpi-card kpi-amber">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-label">수요예측 정확도</div>
+      <div class="kpi-value">MAPE ≤15%</div>
+      <div class="kpi-unit">자율지표 (Ⅲ-2)</div>
+    </div>
+    <div class="kpi-card kpi-purple">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-label">지연 예측 정확도</div>
+      <div class="kpi-value">AUROC ≥0.85</div>
+      <div class="kpi-unit">자율지표 (Ⅲ-2)</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>위험물 물류 전주기 AI 시스템 개요도</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: #FFFFFF;
+    width: 960px;
+    margin: 0 auto;
+    padding: 40px;
+    color: #1a1a2e;
+  }
+
+  .diagram-title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .diagram-title h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F2B46;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .diagram-title .subtitle {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 400;
+  }
+
+  /* ── Central Loop ── */
+  .loop-container {
+    position: relative;
+    width: 880px;
+    height: 520px;
+    margin: 0 auto 30px;
+  }
+
+  /* Center Hub */
+  .center-hub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #1e40af, #0F2B46);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 10;
+    box-shadow: 0 8px 32px rgba(15, 43, 70, 0.35);
+  }
+  .center-hub .icon { font-size: 28px; margin-bottom: 4px; }
+  .center-hub .label { font-size: 13px; font-weight: 700; letter-spacing: -0.3px; }
+  .center-hub .sub { font-size: 10px; opacity: 0.75; margin-top: 2px; }
+
+  /* Orbit Ring */
+  .orbit-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 2px dashed #CBD5E1;
+  }
+
+  /* Arrow paths */
+  .arrow-path {
+    position: absolute;
+    z-index: 5;
+  }
+
+  /* Module Cards */
+  .module {
+    position: absolute;
+    width: 200px;
+    border-radius: 14px;
+    padding: 18px 16px;
+    background: white;
+    border: 1.5px solid;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    z-index: 10;
+    transition: transform 0.2s;
+  }
+  .module:hover { transform: scale(1.03); }
+
+  .module .num {
+    display: inline-flex;
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+  }
+  .module .mod-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    letter-spacing: -0.3px;
+  }
+  .module .question {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .module .desc {
+    font-size: 10.5px;
+    color: #475569;
+    line-height: 1.55;
+  }
+  .module .tech-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 9.5px;
+    font-weight: 600;
+    background: #F1F5F9;
+    color: #475569;
+  }
+
+  /* Module 1 - Top */
+  .mod1 { top: 0; left: 50%; transform: translateX(-50%); border-color: #2563EB; }
+  .mod1 .num { background: #2563EB; }
+  .mod1 .question { color: #2563EB; }
+  .mod1 .mod-title { color: #1e40af; }
+
+  /* Module 2 - Right */
+  .mod2 { top: 50%; right: 0; transform: translateY(-50%); border-color: #059669; }
+  .mod2 .num { background: #059669; }
+  .mod2 .question { color: #059669; }
+  .mod2 .mod-title { color: #047857; }
+
+  /* Module 3 - Bottom */
+  .mod3 { bottom: 0; left: 50%; transform: translateX(-50%); border-color: #D97706; }
+  .mod3 .num { background: #D97706; }
+  .mod3 .question { color: #D97706; }
+  .mod3 .mod-title { color: #B45309; }
+
+  /* Module 4 - Left */
+  .mod4 { top: 50%; left: 0; transform: translateY(-50%); border-color: #7C3AED; }
+  .mod4 .num { background: #7C3AED; }
+  .mod4 .question { color: #7C3AED; }
+  .mod4 .mod-title { color: #6D28D9; }
+
+  /* Flow Arrows SVG */
+  .flow-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 6;
+    pointer-events: none;
+  }
+
+  /* Bottom bar */
+  .platform-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    border: 1.5px solid #DBEAFE;
+    border-radius: 12px;
+    padding: 14px 24px;
+    margin-top: 10px;
+  }
+  .platform-bar .plat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #334155;
+    font-weight: 500;
+  }
+  .platform-bar .plat-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    font-size: 10.5px;
+    color: #64748B;
+  }
+  .legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .legend .dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+  <div class="diagram-title">
+    <h1>위험물 물류 전주기 AI 시스템 개요도</h1>
+    <div class="subtitle">Closed-Loop Predictive Logistics — 4개 AI 모듈 통합 체계</div>
+  </div>
+
+  <div class="loop-container">
+    <!-- SVG Flow Arrows -->
+    <svg class="flow-svg" viewBox="0 0 880 520">
+      <defs>
+        <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#2563EB"/>
+        </marker>
+        <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#059669"/>
+        </marker>
+        <marker id="arrow-amber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#D97706"/>
+        </marker>
+        <marker id="arrow-purple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#7C3AED"/>
+        </marker>
+      </defs>
+      <!-- 1→2: Top-right curve -->
+      <path d="M 540 95 Q 640 120, 670 190" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrow-blue)" opacity="0.7"/>
+      <!-- 2→3: Bottom-right curve -->
+      <path d="M 670 330 Q 640 400, 540 430" fill="none" stroke="#059669" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrow-green)" opacity="0.7"/>
+      <!-- 3→4: Bottom-left curve -->
+      <path d="M 340 430 Q 240 400, 210 330" fill="none" stroke="#D97706" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrow-amber)" opacity="0.7"/>
+      <!-- 4→1: Top-left curve -->
+      <path d="M 210 190 Q 240 120, 340 95" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrow-purple)" opacity="0.7"/>
+
+      <!-- Feedback arrows (inner, lighter) -->
+      <path d="M 480 210 L 520 180" fill="none" stroke="#94A3B8" stroke-width="1" marker-end="url(#arrow-blue)" opacity="0.4"/>
+      <path d="M 520 260 L 540 240" fill="none" stroke="#94A3B8" stroke-width="1" opacity="0.4"/>
+    </svg>
+
+    <div class="orbit-ring"></div>
+
+    <div class="center-hub">
+      <div class="icon">🔄</div>
+      <div class="label">폐루프 물류 AI</div>
+      <div class="sub">Kafka + TimescaleDB</div>
+      <div class="sub">공통 데이터 플랫폼</div>
+    </div>
+
+    <!-- Module 1: 수요예측 -->
+    <div class="module mod1">
+      <div class="num">1</div>
+      <div class="mod-title">수요예측 (VMI)</div>
+      <div class="question">"언제 보낼 것인가"</div>
+      <div class="desc">IoT 센서 기반 탱크 잔량 예측<br>D+1~D+14 고갈 시점 산출</div>
+      <div class="tech-tag">LSTM + Prophet + XGBoost</div>
+    </div>
+
+    <!-- Module 2: 배차최적화 -->
+    <div class="module mod2">
+      <div class="num">2</div>
+      <div class="mod-title">배차 최적화</div>
+      <div class="question">"어떻게 보낼 것인가"</div>
+      <div class="desc">위험물 제약 반영<br>AI 동적 배차·경로 최적화</div>
+      <div class="tech-tag">OR-Tools + ALNS + PPO</div>
+    </div>
+
+    <!-- Module 3: 안전운행 -->
+    <div class="module mod3">
+      <div class="num">3</div>
+      <div class="mod-title">물류 차량 안전 운행</div>
+      <div class="question">"안전하게 보낼 것인가"</div>
+      <div class="desc">AI 영상분석 기반<br>운행 중 실시간 사고 방지</div>
+      <div class="tech-tag">ATALAS AI + YOLOv8</div>
+    </div>
+
+    <!-- Module 4: 예지보전 -->
+    <div class="module mod4">
+      <div class="num">4</div>
+      <div class="mod-title">예지보전</div>
+      <div class="question">"지속 가능하게 운영할 것인가"</div>
+      <div class="desc">차량 상태 예측으로<br>비계획 정비 최소화</div>
+      <div class="tech-tag">LSTM RUL + 이상탐지</div>
+    </div>
+  </div>
+
+  <!-- Platform Bar -->
+  <div class="platform-bar">
+    <div class="plat-item">
+      <div class="plat-icon" style="background:#0F2B46">📡</div>
+      <div>IoT 센서 150대<br><span style="font-size:10px;color:#94A3B8">초음파/방폭인증</span></div>
+    </div>
+    <div class="plat-item">
+      <div class="plat-icon" style="background:#1e40af">🚛</div>
+      <div>텔레매틱스 60대<br><span style="font-size:10px;color:#94A3B8">GPS+ECU 실시간</span></div>
+    </div>
+    <div class="plat-item">
+      <div class="plat-icon" style="background:#059669">📹</div>
+      <div>어라운드뷰 60세트<br><span style="font-size:10px;color:#94A3B8">4CH HD+엣지AI</span></div>
+    </div>
+    <div class="plat-item">
+      <div class="plat-icon" style="background:#7C3AED">🖥️</div>
+      <div>GPU 서버 + 클라우드<br><span style="font-size:10px;color:#94A3B8">하이브리드 운영</span></div>
+    </div>
+    <div class="plat-item">
+      <div class="plat-icon" style="background:#D97706">📱</div>
+      <div>관제 대시보드 + 모바일<br><span style="font-size:10px;color:#94A3B8">React + FastAPI</span></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><div class="dot" style="background:#2563EB"></div>수요예측 → 배차 입력</span>
+    <span><div class="dot" style="background:#059669"></div>배차 → 안전 운행 모니터링</span>
+    <span><div class="dot" style="background:#D97706"></div>운행 데이터 → 보전 예측</span>
+    <span><div class="dot" style="background:#7C3AED"></div>차량 상태 → 배차 반영</span>
+    <span style="color:#94A3B8">⟲ 피드백 루프</span>
+  </div>
+</body>
+</html>
