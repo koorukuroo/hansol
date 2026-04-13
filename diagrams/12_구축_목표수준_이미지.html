@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>제조 AI 응용제품 구축 목표수준</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#FAFBFE;width:960px;margin:0 auto;padding:28px 32px;color:#1a1a2e}
+
+  .header{text-align:center;margin-bottom:22px}
+  .header h1{font-size:18px;font-weight:800;color:#0F2B46}
+  .header .tagline{font-size:11.5px;color:#1e40af;font-weight:600;margin-top:4px}
+  .header .sub{font-size:10px;color:#94A3B8;margin-top:2px}
+
+  /* ══ Scene Layout ══ */
+  .scene{position:relative;background:linear-gradient(180deg,#E8F0FE 0%,#F0F4FF 30%,#FAFBFE 100%);border-radius:16px;border:1.5px solid #CBD5E1;padding:20px;height:500px;overflow:hidden}
+
+  /* ── 공장/본사 (중앙 상단) ── */
+  .hq{position:absolute;top:12px;left:50%;transform:translateX(-50%);text-align:center}
+  .hq-box{background:white;border:2px solid #1e40af;border-radius:12px;padding:10px 20px;box-shadow:0 4px 12px rgba(30,64,175,0.15)}
+  .hq-icon{font-size:22px}
+  .hq-name{font-size:11px;font-weight:700;color:#1e40af}
+  .hq-sub{font-size:9px;color:#64748B}
+
+  /* ── 관제센터 (우상단) ── */
+  .control{position:absolute;top:10px;right:16px}
+  .ctrl-box{background:white;border:2px solid #059669;border-radius:12px;padding:10px 14px;box-shadow:0 4px 12px rgba(5,150,105,0.15)}
+  .ctrl-icon{font-size:18px}
+  .ctrl-name{font-size:10px;font-weight:700;color:#047857}
+  .ctrl-sub{font-size:8.5px;color:#64748B}
+  .ctrl-screens{display:flex;gap:3px;margin-top:4px}
+  .ctrl-scr{width:28px;height:18px;border-radius:3px;background:#D1FAE5;border:1px solid #A7F3D0}
+
+  /* ── Cloud AI (좌상단) ── */
+  .cloud{position:absolute;top:10px;left:16px}
+  .cloud-box{background:white;border:2px solid #7C3AED;border-radius:12px;padding:10px 14px;box-shadow:0 4px 12px rgba(124,58,237,0.15)}
+  .cloud-icon{font-size:18px}
+  .cloud-name{font-size:10px;font-weight:700;color:#5B21B6}
+  .cloud-sub{font-size:8.5px;color:#64748B;line-height:1.3}
+
+  /* ── 도로/배송 (중앙 가로) ── */
+  .road{position:absolute;top:130px;left:30px;right:30px;height:100px}
+  .road-surface{width:100%;height:50px;background:linear-gradient(90deg,#94A3B8 0%,#64748B 50%,#94A3B8 100%);border-radius:6px;position:relative;top:25px}
+  .road-line{position:absolute;top:48px;left:5%;right:5%;height:2px;background:repeating-linear-gradient(90deg,#FDE68A 0px,#FDE68A 20px,transparent 20px,transparent 35px)}
+
+  /* ── 배송 트럭들 ── */
+  .truck{position:absolute;display:flex;flex-direction:column;align-items:center}
+  .truck-body{background:white;border:2px solid;border-radius:10px;padding:6px 10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:relative}
+  .truck-icon{font-size:20px}
+  .truck-label{font-size:8px;font-weight:700;margin-top:1px}
+  .truck-feat{position:absolute;font-size:7px;padding:2px 5px;border-radius:4px;white-space:nowrap;font-weight:600}
+
+  .t1{top:105px;left:80px}
+  .t1 .truck-body{border-color:#D97706}
+  .t1 .truck-label{color:#92400E}
+
+  .t2{top:100px;left:290px}
+  .t2 .truck-body{border-color:#2563EB}
+  .t2 .truck-label{color:#1e40af}
+
+  .t3{top:108px;left:540px}
+  .t3 .truck-body{border-color:#059669}
+  .t3 .truck-label{color:#047857}
+
+  .t4{top:102px;left:750px}
+  .t4 .truck-body{border-color:#DC2626}
+  .t4 .truck-label{color:#9F1239}
+
+  /* ── AI 기능 배지 (트럭 주위) ── */
+  .ai-badge{position:absolute;padding:4px 8px;border-radius:6px;font-size:8px;font-weight:700;color:white;box-shadow:0 2px 6px rgba(0,0,0,0.15);white-space:nowrap}
+
+  /* ── 고객사 탱크 (하단) ── */
+  .tanks-row{position:absolute;bottom:15px;left:20px;right:20px;display:flex;justify-content:space-around}
+  .tank{text-align:center}
+  .tank-visual{width:50px;height:34px;border-radius:6px;border:2px solid;position:relative;overflow:hidden}
+  .tank-fill{position:absolute;bottom:0;left:0;right:0;border-radius:0 0 4px 4px}
+  .tank-sensor{position:absolute;top:-6px;right:-4px;width:12px;height:12px;border-radius:50%;background:#2563EB;border:1.5px solid white;display:flex;align-items:center;justify-content:center;font-size:6px}
+  .tank-name{font-size:7.5px;color:#475569;margin-top:3px;font-weight:600}
+  .tank-status{font-size:7px;font-weight:700;margin-top:1px}
+
+  /* ── 데이터 흐름선 ── */
+  .flow-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+
+  /* ══ 하단 KPI 스트립 ══ */
+  .kpi-strip{display:flex;gap:8px;margin-top:12px}
+  .kpi{flex:1;text-align:center;padding:12px 8px;border-radius:10px;border:1.5px solid;background:white}
+  .kpi .k-icon{font-size:18px;margin-bottom:3px}
+  .kpi .k-before{font-size:9px;color:#94A3B8;text-decoration:line-through}
+  .kpi .k-arrow{font-size:10px;color:#059669;font-weight:800}
+  .kpi .k-after{font-size:18px;font-weight:900}
+  .kpi .k-label{font-size:9px;color:#64748B;margin-top:2px}
+
+  .k-blue{border-color:#BFDBFE}
+  .k-blue .k-after{color:#1e40af}
+  .k-green{border-color:#BBF7D0}
+  .k-green .k-after{color:#047857}
+  .k-amber{border-color:#FDE68A}
+  .k-amber .k-after{color:#92400E}
+  .k-red{border-color:#FECDD3}
+  .k-red .k-after{color:#9F1239}
+  .k-purple{border-color:#DDD6FE}
+  .k-purple .k-after{color:#5B21B6}
+  .k-teal{border-color:#99F6E4}
+  .k-teal .k-after{color:#115E59}
+
+  /* ══ 4대 모듈 요약 스트립 ══ */
+  .mod-strip{display:flex;gap:8px;margin-top:10px}
+  .ms-card{flex:1;padding:10px;border-radius:10px;border:1.5px solid;text-align:center;background:white}
+  .ms-card .ms-num{font-size:10px;font-weight:800;color:white;display:inline-block;width:20px;height:20px;line-height:20px;border-radius:6px;margin-bottom:4px}
+  .ms-card .ms-name{font-size:11px;font-weight:700;margin-bottom:2px}
+  .ms-card .ms-product{font-size:8.5px;color:#64748B}
+  .ms-card .ms-target{font-size:9px;font-weight:700;margin-top:4px;padding:2px 6px;border-radius:4px;display:inline-block}
+
+  .ms1{border-color:#BFDBFE}
+  .ms1 .ms-num{background:#2563EB}
+  .ms1 .ms-name{color:#1e40af}
+  .ms1 .ms-target{background:#EFF6FF;color:#1e40af}
+
+  .ms2{border-color:#BBF7D0}
+  .ms2 .ms-num{background:#059669}
+  .ms2 .ms-name{color:#047857}
+  .ms2 .ms-target{background:#F0FDF4;color:#047857}
+
+  .ms3{border-color:#FDE68A}
+  .ms3 .ms-num{background:#D97706}
+  .ms3 .ms-name{color:#92400E}
+  .ms3 .ms-target{background:#FFFBEB;color:#92400E}
+
+  .ms4{border-color:#DDD6FE}
+  .ms4 .ms-num{background:#7C3AED}
+  .ms4 .ms-name{color:#5B21B6}
+  .ms4 .ms-target{background:#F5F3FF;color:#5B21B6}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>제조 AI 응용제품 구축 목표수준 및 주요 내용</h1>
+  <div class="tagline">위험물(고압가스) 물류 전주기 AI — 수작업 반응형 물류에서 AI 예측형 물류로 전환</div>
+  <div class="sub">검증된 상용 AI 제품 기반 · 12개월 내 전면 상용화 · 차량 60대 · 고객 150개소</div>
+</div>
+
+<!-- Scene -->
+<div class="scene">
+  <svg class="flow-svg" viewBox="0 0 900 500">
+    <defs>
+      <marker id="a1" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#2563EB"/></marker>
+      <marker id="a2" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#059669"/></marker>
+      <marker id="a3" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#7C3AED"/></marker>
+      <marker id="a4" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#D97706"/></marker>
+    </defs>
+    <!-- IoT 센서 → Cloud -->
+    <path d="M120 400 Q50 300 100 100" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a1)" opacity="0.5"/>
+    <path d="M330 400 Q200 300 120 100" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+    <path d="M530 400 Q400 300 140 100" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+    <path d="M720 400 Q600 300 150 100" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3"/>
+
+    <!-- Cloud → 관제센터 -->
+    <path d="M170 70 L700 50" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a2)" opacity="0.5"/>
+
+    <!-- Cloud → 트럭 (배차 지시) -->
+    <path d="M130 100 Q180 150 160 170" fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a3)" opacity="0.5"/>
+    <path d="M140 100 Q300 150 340 165" fill="none" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+
+    <!-- 트럭 → 탱크 (배송) -->
+    <path d="M155 230 L130 370" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a4)" opacity="0.5"/>
+    <path d="M380 225 L350 370" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+    <path d="M600 230 L540 370" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+
+    <!-- Labels -->
+    <text x="60" y="260" font-size="8" fill="#2563EB" font-weight="600" font-family="Pretendard" opacity="0.7">IoT 잔량</text>
+    <text x="60" y="270" font-size="8" fill="#2563EB" font-weight="600" font-family="Pretendard" opacity="0.7">데이터↑</text>
+    <text x="400" y="42" font-size="8" fill="#059669" font-weight="600" font-family="Pretendard" opacity="0.7">실시간 대시보드</text>
+    <text x="200" y="145" font-size="8" fill="#7C3AED" font-weight="600" font-family="Pretendard" opacity="0.7">AI 배차 지시↓</text>
+    <text x="155" y="310" font-size="8" fill="#D97706" font-weight="600" font-family="Pretendard" opacity="0.7">선제 배송</text>
+  </svg>
+
+  <!-- Cloud AI -->
+  <div class="cloud">
+    <div class="cloud-box">
+      <div class="cloud-icon">☁️🧠</div>
+      <div class="cloud-name">AI 클라우드 플랫폼</div>
+      <div class="cloud-sub">Azure AutoML · OR-Tools<br>수요예측 + 배차최적화<br>24시간 자동 운영</div>
+    </div>
+  </div>
+
+  <!-- HQ -->
+  <div class="hq">
+    <div class="hq-box">
+      <div class="hq-icon">🏭</div>
+      <div class="hq-name">덕양가스 본사 (울산)</div>
+      <div class="hq-sub">MES/ERP 연동 · 가스 충전소</div>
+    </div>
+  </div>
+
+  <!-- Control Center -->
+  <div class="control">
+    <div class="ctrl-box">
+      <div class="ctrl-icon">🖥️📊</div>
+      <div class="ctrl-name">AI 통합 관제센터</div>
+      <div class="ctrl-sub">실시간 물류 모니터링<br>배차현황 · KPI · 안전알림</div>
+      <div class="ctrl-screens">
+        <div class="ctrl-scr"></div>
+        <div class="ctrl-scr"></div>
+        <div class="ctrl-scr"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Road -->
+  <div class="road">
+    <div class="road-surface"></div>
+    <div class="road-line"></div>
+  </div>
+
+  <!-- Trucks -->
+  <div class="truck t1">
+    <div class="truck-body">
+      <div class="truck-icon">🚛</div>
+      <div class="truck-label">A차량 (질소)</div>
+    </div>
+    <div class="ai-badge" style="background:#D97706;top:-12px;left:50px">📹 AVM 360° AI</div>
+    <div class="ai-badge" style="background:#7C3AED;top:40px;left:55px">📶 텔레매틱스</div>
+  </div>
+
+  <div class="truck t2">
+    <div class="truck-body">
+      <div class="truck-icon">🚛</div>
+      <div class="truck-label">B차량 (산소)</div>
+    </div>
+    <div class="ai-badge" style="background:#2563EB;top:-12px;left:50px">🗺️ AI 최적 경로</div>
+  </div>
+
+  <div class="truck t3">
+    <div class="truck-body">
+      <div class="truck-icon">🚛</div>
+      <div class="truck-label">C차량 (아르곤)</div>
+    </div>
+    <div class="ai-badge" style="background:#059669;top:-12px;left:45px">📱 모바일 배차</div>
+  </div>
+
+  <div class="truck t4">
+    <div class="truck-body">
+      <div class="truck-icon">🚛</div>
+      <div class="truck-label">D차량 (CO₂)</div>
+    </div>
+    <div class="ai-badge" style="background:#DC2626;top:-12px;left:40px">🔧 예지보전 알림</div>
+  </div>
+
+  <!-- Customer Tanks -->
+  <div class="tanks-row">
+    <div class="tank">
+      <div class="tank-visual" style="border-color:#DC2626">
+        <div class="tank-fill" style="height:18%;background:#FCA5A5"></div>
+        <div class="tank-sensor">📡</div>
+      </div>
+      <div class="tank-name">A고객 (미포산단)</div>
+      <div class="tank-status" style="color:#DC2626">🔴 잔량 18% — AI 긴급배송</div>
+    </div>
+    <div class="tank">
+      <div class="tank-visual" style="border-color:#D97706">
+        <div class="tank-fill" style="height:35%;background:#FDE68A"></div>
+        <div class="tank-sensor">📡</div>
+      </div>
+      <div class="tank-name">B고객 (온산산단)</div>
+      <div class="tank-status" style="color:#D97706">🟡 잔량 35% — D+3 배송 예약</div>
+    </div>
+    <div class="tank">
+      <div class="tank-visual" style="border-color:#059669">
+        <div class="tank-fill" style="height:72%;background:#A7F3D0"></div>
+        <div class="tank-sensor">📡</div>
+      </div>
+      <div class="tank-name">C고객 (울산항)</div>
+      <div class="tank-status" style="color:#059669">🟢 잔량 72% — 안전</div>
+    </div>
+    <div class="tank">
+      <div class="tank-visual" style="border-color:#D97706">
+        <div class="tank-fill" style="height:42%;background:#FDE68A"></div>
+        <div class="tank-sensor">📡</div>
+      </div>
+      <div class="tank-name">D고객 (양산산단)</div>
+      <div class="tank-status" style="color:#D97706">🟡 잔량 42% — D+5 예측</div>
+    </div>
+    <div class="tank">
+      <div class="tank-visual" style="border-color:#059669">
+        <div class="tank-fill" style="height:85%;background:#A7F3D0"></div>
+        <div class="tank-sensor">📡</div>
+      </div>
+      <div class="tank-name">E고객 (사상산단)</div>
+      <div class="tank-status" style="color:#059669">🟢 잔량 85% — 안전</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 Module Summary -->
+<div class="mod-strip">
+  <div class="ms-card ms1">
+    <div class="ms-num">1</div>
+    <div class="ms-name">수요예측 (VMI)</div>
+    <div class="ms-product">Azure AutoML Forecasting</div>
+    <div class="ms-target">MAPE ≤ 15%</div>
+  </div>
+  <div class="ms-card ms2">
+    <div class="ms-name ms-num">2</div>
+    <div class="ms-name">배차 최적화</div>
+    <div class="ms-product">OR-Tools + 카카오/TMAP</div>
+    <div class="ms-target">배차 5분 이내</div>
+  </div>
+  <div class="ms-card ms3">
+    <div class="ms-num">3</div>
+    <div class="ms-name">물류 차량 안전 운행</div>
+    <div class="ms-product">Brigade 360 AI + Mobileye</div>
+    <div class="ms-target">사고 60%↓</div>
+  </div>
+  <div class="ms-card ms4">
+    <div class="ms-num">4</div>
+    <div class="ms-name">텔레매틱스/예지보전</div>
+    <div class="ms-product">KT Smart[Fleet] + XENLINK</div>
+    <div class="ms-target">비계획정비↓</div>
+  </div>
+</div>
+
+<!-- KPI Strip -->
+<div class="kpi-strip">
+  <div class="kpi k-blue">
+    <div class="k-icon">📦</div>
+    <div class="k-before">긴급배송 多</div>
+    <div class="k-arrow">→</div>
+    <div class="k-after">80%↓</div>
+    <div class="k-label">긴급배송 감소</div>
+  </div>
+  <div class="kpi k-green">
+    <div class="k-icon">🚛</div>
+    <div class="k-before">공차 운행 多</div>
+    <div class="k-arrow">→</div>
+    <div class="k-after">50%↓</div>
+    <div class="k-label">공차율 감소</div>
+  </div>
+  <div class="kpi k-amber">
+    <div class="k-icon">💰</div>
+    <div class="k-before">물류비 과다</div>
+    <div class="k-arrow">→</div>
+    <div class="k-after">1.5억</div>
+    <div class="k-label">연간 절감</div>
+  </div>
+  <div class="kpi k-red">
+    <div class="k-icon">🛡️</div>
+    <div class="k-before">사고 위험</div>
+    <div class="k-arrow">→</div>
+    <div class="k-after">60%↓</div>
+    <div class="k-label">사고 감소</div>
+  </div>
+  <div class="kpi k-teal">
+    <div class="k-icon">🌿</div>
+    <div class="k-before">탄소 배출</div>
+    <div class="k-arrow">→</div>
+    <div class="k-after">120톤</div>
+    <div class="k-label">CO₂ 감축</div>
+  </div>
+  <div class="kpi k-purple">
+    <div class="k-icon">📈</div>
+    <div class="k-before">수작업 배차</div>
+    <div class="k-arrow">→</div>
+    <div class="k-after">30%↑</div>
+    <div class="k-label">납기 단축</div>
+  </div>
+</div>
+
+</body>
+</html>
