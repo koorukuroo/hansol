@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>어라운드뷰 AI 감지 체계</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#fff;width:960px;margin:0 auto;padding:32px 40px;color:#1a1a2e}
+  .title{text-align:center;margin-bottom:20px}
+  .title h1{font-size:19px;font-weight:800;color:#0F2B46}
+  .title .sub{font-size:11px;color:#64748B;margin-top:3px}
+
+  .main-layout{display:flex;gap:16px;margin-bottom:16px}
+
+  /* Truck top-view */
+  .truck-view{width:340px;flex-shrink:0;position:relative;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center}
+  .truck-svg{width:300px;height:380px}
+
+  /* Detection info */
+  .detect-info{flex:1}
+  .di-section{margin-bottom:12px}
+  .di-head{font-size:12px;font-weight:700;margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid}
+  .di-card{display:flex;gap:8px;padding:8px;border-radius:8px;margin-bottom:6px;border:1px solid;align-items:flex-start}
+  .di-card .dc-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;color:white;flex-shrink:0}
+  .di-card .dc-title{font-size:10.5px;font-weight:700;margin-bottom:1px}
+  .di-card .dc-desc{font-size:9.5px;color:#64748B;line-height:1.4}
+
+  /* Alert section */
+  .di-alert .di-head{color:#DC2626;border-color:#FECACA}
+  .di-alert .di-card{border-color:#FFE4E6;background:#FFF1F2}
+  .di-alert .dc-title{color:#991B1B}
+
+  /* Feature section */
+  .di-feat .di-head{color:#1e40af;border-color:#BFDBFE}
+  .di-feat .di-card{border-color:#DBEAFE;background:#EFF6FF}
+  .di-feat .dc-title{color:#1e40af}
+
+  /* Spec section */
+  .di-spec .di-head{color:#047857;border-color:#BBF7D0}
+  .di-spec .di-card{border-color:#D1FAE5;background:#F0FDF4}
+  .di-spec .dc-title{color:#047857}
+
+  /* Alert levels bar */
+  .alert-bar{display:flex;gap:8px;margin-bottom:16px}
+  .al-card{flex:1;padding:10px;border-radius:10px;text-align:center;border:1.5px solid}
+  .al-card .al-level{font-size:11px;font-weight:700;margin-bottom:2px}
+  .al-card .al-action{font-size:9px;color:#475569}
+  .al-card .al-range{font-size:16px;font-weight:800;margin:4px 0}
+
+  .al-safe{border-color:#BBF7D0;background:#F0FDF4}
+  .al-safe .al-level{color:#047857}
+  .al-safe .al-range{color:#059669}
+
+  .al-warn{border-color:#FDE68A;background:#FFFBEB}
+  .al-warn .al-level{color:#92400E}
+  .al-warn .al-range{color:#D97706}
+
+  .al-danger{border-color:#FECDD3;background:#FFF1F2}
+  .al-danger .al-level{color:#9F1239}
+  .al-danger .al-range{color:#E11D48}
+
+  .al-emer{border-color:#C084FC;background:#FAF5FF}
+  .al-emer .al-level{color:#6D28D9}
+  .al-emer .al-range{color:#7C3AED}
+
+  /* Bottom product badge */
+  .prod-badge{display:flex;gap:12px;padding:12px 16px;border:1.5px solid #FDE68A;border-radius:12px;background:linear-gradient(135deg,#FFFBEB,#FEF3C7)}
+  .prod-badge .pb-item{flex:1;text-align:center}
+  .prod-badge .pb-name{font-size:11px;font-weight:700;color:#92400E}
+  .prod-badge .pb-desc{font-size:9px;color:#64748B;margin-top:2px}
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>어라운드뷰 AI 감지 체계 — 물류 차량 안전 운행</h1>
+    <div class="sub">4CH HD 카메라 → AI 실시간 객체 인식 → 단계별 경고 → 이벤트 녹화 → 관제센터 알림</div>
+  </div>
+
+  <div class="main-layout">
+    <!-- Truck Top View -->
+    <div class="truck-view">
+      <svg class="truck-svg" viewBox="0 0 280 360">
+        <!-- Detection zones -->
+        <!-- Front zone -->
+        <ellipse cx="140" cy="45" rx="90" ry="35" fill="#059669" opacity="0.08" stroke="#059669" stroke-width="1" stroke-dasharray="4,3"/>
+        <ellipse cx="140" cy="55" rx="60" ry="22" fill="#059669" opacity="0.12"/>
+        <text x="140" y="30" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">전방 감지 구역</text>
+
+        <!-- Left zone -->
+        <ellipse cx="40" cy="180" rx="30" ry="80" fill="#D97706" opacity="0.08" stroke="#D97706" stroke-width="1" stroke-dasharray="4,3"/>
+        <ellipse cx="52" cy="180" rx="18" ry="55" fill="#D97706" opacity="0.12"/>
+        <text x="22" y="180" text-anchor="middle" font-size="8" fill="#D97706" font-weight="600" transform="rotate(-90,22,180)">좌측 사각지대</text>
+
+        <!-- Right zone -->
+        <ellipse cx="240" cy="180" rx="30" ry="80" fill="#D97706" opacity="0.08" stroke="#D97706" stroke-width="1" stroke-dasharray="4,3"/>
+        <ellipse cx="228" cy="180" rx="18" ry="55" fill="#D97706" opacity="0.12"/>
+        <text x="258" y="180" text-anchor="middle" font-size="8" fill="#D97706" font-weight="600" transform="rotate(90,258,180)">우측 사각지대</text>
+
+        <!-- Rear zone -->
+        <ellipse cx="140" cy="315" rx="90" ry="35" fill="#DC2626" opacity="0.08" stroke="#DC2626" stroke-width="1" stroke-dasharray="4,3"/>
+        <ellipse cx="140" cy="305" rx="60" ry="22" fill="#DC2626" opacity="0.12"/>
+        <text x="140" y="335" text-anchor="middle" font-size="9" fill="#DC2626" font-weight="600">후방 사각지대</text>
+
+        <!-- Truck body -->
+        <rect x="80" y="70" width="120" height="220" rx="8" fill="#334155" stroke="#1E293B" stroke-width="2"/>
+        <!-- Cab -->
+        <rect x="95" y="72" width="90" height="50" rx="4" fill="#475569"/>
+        <text x="140" y="100" text-anchor="middle" font-size="10" fill="white" font-weight="700">운전석</text>
+        <!-- Tank -->
+        <rect x="85" y="130" width="110" height="145" rx="6" fill="#64748B"/>
+        <text x="140" y="195" text-anchor="middle" font-size="11" fill="white" font-weight="700">가스 탱크</text>
+        <text x="140" y="210" text-anchor="middle" font-size="8" fill="#CBD5E1">(위험물)</text>
+
+        <!-- Cameras -->
+        <circle cx="140" cy="68" r="6" fill="#3B82F6" stroke="white" stroke-width="2"/>
+        <text x="140" y="62" text-anchor="middle" font-size="7" fill="#3B82F6" font-weight="700">CAM1</text>
+
+        <circle cx="78" cy="180" r="6" fill="#3B82F6" stroke="white" stroke-width="2"/>
+        <text x="68" y="175" text-anchor="middle" font-size="7" fill="#3B82F6" font-weight="700">CAM2</text>
+
+        <circle cx="202" cy="180" r="6" fill="#3B82F6" stroke="white" stroke-width="2"/>
+        <text x="214" y="175" text-anchor="middle" font-size="7" fill="#3B82F6" font-weight="700">CAM3</text>
+
+        <circle cx="140" cy="292" r="6" fill="#3B82F6" stroke="white" stroke-width="2"/>
+        <text x="140" y="300" text-anchor="middle" font-size="7" fill="#3B82F6" font-weight="700">CAM4</text>
+
+        <!-- People icons -->
+        <text x="45" y="140" font-size="16">🚶</text>
+        <text x="220" y="220" font-size="14">🚲</text>
+        <text x="160" y="340" font-size="14">🏗️</text>
+        <text x="100" y="25" font-size="14">🚗</text>
+
+        <!-- 360 label -->
+        <circle cx="140" cy="180" r="20" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="140" y="183" text-anchor="middle" font-size="9" fill="#3B82F6" font-weight="800">360°</text>
+      </svg>
+    </div>
+
+    <!-- Detection Features -->
+    <div class="detect-info">
+      <div class="di-section di-feat">
+        <div class="di-head">🤖 AI 감지 기능 (실시간)</div>
+        <div class="di-card">
+          <div class="dc-icon" style="background:#2563EB">👤</div>
+          <div><div class="dc-title">보행자/작업자 감지 (Human Detection)</div><div class="dc-desc">사각지대 내 사람을 AI가 실시간 식별. 산업단지 내 보행자, 작업자, 안전모 착용자 구분</div></div>
+        </div>
+        <div class="di-card">
+          <div class="dc-icon" style="background:#059669">🚗</div>
+          <div><div class="dc-title">차량/장비 감지</div><div class="dc-desc">승용차, 오토바이, 지게차, 크레인 등 이동체 감지. 산업단지 특수 장비 인식 학습</div></div>
+        </div>
+        <div class="di-card">
+          <div class="dc-icon" style="background:#D97706">📐</div>
+          <div><div class="dc-title">거리/궤적 예측</div><div class="dc-desc">감지 객체의 이동 방향·속도를 분석하여 충돌 위험도 실시간 계산 (Trajectory Prediction)</div></div>
+        </div>
+      </div>
+
+      <div class="di-section di-alert">
+        <div class="di-head">🔔 자동 조치</div>
+        <div class="di-card">
+          <div class="dc-icon" style="background:#DC2626">🔊</div>
+          <div><div class="dc-title">운전자 단계별 경고</div><div class="dc-desc">시각(디스플레이 하이라이트) + 청각(경보음) + 진동(핸들) 3중 경고. 위험 거리에 따라 단계 자동 전환</div></div>
+        </div>
+        <div class="di-card">
+          <div class="dc-icon" style="background:#7C3AED">📹</div>
+          <div><div class="dc-title">이벤트 자동 녹화 + 관제 알림</div><div class="dc-desc">위험 이벤트 발생 시 전후 30초 영상 자동 저장 → 관제센터 실시간 알림 → 사고 분석 DB 축적</div></div>
+        </div>
+      </div>
+
+      <div class="di-section di-spec">
+        <div class="di-head">⚙️ 위험물 차량 특화 설계</div>
+        <div class="di-card">
+          <div class="dc-icon" style="background:#047857">🛢️</div>
+          <div><div class="dc-title">탱크로리 사각지대 최적화</div><div class="dc-desc">일반 트럭 대비 넓은 탱크 후방/측면 사각지대에 맞춰 카메라 각도·AI 감지 범위 커스터마이징. 급제동/급가속 시 적재물 위험도 연동</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert Levels -->
+  <div class="alert-bar">
+    <div class="al-card al-safe">
+      <div class="al-level">안전 (Level 0)</div>
+      <div class="al-range">5m+</div>
+      <div class="al-action">정상 주행 · Bird's Eye View 표시</div>
+    </div>
+    <div class="al-card al-warn">
+      <div class="al-level">주의 (Level 1)</div>
+      <div class="al-range">3~5m</div>
+      <div class="al-action">디스플레이 하이라이트 · 부저음</div>
+    </div>
+    <div class="al-card al-danger">
+      <div class="al-level">위험 (Level 2)</div>
+      <div class="al-range">1~3m</div>
+      <div class="al-action">적색 플래시 · 강한 경보 · 진동</div>
+    </div>
+    <div class="al-card al-emer">
+      <div class="al-level">긴급 (Level 3)</div>
+      <div class="al-range">&lt;1m</div>
+      <div class="al-action">최대 경보 + 이벤트 녹화 + 관제 알림</div>
+    </div>
+  </div>
+
+  <!-- Product Badge -->
+  <div class="prod-badge">
+    <div class="pb-item">
+      <div class="pb-name">Brigade Backeye 360 AI</div>
+      <div class="pb-desc">4CH HD · IP67 · AI 인체감지 내장 · 상용차 전용</div>
+    </div>
+    <div class="pb-item">
+      <div class="pb-name">Mobileye Shield+ (보완)</div>
+      <div class="pb-desc">전방 충돌 방지 · 270° 사각지대 · 레트로핏</div>
+    </div>
+    <div class="pb-item">
+      <div class="pb-name">Jetson Orin 엣지 AI</div>
+      <div class="pb-desc">차량 탑재 · 실시간 추론 · 클라우드 비의존</div>
+    </div>
+  </div>
+</body>
+</html>

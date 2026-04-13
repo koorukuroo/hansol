@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>수요예측(VMI) AI 작동 원리</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#fff;width:960px;margin:0 auto;padding:32px 40px;color:#1a1a2e}
+  .title{text-align:center;margin-bottom:20px}
+  .title h1{font-size:19px;font-weight:800;color:#0F2B46}
+  .title .sub{font-size:11px;color:#64748B;margin-top:3px}
+
+  /* Pipeline */
+  .pipeline{display:flex;gap:8px;align-items:stretch;margin-bottom:18px}
+  .pipe-stage{flex:1;border-radius:12px;border:1.5px solid;overflow:hidden;min-width:0}
+  .ps-head{padding:10px 12px;color:#fff;font-size:12px;font-weight:700;text-align:center}
+  .ps-body{padding:10px 12px;font-size:10px;line-height:1.55;color:#334155}
+  .ps-item{padding:5px 8px;border-radius:6px;margin-bottom:5px;border:1px solid}
+  .ps-item .pi-label{font-weight:700;font-size:10px;margin-bottom:2px}
+  .ps-item .pi-val{font-size:9.5px;color:#64748B}
+
+  .arrow-sep{display:flex;align-items:center;width:18px;flex-shrink:0}
+  .arrow-sep svg{width:14px;height:14px}
+
+  /* Stage colors */
+  .st-input{border-color:#BFDBFE}
+  .st-input .ps-head{background:linear-gradient(135deg,#1e40af,#3B82F6)}
+  .st-input .ps-item{border-color:#DBEAFE;background:#EFF6FF}
+  .st-input .pi-label{color:#1e40af}
+
+  .st-process{border-color:#BBF7D0}
+  .st-process .ps-head{background:linear-gradient(135deg,#047857,#10B981)}
+  .st-process .ps-item{border-color:#D1FAE5;background:#F0FDF4}
+  .st-process .pi-label{color:#047857}
+
+  .st-output{border-color:#FDE68A}
+  .st-output .ps-head{background:linear-gradient(135deg,#B45309,#F59E0B)}
+  .st-output .ps-item{border-color:#FEF3C7;background:#FFFBEB}
+  .st-output .pi-label{color:#92400E}
+
+  .st-action{border-color:#FECDD3}
+  .st-action .ps-head{background:linear-gradient(135deg,#9F1239,#E11D48)}
+  .st-action .ps-item{border-color:#FFE4E6;background:#FFF1F2}
+  .st-action .pi-label{color:#9F1239}
+
+  /* Example scenario */
+  .scenario{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:12px;padding:16px 20px;margin-bottom:16px}
+  .sc-title{font-size:13px;font-weight:700;color:#0F2B46;margin-bottom:12px}
+  .sc-flow{display:flex;align-items:center;gap:8px}
+  .sc-step{flex:1;text-align:center;padding:10px 8px;border-radius:10px;border:1.5px solid}
+  .sc-step .sc-icon{font-size:24px;margin-bottom:4px}
+  .sc-step .sc-label{font-size:10px;font-weight:600;margin-bottom:2px}
+  .sc-step .sc-value{font-size:14px;font-weight:800}
+  .sc-step .sc-desc{font-size:9px;color:#64748B;margin-top:2px}
+  .sc-arrow{font-size:16px;color:#94A3B8;flex-shrink:0}
+
+  .sc-s1{border-color:#BFDBFE;background:#EFF6FF}
+  .sc-s1 .sc-value{color:#1e40af}
+  .sc-s2{border-color:#BBF7D0;background:#F0FDF4}
+  .sc-s2 .sc-value{color:#047857}
+  .sc-s3{border-color:#FDE68A;background:#FFFBEB}
+  .sc-s3 .sc-value{color:#92400E}
+  .sc-s4{border-color:#FECDD3;background:#FFF1F2}
+  .sc-s4 .sc-value{color:#9F1239}
+
+  /* Accuracy chart */
+  .acc-row{display:flex;gap:12px}
+  .acc-card{flex:1;padding:14px;border-radius:10px;border:1.5px solid #E2E8F0;text-align:center}
+  .acc-card .ac-label{font-size:10px;color:#64748B;margin-bottom:4px}
+  .acc-card .ac-val{font-size:22px;font-weight:900}
+  .acc-card .ac-ref{font-size:9px;color:#94A3B8;margin-top:3px}
+  .ac-blue .ac-val{color:#1e40af}
+  .ac-green .ac-val{color:#047857}
+  .ac-amber .ac-val{color:#92400E}
+
+  /* Azure badge */
+  .azure-badge{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;padding:10px;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1.5px solid #BFDBFE;border-radius:10px}
+  .azure-badge .ab-text{font-size:11px;color:#1e40af;font-weight:600}
+  .azure-badge .ab-sub{font-size:9.5px;color:#64748B}
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>수요예측(VMI) AI 작동 원리</h1>
+    <div class="sub">IoT 센서 데이터 + 외부 변수 → Azure AutoML 앙상블 → D+1~D+14 고갈 시점 예측 → 선제적 VMI 자동보충</div>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="pipeline">
+    <div class="pipe-stage st-input">
+      <div class="ps-head">📡 입력 데이터</div>
+      <div class="ps-body">
+        <div class="ps-item"><div class="pi-label">IoT 탱크 센서 (150대)</div><div class="pi-val">잔량(%) · 온도 · 압력<br>10분 주기 · MQTT</div></div>
+        <div class="ps-item"><div class="pi-label">ERP 배송 이력 (3년)</div><div class="pi-val">주문일 · 배송량 · 고객별<br>소비 패턴 · 계절성</div></div>
+        <div class="ps-item"><div class="pi-label">외부 변수</div><div class="pi-val">기상(기온·강수) · 공휴일<br>산업가동률 · 조업 캘린더</div></div>
+      </div>
+    </div>
+
+    <div class="arrow-sep"><svg viewBox="0 0 14 14"><polygon points="0,3 10,7 0,11" fill="#94A3B8"/></svg></div>
+
+    <div class="pipe-stage st-process">
+      <div class="ps-head">🧠 AI 예측 엔진</div>
+      <div class="ps-body">
+        <div class="ps-item"><div class="pi-label">Azure AutoML Forecasting</div><div class="pi-val">10종 알고리즘 자동 시험<br>최적 앙상블 자동 선택</div></div>
+        <div class="ps-item"><div class="pi-label">알고리즘 풀</div><div class="pi-val">ARIMA · Prophet · ETS<br>XGBoost · LightGBM<br>TCNForecaster(딥러닝)</div></div>
+        <div class="ps-item"><div class="pi-label">도메인 특화 피처</div><div class="pi-val">가스 소비 곡선 패턴<br>기온 역비례 특성 반영<br>안전재고 제약 모델링</div></div>
+      </div>
+    </div>
+
+    <div class="arrow-sep"><svg viewBox="0 0 14 14"><polygon points="0,3 10,7 0,11" fill="#94A3B8"/></svg></div>
+
+    <div class="pipe-stage st-output">
+      <div class="ps-head">📊 예측 결과</div>
+      <div class="ps-body">
+        <div class="ps-item"><div class="pi-label">D+1 ~ D+14 잔량 예측</div><div class="pi-val">고객별 탱크 잔량 곡선<br>고갈 예상 시점(일/시)</div></div>
+        <div class="ps-item"><div class="pi-label">위험도 분류</div><div class="pi-val">🔴 긴급 (D+1~2 고갈)<br>🟡 주의 (D+3~7 고갈)<br>🟢 안전 (D+7 이상)</div></div>
+        <div class="ps-item"><div class="pi-label">신뢰구간</div><div class="pi-val">예측값 ± 불확실성 범위<br>Explainable AI 변수기여도</div></div>
+      </div>
+    </div>
+
+    <div class="arrow-sep"><svg viewBox="0 0 14 14"><polygon points="0,3 10,7 0,11" fill="#94A3B8"/></svg></div>
+
+    <div class="pipe-stage st-action">
+      <div class="ps-head">🚛 자동 조치</div>
+      <div class="ps-body">
+        <div class="ps-item"><div class="pi-label">VMI 자동보충 주문</div><div class="pi-val">고갈 전 선제적 배송 지시<br>→ 배차최적화 모듈 연계</div></div>
+        <div class="ps-item"><div class="pi-label">관제사 알림</div><div class="pi-val">대시보드 위험도 표시<br>긴급 고객 우선 배정</div></div>
+        <div class="ps-item"><div class="pi-label">ERP 자동 반영</div><div class="pi-val">주문 자동생성 → 출하지시<br>재고관리 연동</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example Scenario -->
+  <div class="scenario">
+    <div class="sc-title">💡 실제 작동 시나리오 예시: A고객사 (울산 미포산단, 질소 탱크 5톤)</div>
+    <div class="sc-flow">
+      <div class="sc-step sc-s1">
+        <div class="sc-icon">📡</div>
+        <div class="sc-label">IoT 센서 수신</div>
+        <div class="sc-value">잔량 42%</div>
+        <div class="sc-desc">오전 9시 실시간 데이터</div>
+      </div>
+      <div class="sc-arrow">→</div>
+      <div class="sc-step sc-s2">
+        <div class="sc-icon">🧠</div>
+        <div class="sc-label">AI 예측 실행</div>
+        <div class="sc-value">D+3 고갈</div>
+        <div class="sc-desc">일평균 소비 14% × 기온↓ 보정</div>
+      </div>
+      <div class="sc-arrow">→</div>
+      <div class="sc-step sc-s3">
+        <div class="sc-icon">⚠️</div>
+        <div class="sc-label">위험도: 주의</div>
+        <div class="sc-value">🟡 D+3</div>
+        <div class="sc-desc">안전재고 20% 이전 배송 필요</div>
+      </div>
+      <div class="sc-arrow">→</div>
+      <div class="sc-step sc-s4">
+        <div class="sc-icon">🚛</div>
+        <div class="sc-label">VMI 자동보충</div>
+        <div class="sc-value">D+2 배송</div>
+        <div class="sc-desc">내일 배차에 자동 편입<br>고객 전화 없이 선제 배송</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accuracy benchmarks -->
+  <div class="acc-row">
+    <div class="acc-card ac-blue">
+      <div class="ac-label">목표 정확도</div>
+      <div class="ac-val">MAPE ≤15%</div>
+      <div class="ac-ref">산업가스 수요 변동성 고려 보수적 설정</div>
+    </div>
+    <div class="acc-card ac-green">
+      <div class="ac-label">벤치마크 (에너지 분야)</div>
+      <div class="ac-val">MAPE 6~12%</div>
+      <div class="ac-ref">Puget Sound Energy 가스예측 사례</div>
+    </div>
+    <div class="acc-card ac-amber">
+      <div class="ac-label">기대 효과</div>
+      <div class="ac-val">긴급배송 80%↓</div>
+      <div class="ac-ref">선제적 VMI로 고갈 전 배송 전환</div>
+    </div>
+  </div>
+
+  <div class="azure-badge">
+    <div>☁️</div>
+    <div>
+      <div class="ab-text">Azure AutoML Forecasting — 검증된 상용 클라우드 AI</div>
+      <div class="ab-sub">10종 알고리즘 자동 앙상블 · 한국 리전 · IoT Hub 네이티브 통합 · 3~4개월 내 배포</div>
+    </div>
+  </div>
+</body>
+</html>

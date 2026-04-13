@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>12개월 추진일정 타임라인</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#fff;width:960px;margin:0 auto;padding:32px 40px;color:#1a1a2e}
+  .title{text-align:center;margin-bottom:20px}
+  .title h1{font-size:19px;font-weight:800;color:#0F2B46}
+  .title .sub{font-size:11px;color:#64748B;margin-top:3px}
+
+  /* Timeline container */
+  .timeline{position:relative;padding:0 20px}
+
+  /* Month header row */
+  .month-row{display:flex;margin-bottom:4px;padding-left:160px}
+  .month-cell{flex:1;text-align:center;font-size:9px;font-weight:700;color:#64748B;padding:4px 0;border-left:1px solid #E2E8F0}
+  .month-cell:first-child{border-left:none}
+
+  /* Gantt rows */
+  .gantt-row{display:flex;align-items:center;margin-bottom:3px;min-height:28px}
+  .gr-label{width:160px;flex-shrink:0;font-size:10px;padding-right:8px;text-align:right}
+  .gr-label .gl-name{font-weight:700}
+  .gr-label .gl-sub{font-size:8.5px;color:#94A3B8}
+  .gr-bars{flex:1;display:flex;position:relative;height:24px}
+  .gr-bars .month-bg{flex:1;border-left:1px solid #F1F5F9}
+  .gr-bars .month-bg:first-child{border-left:none}
+
+  /* Bar overlay */
+  .bar{position:absolute;height:20px;top:2px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:white;letter-spacing:-0.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
+
+  /* Colors */
+  .bar-blue{background:linear-gradient(90deg,#2563EB,#3B82F6)}
+  .bar-green{background:linear-gradient(90deg,#059669,#10B981)}
+  .bar-amber{background:linear-gradient(90deg,#D97706,#F59E0B)}
+  .bar-purple{background:linear-gradient(90deg,#7C3AED,#8B5CF6)}
+  .bar-red{background:linear-gradient(90deg,#DC2626,#EF4444)}
+  .bar-teal{background:linear-gradient(90deg,#0D9488,#14B8A6)}
+  .bar-gray{background:linear-gradient(90deg,#475569,#64748B)}
+  .bar-indigo{background:linear-gradient(90deg,#4338CA,#6366F1)}
+
+  /* Phase separator */
+  .phase-row{display:flex;align-items:center;margin:6px 0 4px}
+  .phase-label{width:160px;flex-shrink:0;text-align:right;padding-right:8px}
+  .phase-tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;color:white}
+  .phase-line{flex:1;height:1.5px;background:#E2E8F0}
+
+  /* Milestone markers */
+  .ms-row{display:flex;padding-left:160px;margin-top:8px}
+  .ms-cell{flex:1;text-align:center;position:relative}
+  .ms-diamond{width:12px;height:12px;background:#0F2B46;transform:rotate(45deg);margin:0 auto 4px;border-radius:2px}
+  .ms-text{font-size:8px;color:#475569;font-weight:600;line-height:1.3}
+
+  /* Legend */
+  .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;justify-content:center}
+  .leg-item{display:flex;align-items:center;gap:4px;font-size:9px;color:#475569}
+  .leg-dot{width:10px;height:10px;border-radius:3px}
+
+  /* Bottom summary */
+  .summary{display:flex;gap:10px;margin-top:14px}
+  .sum-card{flex:1;padding:10px;border-radius:10px;border:1.5px solid #E2E8F0;text-align:center}
+  .sum-card .sum-val{font-size:18px;font-weight:900;color:#0F2B46}
+  .sum-card .sum-label{font-size:9px;color:#64748B;margin-top:2px}
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>12개월 추진일정 타임라인</h1>
+    <div class="sub">단기 1년 프로젝트 — 검증된 상용 제품 기반 신속 구축, 단계별 마일스톤 관리</div>
+  </div>
+
+  <div class="timeline">
+    <!-- Month headers -->
+    <div class="month-row">
+      <div class="month-cell">1월</div><div class="month-cell">2월</div><div class="month-cell">3월</div>
+      <div class="month-cell">4월</div><div class="month-cell">5월</div><div class="month-cell">6월</div>
+      <div class="month-cell">7월</div><div class="month-cell">8월</div><div class="month-cell">9월</div>
+      <div class="month-cell">10월</div><div class="month-cell">11월</div><div class="month-cell">12월</div>
+    </div>
+
+    <!-- Phase 1: 요구분석/설계 -->
+    <div class="phase-row">
+      <div class="phase-label"><div class="phase-tag" style="background:#475569">PHASE 1</div></div>
+      <div class="phase-line"></div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">요구분석/설계</div><div class="gl-sub">요구사항 · 아키텍처 · DB설계</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-gray" style="left:0%;width:16.6%">요구분석/설계</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">HW 조달/설치</div><div class="gl-sub">IoT센서 · 텔레매틱스 · 어라운드뷰</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-red" style="left:8.3%;width:33.3%">HW 조달 · 설치 · 검수</div>
+      </div>
+    </div>
+
+    <!-- Phase 2: 개발 -->
+    <div class="phase-row">
+      <div class="phase-label"><div class="phase-tag" style="background:#2563EB">PHASE 2</div></div>
+      <div class="phase-line"></div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">① 수요예측(VMI)</div><div class="gl-sub">Azure AutoML + IoT Hub</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-blue" style="left:16.6%;width:33.3%">Azure 연동 · 모델 학습 · 검증</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">② 배차최적화</div><div class="gl-sub">OR-Tools + 카카오/TMAP</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-green" style="left:16.6%;width:41.7%">제약엔진 · 최적화 · 지도연동</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">③ 어라운드뷰 AI</div><div class="gl-sub">Brigade 360 + 엣지AI</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-amber" style="left:25%;width:33.3%">설치 · AI 커스터마이징 · 시험</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">④ 텔레매틱스/예지보전</div><div class="gl-sub">KT Smart[Fleet] + XENLINK</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-purple" style="left:25%;width:33.3%">단말설치 · 데이터수집 · ML학습</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">통합 관제 플랫폼</div><div class="gl-sub">FastAPI + React 대시보드</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-indigo" style="left:25%;width:50%">프론트/백 개발 · MES/ERP 연동</div>
+      </div>
+    </div>
+
+    <!-- Phase 3: 시범/안정화 -->
+    <div class="phase-row">
+      <div class="phase-label"><div class="phase-tag" style="background:#059669">PHASE 3</div></div>
+      <div class="phase-line"></div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">시범 운영</div><div class="gl-sub">10대 차량 · 30고객 파일럿</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-teal" style="left:66.6%;width:16.7%">파일럿 · KPI 검증</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">전면 확대/안정화</div><div class="gl-sub">60대 전 차량 · 150고객 전체</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-teal" style="left:83.3%;width:16.7%">전면 확대 · 안정화</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gr-label"><div class="gl-name">교육/인수인계</div><div class="gl-sub">운전자 · 관제사 · 관리자</div></div>
+      <div class="gr-bars">
+        <div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div><div class="month-bg"></div>
+        <div class="bar bar-gray" style="left:75%;width:25%">교육 · 매뉴얼 · 인수인계</div>
+      </div>
+    </div>
+
+    <!-- Milestones -->
+    <div class="ms-row">
+      <div class="ms-cell" style="flex:2"><div class="ms-diamond"></div><div class="ms-text">M1: 착수보고<br>요구분석 완료</div></div>
+      <div class="ms-cell" style="flex:2"></div>
+      <div class="ms-cell" style="flex:2"><div class="ms-diamond"></div><div class="ms-text">M2: 중간보고<br>HW설치 완료<br>AI PoC 검증</div></div>
+      <div class="ms-cell" style="flex:2"></div>
+      <div class="ms-cell" style="flex:2"><div class="ms-diamond"></div><div class="ms-text">M3: 파일럿<br>10대 시범운영<br>KPI 중간점검</div></div>
+      <div class="ms-cell" style="flex:2"><div class="ms-diamond"></div><div class="ms-text">M4: 최종보고<br>전면확대 완료<br>KPI 달성 확인</div></div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#475569"></div>설계/교육</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#DC2626"></div>HW 조달/설치</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#2563EB"></div>수요예측</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#059669"></div>배차최적화</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#D97706"></div>어라운드뷰</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#7C3AED"></div>텔레매틱스</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#4338CA"></div>통합플랫폼</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#0D9488"></div>시범/안정화</div>
+    <div class="leg-item">◆ 마일스톤</div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="sum-card"><div class="sum-val">12개월</div><div class="sum-label">총 사업기간</div></div>
+    <div class="sum-card"><div class="sum-val">4회</div><div class="sum-label">마일스톤 검증</div></div>
+    <div class="sum-card"><div class="sum-val">3단계</div><div class="sum-label">설계→개발→안정화</div></div>
+    <div class="sum-card"><div class="sum-val">상용제품</div><div class="sum-label">기반 신속 구축</div></div>
+  </div>
+</body>
+</html>
