@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>AI 응용제품 목표시스템 구성도</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Pretendard',sans-serif;background:#fff;width:960px;margin:0 auto;padding:28px 32px;color:#1a1a2e}
+
+  .diagram-header{text-align:center;margin-bottom:20px}
+  .diagram-header h1{font-size:20px;font-weight:800;color:#0F2B46;letter-spacing:-0.5px}
+  .diagram-header .sub{font-size:11px;color:#64748B;margin-top:4px}
+
+  /* ── Layer container ── */
+  .layer{border-radius:14px;margin-bottom:10px;overflow:hidden;border:1.5px solid}
+
+  .layer-head{
+    padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
+    color:white;font-size:12px;font-weight:700
+  }
+  .layer-head .lh-tag{opacity:0.7;font-size:10px;font-weight:500}
+  .layer-body{padding:12px 14px;background:white}
+
+  /* ── Layer colors ── */
+  .l-edge{border-color:#94A3B8}
+  .l-edge .layer-head{background:linear-gradient(135deg,#334155,#475569)}
+
+  .l-collect{border-color:#BFDBFE}
+  .l-collect .layer-head{background:linear-gradient(135deg,#1e40af,#2563EB)}
+
+  .l-ai{border-color:#BBF7D0}
+  .l-ai .layer-head{background:linear-gradient(135deg,#047857,#059669)}
+
+  .l-service{border-color:#FDE68A}
+  .l-service .layer-head{background:linear-gradient(135deg,#92400E,#D97706)}
+
+  .l-infra{border-color:#DDD6FE}
+  .l-infra .layer-head{background:linear-gradient(135deg,#5B21B6,#7C3AED)}
+
+  /* ── Node grid ── */
+  .nodes{display:flex;gap:8px;flex-wrap:wrap}
+  .node{
+    flex:1;min-width:130px;
+    padding:10px;border-radius:10px;border:1px solid;
+    display:flex;flex-direction:column;align-items:center;text-align:center
+  }
+  .node .n-icon{font-size:22px;margin-bottom:4px}
+  .node .n-name{font-size:10.5px;font-weight:700;margin-bottom:2px;line-height:1.3}
+  .node .n-product{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;margin-bottom:3px;display:inline-block}
+  .node .n-spec{font-size:8.5px;color:#64748B;line-height:1.4}
+  .node .n-qty{font-size:8px;color:#94A3B8;margin-top:2px}
+
+  /* Node color variants */
+  .n-dark{border-color:#CBD5E1;background:#F8FAFC}
+  .n-dark .n-name{color:#334155}
+  .n-dark .n-product{background:#334155;color:white}
+
+  .n-blue{border-color:#DBEAFE;background:#EFF6FF}
+  .n-blue .n-name{color:#1e40af}
+  .n-blue .n-product{background:#2563EB;color:white}
+
+  .n-green{border-color:#D1FAE5;background:#F0FDF4}
+  .n-green .n-name{color:#047857}
+  .n-green .n-product{background:#059669;color:white}
+
+  .n-amber{border-color:#FEF3C7;background:#FFFBEB}
+  .n-amber .n-name{color:#92400E}
+  .n-amber .n-product{background:#D97706;color:white}
+
+  .n-purple{border-color:#EDE9FE;background:#F5F3FF}
+  .n-purple .n-name{color:#5B21B6}
+  .n-purple .n-product{background:#7C3AED;color:white}
+
+  .n-red{border-color:#FFE4E6;background:#FFF1F2}
+  .n-red .n-name{color:#9F1239}
+  .n-red .n-product{background:#E11D48;color:white}
+
+  .n-teal{border-color:#CCFBF1;background:#F0FDFA}
+  .n-teal .n-name{color:#115E59}
+  .n-teal .n-product{background:#0D9488;color:white}
+
+  /* ── Flow arrows between layers ── */
+  .flow-arrow{
+    display:flex;align-items:center;justify-content:center;
+    padding:3px 0;color:#94A3B8;font-size:10px;gap:8px
+  }
+  .flow-arrow .fa-line{flex:1;height:1px;background:#CBD5E1}
+  .flow-arrow .fa-label{font-size:9px;color:#94A3B8;white-space:nowrap}
+
+  /* ── Existing system badge ── */
+  .existing-badge{
+    display:flex;align-items:center;gap:8px;
+    margin-top:6px;padding:6px 12px;border-radius:8px;
+    background:#F1F5F9;border:1px dashed #CBD5E1;
+    font-size:9px;color:#64748B
+  }
+  .existing-badge .eb-dot{width:8px;height:8px;border-radius:50%;background:#94A3B8;flex-shrink:0}
+
+  /* ── Standards strip ── */
+  .standards{
+    display:flex;gap:8px;margin-top:10px;
+    padding:8px 14px;border-radius:10px;
+    background:linear-gradient(135deg,#EFF6FF,#DBEAFE);
+    border:1.5px solid #BFDBFE
+  }
+  .std-item{
+    flex:1;text-align:center;
+    font-size:9px;color:#1e40af;font-weight:600;
+    padding:4px;border-radius:6px;background:rgba(255,255,255,0.6)
+  }
+  .std-item .si-label{font-size:8px;color:#64748B;font-weight:400;display:block;margin-top:1px}
+
+  /* ── Legend ── */
+  .legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:9px;color:#64748B}
+  .legend span{display:flex;align-items:center;gap:4px}
+  .legend .ld{width:10px;height:10px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="diagram-header">
+  <h1>AI 응용제품 목표시스템 구성도</h1>
+  <div class="sub">검증된 상용 AI 제품 기반 · 5-Tier Architecture · 위험물 물류 전주기 통합 플랫폼</div>
+</div>
+
+<!-- ═══ Layer 1: Edge / 현장 디바이스 ═══ -->
+<div class="layer l-edge">
+  <div class="layer-head">
+    <span>🔧 EDGE 계층 — 현장 디바이스 및 센서</span>
+    <span class="lh-tag">IoT · 카메라 · 텔레매틱스 · 엣지AI</span>
+  </div>
+  <div class="layer-body">
+    <div class="nodes">
+      <div class="node n-dark">
+        <div class="n-icon">⛽</div>
+        <div class="n-name">고객 탱크<br>IoT 센서</div>
+        <div class="n-product">초음파 · 방폭인증</div>
+        <div class="n-spec">잔량(%) · 온도 · 압력<br>10분 주기 · MQTT</div>
+        <div class="n-qty">150대</div>
+      </div>
+      <div class="node n-dark">
+        <div class="n-icon">📹</div>
+        <div class="n-name">AI 어라운드뷰</div>
+        <div class="n-product">Brigade Backeye 360</div>
+        <div class="n-spec">4CH HD · IP67 · AI 인체감지<br>Bird's Eye View · 단계별 경고</div>
+        <div class="n-qty">60세트</div>
+      </div>
+      <div class="node n-dark">
+        <div class="n-icon">📶</div>
+        <div class="n-name">텔레매틱스<br>+ ECU 진단</div>
+        <div class="n-product">KT Smart[Fleet] + XENLINK</div>
+        <div class="n-spec">GPS · 속도 · OBD-II · DTC<br>DTG 규정 준수</div>
+        <div class="n-qty">60대</div>
+      </div>
+      <div class="node n-dark">
+        <div class="n-icon">🖥️</div>
+        <div class="n-name">엣지 AI<br>프로세서</div>
+        <div class="n-product">NVIDIA Jetson Orin</div>
+        <div class="n-spec">어라운드뷰 AI 추론<br>차량 탑재 · 실시간 처리</div>
+        <div class="n-qty">60대</div>
+      </div>
+      <div class="node n-dark">
+        <div class="n-icon">📱</div>
+        <div class="n-name">운전자<br>모바일 단말</div>
+        <div class="n-product">Android 앱</div>
+        <div class="n-spec">배차표 · 내비 · 배송확인<br>안전 알림 수신</div>
+        <div class="n-qty">60대</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">
+  <div class="fa-line"></div>
+  <span>▼ MQTT · LTE · RTSP · CAN Bus ▼</span>
+  <div class="fa-line"></div>
+</div>
+
+<!-- ═══ Layer 2: Data Collection & Processing ═══ -->
+<div class="layer l-collect">
+  <div class="layer-head">
+    <span>📊 DATA 계층 — 수집 · 전처리 · 저장</span>
+    <span class="lh-tag">실시간 스트리밍 · 시계열DB · 데이터 레이크</span>
+  </div>
+  <div class="layer-body">
+    <div class="nodes">
+      <div class="node n-blue">
+        <div class="n-icon">📡</div>
+        <div class="n-name">Azure IoT Hub</div>
+        <div class="n-product">디바이스 게이트웨이</div>
+        <div class="n-spec">센서 등록 · 메시지 라우팅<br>디바이스 쌍 관리</div>
+      </div>
+      <div class="node n-blue">
+        <div class="n-icon">⚡</div>
+        <div class="n-name">Apache Kafka</div>
+        <div class="n-product">메시지 브로커</div>
+        <div class="n-spec">실시간 스트림 수집<br>순서 보장 · 장애 복구</div>
+      </div>
+      <div class="node n-blue">
+        <div class="n-icon">🗄️</div>
+        <div class="n-name">TimescaleDB</div>
+        <div class="n-product">시계열 데이터베이스</div>
+        <div class="n-spec">IoT/GPS/ECU 시계열 저장<br>자동 파티셔닝 · 고속 쿼리</div>
+      </div>
+      <div class="node n-blue">
+        <div class="n-icon">🔄</div>
+        <div class="n-name">데이터 전처리<br>파이프라인</div>
+        <div class="n-product">ETL · Feature Store</div>
+        <div class="n-spec">결측치 보간 · 이상치 탐지<br>피처 엔지니어링 자동화</div>
+      </div>
+      <div class="node n-blue">
+        <div class="n-icon">🌤️</div>
+        <div class="n-name">외부 데이터<br>연동</div>
+        <div class="n-product">REST API</div>
+        <div class="n-spec">기상청 · 통계청 가동률<br>카카오/TMAP 교통정보</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">
+  <div class="fa-line"></div>
+  <span>▼ 정제된 데이터 · 피처 벡터 ▼</span>
+  <div class="fa-line"></div>
+</div>
+
+<!-- ═══ Layer 3: AI Engine ═══ -->
+<div class="layer l-ai">
+  <div class="layer-head">
+    <span>🧠 AI 계층 — 4대 AI 모듈 (검증된 상용 제품 기반)</span>
+    <span class="lh-tag">예측 · 최적화 · 영상분석 · 이상탐지</span>
+  </div>
+  <div class="layer-body">
+    <div class="nodes">
+      <div class="node n-green" style="border-width:2px">
+        <div class="n-icon">📈</div>
+        <div class="n-name">① 수요예측<br>(VMI)</div>
+        <div class="n-product">Azure AutoML Forecasting</div>
+        <div class="n-spec">ARIMA · Prophet · XGBoost<br>LightGBM · TCNForecaster<br>10종 자동 앙상블</div>
+        <div class="n-qty">MAPE ≤ 15%</div>
+      </div>
+      <div class="node n-green" style="border-width:2px">
+        <div class="n-icon">🗺️</div>
+        <div class="n-name">② 배차<br>최적화</div>
+        <div class="n-product">OR-Tools + 카카오/TMAP</div>
+        <div class="n-spec">CVRPTW · GLS · ALNS<br>위험물 제약 자동 반영<br>실시간 리라우팅</div>
+        <div class="n-qty">배차 5분 이내</div>
+      </div>
+      <div class="node n-green" style="border-width:2px">
+        <div class="n-icon">👁️</div>
+        <div class="n-name">③ 물류 차량<br>안전 운행</div>
+        <div class="n-product">Brigade 360 AI + YOLOv8</div>
+        <div class="n-spec">보행자/차량/장비 감지<br>4단계 경고 · 이벤트 녹화<br>엣지 실시간 추론</div>
+        <div class="n-qty">사고 60%↓</div>
+      </div>
+      <div class="node n-green" style="border-width:2px">
+        <div class="n-icon">🔧</div>
+        <div class="n-name">④ 예지<br>보전</div>
+        <div class="n-product">XENLINK + Uptake AI</div>
+        <div class="n-spec">ECU 원격진단 · RUL 예측<br>DTC 핵심 조치 자동 분류<br>정비 스케줄링</div>
+        <div class="n-qty">비계획정비↓</div>
+      </div>
+    </div>
+    <div class="existing-badge">
+      <div class="eb-dot" style="background:#059669"></div>
+      <b>도메인 특화 자체 개발:</b>&nbsp; 위험물안전관리법 제약 엔진 · 가스 소비 패턴 피처 · 탱크로리 특화 객체 학습 · AAS 데이터 모델
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">
+  <div class="fa-line"></div>
+  <span>▼ 예측 결과 · 최적 배차 · 위험 이벤트 · 정비 알림 ▼</span>
+  <div class="fa-line"></div>
+</div>
+
+<!-- ═══ Layer 4: Application / Service ═══ -->
+<div class="layer l-service">
+  <div class="layer-head">
+    <span>📱 SERVICE 계층 — 통합 관제 및 사용자 인터페이스</span>
+    <span class="lh-tag">웹 대시보드 · 모바일 앱 · ERP 연동 · 리포트</span>
+  </div>
+  <div class="layer-body">
+    <div class="nodes">
+      <div class="node n-amber">
+        <div class="n-icon">⚙️</div>
+        <div class="n-name">API 서버</div>
+        <div class="n-product">FastAPI (Python)</div>
+        <div class="n-spec">RESTful API · JWT 인증<br>WebSocket 실시간 알림</div>
+      </div>
+      <div class="node n-amber">
+        <div class="n-icon">🖥️</div>
+        <div class="n-name">관제 대시보드</div>
+        <div class="n-product">React + Recharts</div>
+        <div class="n-spec">실시간 물류 현황 · 배차 모니터<br>KPI 추이 · AI 추천 근거 시각화</div>
+      </div>
+      <div class="node n-amber">
+        <div class="n-icon">📱</div>
+        <div class="n-name">운전자 앱</div>
+        <div class="n-product">React Native</div>
+        <div class="n-spec">배송 경로 안내 · 안전 알림<br>배송완료 확인 · 차량 상태</div>
+      </div>
+      <div class="node n-amber">
+        <div class="n-icon">📊</div>
+        <div class="n-name">경영진 리포트</div>
+        <div class="n-product">BI 대시보드</div>
+        <div class="n-spec">주간/월간 성과 분석<br>물류비 절감 · ESG 지표</div>
+      </div>
+      <div class="node n-amber">
+        <div class="n-icon">🔗</div>
+        <div class="n-name">MES/ERP 연동</div>
+        <div class="n-product">SAP ERP + REST API</div>
+        <div class="n-spec">양방향 연동 · 주문 자동생성<br>출하지시 · 재고 차감</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">
+  <div class="fa-line"></div>
+  <span>▼ 피드백 루프: 현장 데이터 → AI 재학습 → 성능 개선 ▼</span>
+  <div class="fa-line"></div>
+</div>
+
+<!-- ═══ Layer 5: Infrastructure ═══ -->
+<div class="layer l-infra">
+  <div class="layer-head">
+    <span>☁️ INFRA 계층 — 클라우드 · 보안 · 운영</span>
+    <span class="lh-tag">하이브리드 클라우드 · ISMS-P · MLOps</span>
+  </div>
+  <div class="layer-body">
+    <div class="nodes">
+      <div class="node n-purple">
+        <div class="n-icon">☁️</div>
+        <div class="n-name">Azure Korea<br>Central</div>
+        <div class="n-product">클라우드 인프라</div>
+        <div class="n-spec">AI 학습/추론 · IoT Hub<br>한국 리전 · 데이터 주권</div>
+      </div>
+      <div class="node n-purple">
+        <div class="n-icon">🖥️</div>
+        <div class="n-name">GPU 서버</div>
+        <div class="n-product">온프레미스</div>
+        <div class="n-spec">AI 모델 고속 학습<br>대용량 데이터 처리</div>
+        <div class="n-qty">2대</div>
+      </div>
+      <div class="node n-purple">
+        <div class="n-icon">🔒</div>
+        <div class="n-name">보안 체계</div>
+        <div class="n-product">ISMS-P 준수</div>
+        <div class="n-spec">VPN · 방화벽 · 암호화<br>비식별화 · 접근통제</div>
+      </div>
+      <div class="node n-purple">
+        <div class="n-icon">🔄</div>
+        <div class="n-name">MLOps<br>파이프라인</div>
+        <div class="n-product">모델 자동 재학습</div>
+        <div class="n-spec">월 1회 모델 업데이트<br>성능 모니터링 · A/B 테스트</div>
+      </div>
+      <div class="node n-purple">
+        <div class="n-icon">📋</div>
+        <div class="n-name">로그/모니터링</div>
+        <div class="n-product">스마트공장 연동</div>
+        <div class="n-spec">3년간 로그 제출<br>가용성 · 장애 관리</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Standards strip -->
+<div class="standards">
+  <div class="std-item">IEC 63278-1 AAS<span class="si-label">제조데이터 표준</span></div>
+  <div class="std-item">OPC-UA<span class="si-label">통신 프로토콜 표준</span></div>
+  <div class="std-item">위험물안전관리법<span class="si-label">혼적/적재/운행 제약</span></div>
+  <div class="std-item">ISMS-P<span class="si-label">정보보호 인증</span></div>
+  <div class="std-item">DTG<span class="si-label">디지털 운행기록</span></div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <span><div class="ld" style="background:#475569"></div>Edge 현장</span>
+  <span><div class="ld" style="background:#2563EB"></div>Data 수집/저장</span>
+  <span><div class="ld" style="background:#059669"></div>AI 엔진</span>
+  <span><div class="ld" style="background:#D97706"></div>Service 사용자</span>
+  <span><div class="ld" style="background:#7C3AED"></div>Infra 클라우드</span>
+  <span style="border-left:1px solid #CBD5E1;padding-left:12px"><div class="ld" style="background:white;border:1.5px dashed #059669"></div>도메인 특화 자체개발</span>
+</div>
+
+</body>
+</html>
