@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════
+   WEB FONTS
+   Paperozi (본문/UI) + A2z (헤딩/숫자 강조)
+   ══════════════════════════════════════ */
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+@font-face { font-family: 'A2z'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+@theme inline {
+  /* ══════════════════════════════════════
+     DESIGN SYSTEM TOKENS
+     덕양가스 AI 통합 관제 플랫폼
+     ══════════════════════════════════════ */
+
+  /* ── Brand Scale ── */
+  --color-brand-50:  #EDF5FC;
+  --color-brand-100: #D4E8F8;
+  --color-brand-200: #A9D1F1;
+  --color-brand-300: #6DB3E6;
+  --color-brand-400: #3494D6;
+  --color-brand:     #1A6DB5;
+  --color-brand-600: #155A96;
+  --color-brand-700: #104777;
+  --color-brand-800: #0C355A;
+  --color-brand-900: #08233D;
+
+  /* ── Navy (Sidebar) ── */
+  --color-navy-700: #1E4872;
+  --color-navy-800: #152F4E;
+  --color-navy-900: #0C1F35;
+  --color-navy-950: #070F1A;
+
+  /* ── Surface & Background ── */
+  --color-surface:          #FFFFFF;
+  --color-surface-secondary: #F8F9FB;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-overlay:  rgba(12, 31, 53, 0.5);
+
+  /* ── Text ── */
+  --color-text-primary:   #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-muted:     #9CA3AF;
+  --color-text-inverse:   #F9FAFB;
+
+  /* ── Border ── */
+  --color-border:       #E5E7EB;
+  --color-border-light: #F3F4F6;
+
+  /* ── Product Colors (desaturated for readability) ── */
+  --color-product-n2:  #4B8DF8;
+  --color-product-o2:  #E8564C;
+  --color-product-co2: #9066E0;
+  --color-product-ar:  #1AADCA;
+  --color-product-lpg: #E88A3E;
+  --color-product-med: #D65B93;
+
+  /* ── Semantic Status ── */
+  --color-danger:    #DC2626;
+  --color-danger-bg: #FEF2F2;
+  --color-warning:    #D97706;
+  --color-warning-bg: #FFFBEB;
+  --color-success:    #059669;
+  --color-success-bg: #ECFDF5;
+  --color-info:       #1A6DB5;
+  --color-info-bg:    #EDF5FC;
+
+  /* ── Shadows ── */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg:  0 10px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-xl:  0 20px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05);
+
+  /* ── Radius ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* ── Font ── */
+  --font-sans: "Paperozi", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "A2z", "Paperozi", sans-serif;
+}
+
+/* ══════════════════════════════════════
+   BASE STYLES
+   ══════════════════════════════════════ */
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Display font for headings & metrics ── */
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* ── Tabular Nums ── */
+.tabular-nums {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #E5E7EB 25%, #F0F1F3 50%, #E5E7EB 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Alert pulse ── */
+@keyframes alert-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+.alert-pulse {
+  animation: alert-pulse 1.5s ease-in-out infinite;
+}
+
+/* ── Leaflet ── */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  z-index: 0;
+}
+
+/* ── Truck markers ── */
+.truck-marker { transition: transform 0.2s ease; }
+.truck-marker:hover { transform: scale(1.15) translateY(-2px); }
+.truck-pulse { animation: truck-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes truck-ping {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(34,197,94,0)); }
+  50% { filter: drop-shadow(0 0 8px rgba(34,197,94,0.5)); }
+}
+
+/* ── Scrollbar ── */
+.custom-scroll::-webkit-scrollbar { width: 5px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

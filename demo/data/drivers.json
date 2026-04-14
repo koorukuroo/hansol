@@ -1,0 +1,268 @@
+[
+  {
+    "id": "D001",
+    "name": "김기권",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 16,
+    "assignedVehicles": [
+      "93마1049",
+      "88소2378"
+    ],
+    "safetyScore": 87,
+    "ecoScore": 74,
+    "punctuality": 95.8,
+    "monthlyDeliveries": 78,
+    "monthlyDistance": 5846.0,
+    "avgDistance": 74.9,
+    "violations": 2,
+    "rating": "B"
+  },
+  {
+    "id": "D002",
+    "name": "김봉진",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 6,
+    "assignedVehicles": [
+      "88소3847",
+      "88소1984"
+    ],
+    "safetyScore": 88,
+    "ecoScore": 76,
+    "punctuality": 93.5,
+    "monthlyDeliveries": 60,
+    "monthlyDistance": 2653.7,
+    "avgDistance": 44.2,
+    "violations": 3,
+    "rating": "B"
+  },
+  {
+    "id": "D003",
+    "name": "모윤환",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 6,
+    "assignedVehicles": [
+      "96누2361",
+      "92구3422"
+    ],
+    "safetyScore": 69,
+    "ecoScore": 90,
+    "punctuality": 97.9,
+    "monthlyDeliveries": 1,
+    "monthlyDistance": 27.0,
+    "avgDistance": 27.0,
+    "violations": 4,
+    "rating": "C"
+  },
+  {
+    "id": "D004",
+    "name": "박병근",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 7,
+    "assignedVehicles": [
+      "82거7321"
+    ],
+    "safetyScore": 84,
+    "ecoScore": 86,
+    "punctuality": 85.8,
+    "monthlyDeliveries": 47,
+    "monthlyDistance": 2741.8,
+    "avgDistance": 58.3,
+    "violations": 1,
+    "rating": "B"
+  },
+  {
+    "id": "D005",
+    "name": "박태화",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 8,
+    "assignedVehicles": [
+      "88소3056"
+    ],
+    "safetyScore": 94,
+    "ecoScore": 69,
+    "punctuality": 89.6,
+    "monthlyDeliveries": 44,
+    "monthlyDistance": 4490.8,
+    "avgDistance": 102.1,
+    "violations": 1,
+    "rating": "A"
+  },
+  {
+    "id": "D006",
+    "name": "박현성",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 3,
+    "assignedVehicles": [
+      "89보4327",
+      "91수0616"
+    ],
+    "safetyScore": 86,
+    "ecoScore": 71,
+    "punctuality": 89.5,
+    "monthlyDeliveries": 3,
+    "monthlyDistance": 192.0,
+    "avgDistance": 64.0,
+    "violations": 0,
+    "rating": "B"
+  },
+  {
+    "id": "D007",
+    "name": "배형근",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 7,
+    "assignedVehicles": [
+      "84노1302",
+      "84저9933",
+      "88소1853"
+    ],
+    "safetyScore": 75,
+    "ecoScore": 70,
+    "punctuality": 92.1,
+    "monthlyDeliveries": 64,
+    "monthlyDistance": 3240.1,
+    "avgDistance": 50.6,
+    "violations": 0,
+    "rating": "B"
+  },
+  {
+    "id": "D008",
+    "name": "심현섭",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 15,
+    "assignedVehicles": [
+      "92거7006"
+    ],
+    "safetyScore": 92,
+    "ecoScore": 85,
+    "punctuality": 91.2,
+    "monthlyDeliveries": 70,
+    "monthlyDistance": 3116.7,
+    "avgDistance": 44.5,
+    "violations": 1,
+    "rating": "A"
+  },
+  {
+    "id": "D009",
+    "name": "양인섭",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 19,
+    "assignedVehicles": [
+      "92주3247",
+      "88소2654"
+    ],
+    "safetyScore": 77,
+    "ecoScore": 83,
+    "punctuality": 98.8,
+    "monthlyDeliveries": 58,
+    "monthlyDistance": 2424.3,
+    "avgDistance": 41.8,
+    "violations": 2,
+    "rating": "B"
+  },
+  {
+    "id": "D010",
+    "name": "양재근",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 12,
+    "assignedVehicles": [
+      "97노6982",
+      "88소3269",
+      "84구9345"
+    ],
+    "safetyScore": 65,
+    "ecoScore": 75,
+    "punctuality": 88.3,
+    "monthlyDeliveries": 13,
+    "monthlyDistance": 1360.6,
+    "avgDistance": 104.7,
+    "violations": 2,
+    "rating": "C"
+  },
+  {
+    "id": "D011",
+    "name": "이재원",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 12,
+    "assignedVehicles": [
+      "80오0223"
+    ],
+    "safetyScore": 97,
+    "ecoScore": 79,
+    "punctuality": 87.4,
+    "monthlyDeliveries": 55,
+    "monthlyDistance": 3534.8,
+    "avgDistance": 64.3,
+    "violations": 0,
+    "rating": "A"
+  },
+  {
+    "id": "D012",
+    "name": "이종근",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 7,
+    "assignedVehicles": [
+      "97노6812"
+    ],
+    "safetyScore": 98,
+    "ecoScore": 93,
+    "punctuality": 89.9,
+    "monthlyDeliveries": 41,
+    "monthlyDistance": 1759.7,
+    "avgDistance": 42.9,
+    "violations": 1,
+    "rating": "A"
+  },
+  {
+    "id": "D013",
+    "name": "지은식",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 15,
+    "assignedVehicles": [
+      "88소2611"
+    ],
+    "safetyScore": 96,
+    "ecoScore": 82,
+    "punctuality": 95.9,
+    "monthlyDeliveries": 46,
+    "monthlyDistance": 1958.1,
+    "avgDistance": 42.6,
+    "violations": 1,
+    "rating": "A"
+  },
+  {
+    "id": "D014",
+    "name": "최운학",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 19,
+    "assignedVehicles": [
+      "80로7991",
+      "88소1619"
+    ],
+    "safetyScore": 73,
+    "ecoScore": 73,
+    "punctuality": 95.6,
+    "monthlyDeliveries": 50,
+    "monthlyDistance": 2428.3,
+    "avgDistance": 48.6,
+    "violations": 4,
+    "rating": "C"
+  },
+  {
+    "id": "D015",
+    "name": "허원준",
+    "licenseType": "1종 대형 + 위험물",
+    "experienceYears": 20,
+    "assignedVehicles": [
+      "97노6951",
+      "84노1313"
+    ],
+    "safetyScore": 67,
+    "ecoScore": 84,
+    "punctuality": 97.7,
+    "monthlyDeliveries": 49,
+    "monthlyDistance": 2442.2,
+    "avgDistance": 49.8,
+    "violations": 2,
+    "rating": "C"
+  }
+]

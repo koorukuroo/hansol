@@ -1,0 +1,77 @@
+[
+  {
+    "id": "K001",
+    "type": "order",
+    "sender": "현대미포조선 구매팀",
+    "timestamp": "2025-03-31 08:42",
+    "message": "덕양가스 울산 배차팀 질소 1대 부탁드립니다. 본사 2공장 탱크입니다.",
+    "parsed": {
+      "customer": "현대미포조선",
+      "product": "N2",
+      "quantity": "1대 (약 15톤)",
+      "location": "본사 2공장",
+      "urgency": "일반"
+    },
+    "aiAction": "자동 배차 처리 -> 84노1302 (이재원 기사) 배정, 예상 도착 10:30"
+  },
+  {
+    "id": "K002",
+    "type": "urgent",
+    "sender": "울산대학교병원 시설팀",
+    "timestamp": "2025-03-31 14:15",
+    "message": "산소 탱크 잔량 15% 아래로 떨어졌습니다. 긴급 배송 부탁드립니다!",
+    "parsed": {
+      "customer": "울산대학교병원",
+      "product": "O2 (의료용)",
+      "quantity": "긴급 1대",
+      "location": "병원 의료가스실",
+      "urgency": "긴급"
+    },
+    "aiAction": "긴급 배차 -> 88소1619 (김봉진 기사) 즉시 출발, 예상 도착 15:00"
+  },
+  {
+    "id": "K003",
+    "type": "order",
+    "sender": "홍인화학 생산관리부",
+    "timestamp": "2025-03-31 09:20",
+    "message": "질소 내일 오전 중 1대 배송 부탁합니다. CA라인 탱크요.",
+    "parsed": {
+      "customer": "홍인화학",
+      "product": "N2",
+      "quantity": "1대",
+      "location": "CA라인",
+      "urgency": "일반 (익일)"
+    },
+    "aiAction": "익일 배차 예약 -> 4/1 08:00 80오0223 (이재원 기사) 배정"
+  },
+  {
+    "id": "K004",
+    "type": "inquiry",
+    "sender": "삼흥에너지",
+    "timestamp": "2025-03-31 11:05",
+    "message": "코메론 탱크 질소 이번주 금요일 배송 가능한가요? 잔량 40% 정도입니다.",
+    "parsed": {
+      "customer": "삼흥에너지 (코메론)",
+      "product": "N2",
+      "quantity": "1대",
+      "location": "코메론 탱크",
+      "urgency": "예약 (금요일)"
+    },
+    "aiAction": "AI 수요 예측: 금요일까지 잔량 22% 예상 -> 금요일 오전 배차 권장, 84노1302 예약"
+  },
+  {
+    "id": "K005",
+    "type": "order",
+    "sender": "유니스트 연구지원팀",
+    "timestamp": "2025-03-31 10:30",
+    "message": "101동, 106동, 108동 질소 각 200kg씩 부탁드립니다.",
+    "parsed": {
+      "customer": "울산과학기술원(유니스트)",
+      "product": "N2",
+      "quantity": "600kg (3개동 분배)",
+      "location": "101동, 106동, 108동",
+      "urgency": "일반"
+    },
+    "aiAction": "다중 납품지 배차 -> 80오0223 1대로 3개동 순회 배송, 최적 경로 생성"
+  }
+]

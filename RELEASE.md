@@ -10,7 +10,7 @@
 ## v14 (2026-04-14) — 코어닷투데이/UNIST 역량 + AWS 전환 + 기술 현실화 ⭐ 최신
 
 ### 코어닷투데이 역량 반영 (심사위원 1순위 감점 해소)
-- UNIST 교원창업(2016), 대표 김경훈(UNIST 수리과학 박사, 울산과학기술대학교 겸임교수)
+- UNIST 교원창업(2016), 대표 김경훈(UNIST 수리과학 박사, 울산과학대학교 겸임교수)
 - AWS Select Tier Technology Partner 인증 (2019년~)
 - Core.Agent 프로덕션 추론 아키텍처: GPU 오토스케일링, <100ms 저지연, 99.9% SLA
 - Sharp-PINN(Physics-Informed Neural Network) 기반 산업 설비 부식 예측·RUL 산출

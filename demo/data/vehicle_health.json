@@ -1,0 +1,1334 @@
+{
+  "detailed": [
+    {
+      "vehicleId": "V001",
+      "plateNumber": "92주3247",
+      "model": "트라고",
+      "year": 2013,
+      "age": 13,
+      "mileage": 251494,
+      "overallScore": 54,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-02-08",
+          "nextCheck": "2025-04-14"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-01",
+          "nextCheck": "2025-05-05"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 74,
+          "status": "warning",
+          "lastCheck": "2025-02-11",
+          "nextCheck": "2025-04-29"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 57,
+          "status": "danger",
+          "lastCheck": "2025-03-06",
+          "nextCheck": "2025-05-26"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 38,
+          "status": "danger",
+          "lastCheck": "2025-01-23",
+          "nextCheck": "2025-05-21"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 57,
+          "status": "danger",
+          "lastCheck": "2025-01-14",
+          "nextCheck": "2025-05-24"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 63,
+          "status": "warning",
+          "lastCheck": "2025-02-26",
+          "nextCheck": "2025-05-22"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 74,
+          "status": "warning",
+          "lastCheck": "2025-02-06",
+          "nextCheck": "2025-04-29"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-03-01",
+          "type": "필터 교환",
+          "cost": 343000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-12-26",
+          "type": "엔진 오일 교환",
+          "cost": 423000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-11-28",
+          "type": "탱크 밸브 점검",
+          "cost": 212000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-08-13",
+          "type": "탱크 밸브 점검",
+          "cost": 66000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.61,
+          "estimatedDate": "2025-04-21",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.47,
+          "estimatedDate": "2025-04-13",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V002",
+      "plateNumber": "97노6951",
+      "model": "트라고엑시언트",
+      "year": 2015,
+      "age": 11,
+      "mileage": 264263,
+      "overallScore": 51,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 70,
+          "status": "warning",
+          "lastCheck": "2025-02-12",
+          "nextCheck": "2025-05-27"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 43,
+          "status": "danger",
+          "lastCheck": "2025-02-10",
+          "nextCheck": "2025-04-30"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-03-15",
+          "nextCheck": "2025-05-25"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 59,
+          "status": "danger",
+          "lastCheck": "2025-02-12",
+          "nextCheck": "2025-05-08"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-02-28",
+          "nextCheck": "2025-04-25"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 83,
+          "status": "good",
+          "lastCheck": "2025-02-10",
+          "nextCheck": "2025-04-26"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-03-26",
+          "nextCheck": "2025-04-13"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 52,
+          "status": "danger",
+          "lastCheck": "2025-02-01",
+          "nextCheck": "2025-04-20"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-01-23",
+          "type": "정기 점검",
+          "cost": 200000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-11-06",
+          "type": "엔진 오일 교환",
+          "cost": 281000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-06-29",
+          "type": "탱크 밸브 점검",
+          "cost": 383000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-06-22",
+          "type": "타이어 교체",
+          "cost": 229000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-05-26",
+          "type": "타이어 교체",
+          "cost": 101000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "변속기",
+          "probability": 0.16,
+          "estimatedDate": "2025-04-23",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        },
+        {
+          "component": "브레이크",
+          "probability": 0.63,
+          "estimatedDate": "2025-04-11",
+          "recommendedAction": "브레이크 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V003",
+      "plateNumber": "80로7991",
+      "model": "엑시언트",
+      "year": 2022,
+      "age": 4,
+      "mileage": 101792,
+      "overallScore": 68,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 67,
+          "status": "warning",
+          "lastCheck": "2025-02-06",
+          "nextCheck": "2025-04-20"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 92,
+          "status": "good",
+          "lastCheck": "2025-01-15",
+          "nextCheck": "2025-04-15"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 59,
+          "status": "danger",
+          "lastCheck": "2025-01-07",
+          "nextCheck": "2025-05-10"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 91,
+          "status": "good",
+          "lastCheck": "2025-01-30",
+          "nextCheck": "2025-05-21"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 48,
+          "status": "danger",
+          "lastCheck": "2025-01-30",
+          "nextCheck": "2025-04-20"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 49,
+          "status": "danger",
+          "lastCheck": "2025-02-12",
+          "nextCheck": "2025-04-23"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 54,
+          "status": "danger",
+          "lastCheck": "2025-01-15",
+          "nextCheck": "2025-05-26"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 84,
+          "status": "good",
+          "lastCheck": "2025-02-21",
+          "nextCheck": "2025-05-22"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-02-04",
+          "type": "타이어 교체",
+          "cost": 342000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2025-02-02",
+          "type": "브레이크 패드 교체",
+          "cost": 51000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-09-30",
+          "type": "엔진 오일 교환",
+          "cost": 99000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-05-24",
+          "type": "타이어 교체",
+          "cost": 128000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.36,
+          "estimatedDate": "2025-04-25",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "브레이크",
+          "probability": 0.56,
+          "estimatedDate": "2025-05-15",
+          "recommendedAction": "브레이크 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V004",
+      "plateNumber": "84노1313",
+      "model": "트라고",
+      "year": 2013,
+      "age": 13,
+      "mileage": 287220,
+      "overallScore": 51,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 67,
+          "status": "warning",
+          "lastCheck": "2025-03-14",
+          "nextCheck": "2025-04-11"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 50,
+          "status": "danger",
+          "lastCheck": "2025-01-04",
+          "nextCheck": "2025-04-28"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-03-12",
+          "nextCheck": "2025-04-29"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 49,
+          "status": "danger",
+          "lastCheck": "2025-01-23",
+          "nextCheck": "2025-05-22"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 53,
+          "status": "danger",
+          "lastCheck": "2025-01-03",
+          "nextCheck": "2025-05-14"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 61,
+          "status": "warning",
+          "lastCheck": "2025-02-07",
+          "nextCheck": "2025-05-04"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 60,
+          "status": "warning",
+          "lastCheck": "2025-01-28",
+          "nextCheck": "2025-04-12"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 40,
+          "status": "danger",
+          "lastCheck": "2025-01-26",
+          "nextCheck": "2025-04-26"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-01-11",
+          "type": "정기 점검",
+          "cost": 392000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-12-14",
+          "type": "필터 교환",
+          "cost": 391000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-10-15",
+          "type": "탱크 밸브 점검",
+          "cost": 81000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.32,
+          "estimatedDate": "2025-05-11",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.36,
+          "estimatedDate": "2025-05-14",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V005",
+      "plateNumber": "88소2654",
+      "model": "트라고",
+      "year": 2007,
+      "age": 19,
+      "mileage": 408167,
+      "overallScore": 39,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-03-19",
+          "nextCheck": "2025-05-04"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 45,
+          "status": "danger",
+          "lastCheck": "2025-01-17",
+          "nextCheck": "2025-05-23"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-02-24",
+          "nextCheck": "2025-05-10"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 50,
+          "status": "danger",
+          "lastCheck": "2025-02-04",
+          "nextCheck": "2025-05-25"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-12",
+          "nextCheck": "2025-05-13"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-06",
+          "nextCheck": "2025-04-19"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-03-04",
+          "nextCheck": "2025-04-20"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 44,
+          "status": "danger",
+          "lastCheck": "2025-03-10",
+          "nextCheck": "2025-04-12"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-01-26",
+          "type": "정기 점검",
+          "cost": 248000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2025-01-20",
+          "type": "필터 교환",
+          "cost": 272000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-11-18",
+          "type": "필터 교환",
+          "cost": 125000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-05-21",
+          "type": "타이어 교체",
+          "cost": 332000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-05-01",
+          "type": "브레이크 패드 교체",
+          "cost": 213000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.31,
+          "estimatedDate": "2025-04-24",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.41,
+          "estimatedDate": "2025-04-07",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V006",
+      "plateNumber": "84노1302",
+      "model": "트라고",
+      "year": 2013,
+      "age": 13,
+      "mileage": 241328,
+      "overallScore": 50,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 55,
+          "status": "danger",
+          "lastCheck": "2025-01-10",
+          "nextCheck": "2025-05-13"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 63,
+          "status": "warning",
+          "lastCheck": "2025-02-01",
+          "nextCheck": "2025-04-19"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-10",
+          "nextCheck": "2025-05-17"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 85,
+          "status": "good",
+          "lastCheck": "2025-03-13",
+          "nextCheck": "2025-05-16"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-17",
+          "nextCheck": "2025-05-02"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 50,
+          "status": "danger",
+          "lastCheck": "2025-02-05",
+          "nextCheck": "2025-05-21"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 42,
+          "status": "danger",
+          "lastCheck": "2025-01-08",
+          "nextCheck": "2025-05-10"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 39,
+          "status": "danger",
+          "lastCheck": "2025-02-19",
+          "nextCheck": "2025-05-05"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2024-09-13",
+          "type": "필터 교환",
+          "cost": 171000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-08-08",
+          "type": "정기 점검",
+          "cost": 252000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-04-19",
+          "type": "탱크 밸브 점검",
+          "cost": 398000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.17,
+          "estimatedDate": "2025-05-07",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.61,
+          "estimatedDate": "2025-04-30",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V007",
+      "plateNumber": "80오0223",
+      "model": "엑시언트",
+      "year": 2019,
+      "age": 7,
+      "mileage": 153684,
+      "overallScore": 55,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 37,
+          "status": "danger",
+          "lastCheck": "2025-02-16",
+          "nextCheck": "2025-04-29"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 53,
+          "status": "danger",
+          "lastCheck": "2025-03-14",
+          "nextCheck": "2025-04-24"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 44,
+          "status": "danger",
+          "lastCheck": "2025-01-29",
+          "nextCheck": "2025-05-29"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 56,
+          "status": "danger",
+          "lastCheck": "2025-02-01",
+          "nextCheck": "2025-05-18"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 84,
+          "status": "good",
+          "lastCheck": "2025-03-02",
+          "nextCheck": "2025-05-08"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 49,
+          "status": "danger",
+          "lastCheck": "2025-01-23",
+          "nextCheck": "2025-05-28"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 69,
+          "status": "warning",
+          "lastCheck": "2025-03-19",
+          "nextCheck": "2025-05-12"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 53,
+          "status": "danger",
+          "lastCheck": "2025-02-15",
+          "nextCheck": "2025-05-25"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-01-31",
+          "type": "엔진 오일 교환",
+          "cost": 66000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-12-22",
+          "type": "탱크 밸브 점검",
+          "cost": 500000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-11-23",
+          "type": "엔진 오일 교환",
+          "cost": 478000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-07-11",
+          "type": "정기 점검",
+          "cost": 234000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-05-14",
+          "type": "정기 점검",
+          "cost": 138000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.5,
+          "estimatedDate": "2025-04-24",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.33,
+          "estimatedDate": "2025-05-06",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V008",
+      "plateNumber": "97노6982",
+      "model": "트라고엑시언트",
+      "year": 2015,
+      "age": 11,
+      "mileage": 208994,
+      "overallScore": 62,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 60,
+          "status": "warning",
+          "lastCheck": "2025-01-04",
+          "nextCheck": "2025-04-17"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 82,
+          "status": "good",
+          "lastCheck": "2025-02-24",
+          "nextCheck": "2025-05-03"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 48,
+          "status": "danger",
+          "lastCheck": "2025-01-28",
+          "nextCheck": "2025-04-21"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 47,
+          "status": "danger",
+          "lastCheck": "2025-01-15",
+          "nextCheck": "2025-05-02"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 61,
+          "status": "warning",
+          "lastCheck": "2025-02-21",
+          "nextCheck": "2025-05-27"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 83,
+          "status": "good",
+          "lastCheck": "2025-02-18",
+          "nextCheck": "2025-04-11"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 63,
+          "status": "warning",
+          "lastCheck": "2025-03-06",
+          "nextCheck": "2025-05-16"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 52,
+          "status": "danger",
+          "lastCheck": "2025-01-03",
+          "nextCheck": "2025-04-24"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-02-25",
+          "type": "타이어 교체",
+          "cost": 117000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-10-15",
+          "type": "필터 교환",
+          "cost": 259000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-06-12",
+          "type": "정기 점검",
+          "cost": 492000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.47,
+          "estimatedDate": "2025-05-15",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "브레이크",
+          "probability": 0.55,
+          "estimatedDate": "2025-04-21",
+          "recommendedAction": "브레이크 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V009",
+      "plateNumber": "88소3056",
+      "model": "트라고",
+      "year": 2007,
+      "age": 19,
+      "mileage": 377357,
+      "overallScore": 37,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-02-15",
+          "nextCheck": "2025-05-25"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 38,
+          "status": "danger",
+          "lastCheck": "2025-02-19",
+          "nextCheck": "2025-05-07"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 36,
+          "status": "danger",
+          "lastCheck": "2025-01-27",
+          "nextCheck": "2025-04-26"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-02-16",
+          "nextCheck": "2025-05-23"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-02-04",
+          "nextCheck": "2025-05-17"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 37,
+          "status": "danger",
+          "lastCheck": "2025-01-20",
+          "nextCheck": "2025-05-22"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-03",
+          "nextCheck": "2025-05-18"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 50,
+          "status": "danger",
+          "lastCheck": "2025-02-16",
+          "nextCheck": "2025-05-23"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2024-10-11",
+          "type": "필터 교환",
+          "cost": 216000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-06-28",
+          "type": "정기 점검",
+          "cost": 222000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.58,
+          "estimatedDate": "2025-04-23",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.48,
+          "estimatedDate": "2025-04-26",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    },
+    {
+      "vehicleId": "V010",
+      "plateNumber": "97노6812",
+      "model": "트라고엑시언트(TRAGO XCIENT)",
+      "year": 2015,
+      "age": 11,
+      "mileage": 234939,
+      "overallScore": 62,
+      "components": {
+        "engine": {
+          "name": "엔진",
+          "score": 51,
+          "status": "danger",
+          "lastCheck": "2025-01-19",
+          "nextCheck": "2025-05-28"
+        },
+        "transmission": {
+          "name": "변속기",
+          "score": 54,
+          "status": "danger",
+          "lastCheck": "2025-01-09",
+          "nextCheck": "2025-05-05"
+        },
+        "brakes": {
+          "name": "브레이크",
+          "score": 70,
+          "status": "warning",
+          "lastCheck": "2025-03-09",
+          "nextCheck": "2025-05-26"
+        },
+        "tires": {
+          "name": "타이어",
+          "score": 35,
+          "status": "danger",
+          "lastCheck": "2025-01-22",
+          "nextCheck": "2025-04-28"
+        },
+        "tankPressure": {
+          "name": "탱크 압력",
+          "score": 44,
+          "status": "danger",
+          "lastCheck": "2025-02-03",
+          "nextCheck": "2025-05-04"
+        },
+        "suspension": {
+          "name": "서스펜션",
+          "score": 86,
+          "status": "good",
+          "lastCheck": "2025-01-11",
+          "nextCheck": "2025-05-25"
+        },
+        "electrical": {
+          "name": "전기 시스템",
+          "score": 75,
+          "status": "good",
+          "lastCheck": "2025-02-11",
+          "nextCheck": "2025-05-26"
+        },
+        "cooling": {
+          "name": "냉각 시스템",
+          "score": 84,
+          "status": "good",
+          "lastCheck": "2025-01-17",
+          "nextCheck": "2025-05-20"
+        }
+      },
+      "maintenanceHistory": [
+        {
+          "date": "2025-01-11",
+          "type": "타이어 교체",
+          "cost": 115000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-12-04",
+          "type": "필터 교환",
+          "cost": 498000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-10-20",
+          "type": "필터 교환",
+          "cost": 463000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-08-30",
+          "type": "탱크 밸브 점검",
+          "cost": 203000,
+          "notes": "정상 완료"
+        },
+        {
+          "date": "2024-05-20",
+          "type": "엔진 오일 교환",
+          "cost": 200000,
+          "notes": "정상 완료"
+        }
+      ],
+      "predictedFailures": [
+        {
+          "component": "엔진",
+          "probability": 0.43,
+          "estimatedDate": "2025-04-18",
+          "recommendedAction": "엔진 사전 교체/점검 권장"
+        },
+        {
+          "component": "변속기",
+          "probability": 0.62,
+          "estimatedDate": "2025-04-28",
+          "recommendedAction": "변속기 사전 교체/점검 권장"
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "vehicleId": "V011",
+      "plateNumber": "88소3847",
+      "overallScore": 47,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V012",
+      "plateNumber": "88소1984",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V013",
+      "plateNumber": "88소1619",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V014",
+      "plateNumber": "89보4327",
+      "overallScore": 98,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V015",
+      "plateNumber": "82거7321",
+      "overallScore": 62,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V016",
+      "plateNumber": "84저9933",
+      "overallScore": 66,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V017",
+      "plateNumber": "88소2611",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V018",
+      "plateNumber": "92거7006",
+      "overallScore": 98,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V019",
+      "plateNumber": "93마1049",
+      "overallScore": 57,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V020",
+      "plateNumber": "88소2378",
+      "overallScore": 48,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V021",
+      "plateNumber": "88소1853",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V022",
+      "plateNumber": "88소3269",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V023",
+      "plateNumber": "93마1011",
+      "overallScore": 75,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V024",
+      "plateNumber": "97조5301",
+      "overallScore": 74,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V025",
+      "plateNumber": "84어4500",
+      "overallScore": 80,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V026",
+      "plateNumber": "86누0966",
+      "overallScore": 74,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V027",
+      "plateNumber": "88머2012",
+      "overallScore": 65,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V028",
+      "plateNumber": "81버4901",
+      "overallScore": 72,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V029",
+      "plateNumber": "92구3548",
+      "overallScore": 72,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V030",
+      "plateNumber": "88소3476",
+      "overallScore": 50,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V031",
+      "plateNumber": "88소2806",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V032",
+      "plateNumber": "85다8607",
+      "overallScore": 98,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V033",
+      "plateNumber": "85다8222",
+      "overallScore": 93,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V034",
+      "plateNumber": "85노3075",
+      "overallScore": 81,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V035",
+      "plateNumber": "84누5218",
+      "overallScore": 68,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V036",
+      "plateNumber": "84구9345",
+      "overallScore": 59,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V037",
+      "plateNumber": "96누2361",
+      "overallScore": 61,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V038",
+      "plateNumber": "91수0616",
+      "overallScore": 82,
+      "status": "good"
+    },
+    {
+      "vehicleId": "V039",
+      "plateNumber": "85머8280",
+      "overallScore": 55,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V040",
+      "plateNumber": "83모6873",
+      "overallScore": 64,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V041",
+      "plateNumber": "82루6944",
+      "overallScore": 70,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V042",
+      "plateNumber": "92구3422",
+      "overallScore": 63,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V043",
+      "plateNumber": "92수4142",
+      "overallScore": 58,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V044",
+      "plateNumber": "93루8066",
+      "overallScore": 45,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V045",
+      "plateNumber": "93마1055",
+      "overallScore": 70,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V046",
+      "plateNumber": "88머2061",
+      "overallScore": 67,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V047",
+      "plateNumber": "94우8181",
+      "overallScore": 74,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V048",
+      "plateNumber": "90조3579",
+      "overallScore": 57,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V049",
+      "plateNumber": "94버9601",
+      "overallScore": 52,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V050",
+      "plateNumber": "84소9815",
+      "overallScore": 68,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V051",
+      "plateNumber": "89머4837",
+      "overallScore": 58,
+      "status": "danger"
+    },
+    {
+      "vehicleId": "V052",
+      "plateNumber": "97모2803",
+      "overallScore": 74,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V053",
+      "plateNumber": "87저8918",
+      "overallScore": 66,
+      "status": "warning"
+    },
+    {
+      "vehicleId": "V054",
+      "plateNumber": "819노3477",
+      "overallScore": 86,
+      "status": "good"
+    }
+  ]
+}
