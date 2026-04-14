@@ -1,17 +1,25 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wrench, Calendar, AlertTriangle, Printer, X, FileText, CheckCircle2 } from "lucide-react";
+import { Wrench, Calendar, AlertTriangle, Printer, X, FileText, CheckCircle2, Package, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { vehicles, vehicleHealth } from "@/lib/data";
 import Card from "@/components/ui/Card";
 import Gauge from "@/components/ui/Gauge";
 import StatusDot from "@/components/ui/StatusDot";
 import Badge from "@/components/ui/Badge";
-import EmptyState from "@/components/ui/EmptyState";
 import PageTransition from "@/components/PageTransition";
 import { useToast } from "@/components/ui/Toast";
+
+// ── Parts inventory (sample data) ──
+const PARTS_INVENTORY: Record<string, { stock: number; unit: string; unitCost: number }> = {
+  "브레이크 패드": { stock: 4, unit: "세트", unitCost: 180000 },
+  "냉각수 시스템": { stock: 2, unit: "세트", unitCost: 350000 },
+  "배터리": { stock: 3, unit: "개", unitCost: 520000 },
+  "탱크 밸브": { stock: 5, unit: "개", unitCost: 420000 },
+  "엔진 오일": { stock: 8, unit: "L(20L)", unitCost: 95000 },
+};
 
 // ── Heatmap cell color by health score ──
 function healthColor(score: number): string {
@@ -24,6 +32,8 @@ export default function MaintenancePage() {
   const [selectedPlate, setSelectedPlate] = useState<string | null>(null);
   const [hoveredVehicle, setHoveredVehicle] = useState<string | null>(null);
   const [showWorkOrder, setShowWorkOrder] = useState(false);
+  const [calMonth, setCalMonth] = useState<{ year: number; month: number }>({ year: 2026, month: 3 }); // 0-indexed: 3 = April
+  const [selectedCalDay, setSelectedCalDay] = useState<string | null>(null); // "YYYY-MM-DD"
   const printRef = useRef<HTMLDivElement>(null);
   const { addToast } = useToast();
 
@@ -31,6 +41,49 @@ export default function MaintenancePage() {
   const selectedVehicle = selectedPlate
     ? vehicles.find((v) => v.plateNumber === selectedPlate)
     : null;
+
+  // ── Parts overview (cross-vehicle aggregation) ──
+  const partsOverview = useMemo(() => {
+    const allHealth = Object.values(vehicleHealth);
+    const partNames = ["브레이크 패드", "냉각수 시스템", "배터리", "탱크 밸브", "엔진 오일"];
+
+    const partStats = partNames.map((name) => {
+      const instances = allHealth.map((vh) => {
+        const comp = vh.components.find((c) => c.name === name);
+        return comp ? { ...comp, plate: vh.plateNumber, model: vh.model } : null;
+      }).filter(Boolean) as { name: string; rul: number; health: number; status: string; plate: string; model: string }[];
+
+      const danger = instances.filter((c) => c.health < 60);
+      const caution = instances.filter((c) => c.health >= 60 && c.health < 70);
+      const good = instances.filter((c) => c.health >= 70);
+      const avgHealth = instances.length > 0 ? Math.round(instances.reduce((s, c) => s + c.health, 0) / instances.length) : 0;
+      const avgRul = instances.length > 0 ? Math.round(instances.reduce((s, c) => s + c.rul, 0) / instances.length) : 0;
+      const need30d = instances.filter((c) => c.rul <= 30).length; // need replacement within 30 days
+      const inv = PARTS_INVENTORY[name];
+      const shortage = Math.max(0, need30d - (inv?.stock ?? 0));
+
+      return { name, total: instances.length, danger, caution, good, avgHealth, avgRul, need30d, stock: inv?.stock ?? 0, unit: inv?.unit ?? "", unitCost: inv?.unitCost ?? 0, shortage, instances };
+    });
+
+    // Urgent items: health < 60, sorted by RUL ascending
+    const urgentItems = partStats.flatMap((ps) =>
+      ps.danger.map((d) => ({ part: ps.name, plate: d.plate, health: d.health, rul: d.rul }))
+    ).sort((a, b) => a.rul - b.rul);
+
+    // Upcoming maintenance schedule
+    const schedules = allHealth
+      .map((vh) => ({ plate: vh.plateNumber, date: vh.nextMaintenance.date, type: vh.nextMaintenance.type, autoExcluded: vh.nextMaintenance.autoExcluded }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    // Summary KPIs
+    const totalDanger = partStats.reduce((s, ps) => s + ps.danger.length, 0);
+    const totalShortage = partStats.reduce((s, ps) => s + ps.shortage, 0);
+    const avgFleetHealth = allHealth.length > 0
+      ? Math.round(allHealth.reduce((s, vh) => s + vh.overallScore, 0) / allHealth.length)
+      : 0;
+
+    return { partStats, urgentItems, schedules, totalDanger, totalShortage, avgFleetHealth };
+  }, []);
 
   return (
     <PageTransition>
@@ -87,18 +140,357 @@ export default function MaintenancePage() {
         <AnimatePresence mode="wait">
           {!detail || !selectedVehicle ? (
             <motion.div
-              key="empty"
+              key="overview"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <Card hover={false}>
-                <EmptyState
-                  icon={Wrench}
-                  title="차량을 선택하세요"
-                  description="위 히트맵에서 차량을 클릭하면 상세 정보가 표시됩니다"
-                />
-              </Card>
+              {/* ── Parts Overview Dashboard ── */}
+              <div className="space-y-4">
+                {/* Parts status table */}
+                <Card hover={false}>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Package size={16} className="text-text-muted" />
+                      <h3 className="text-sm font-semibold text-text-primary">부품별 전체 현황</h3>
+                    </div>
+                    <div className="flex items-center gap-3 text-[10px] text-text-muted">
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-danger" />교체 필요</span>
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-warning" />주의 관찰</span>
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-success" />양호</span>
+                    </div>
+                  </div>
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-border-light">
+                        <th className="text-left py-2 text-text-muted font-semibold w-28">부품명</th>
+                        <th className="text-center py-2 text-danger font-semibold w-16">교체 필요</th>
+                        <th className="text-center py-2 text-warning font-semibold w-16">주의</th>
+                        <th className="text-center py-2 text-success font-semibold w-16">양호</th>
+                        <th className="text-left py-2 text-text-muted font-semibold w-32">평균 건강도</th>
+                        <th className="text-center py-2 text-text-muted font-semibold w-20">평균 잔여일</th>
+                        <th className="text-center py-2 text-text-muted font-semibold w-16">재고</th>
+                        <th className="text-center py-2 text-text-muted font-semibold w-20">30일 내 필요</th>
+                        <th className="text-center py-2 text-text-muted font-semibold w-16">부족분</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {partsOverview.partStats.map((ps) => (
+                        <tr key={ps.name} className="border-b border-border-light last:border-0 hover:bg-surface-secondary transition-colors">
+                          <td className="py-2.5 font-medium text-text-primary">{ps.name}</td>
+                          <td className="py-2.5 text-center">
+                            {ps.danger.length > 0 ? (
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-danger-bg text-danger font-bold">{ps.danger.length}</span>
+                            ) : <span className="text-text-muted">-</span>}
+                          </td>
+                          <td className="py-2.5 text-center">
+                            {ps.caution.length > 0 ? (
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-warning-bg text-warning font-bold">{ps.caution.length}</span>
+                            ) : <span className="text-text-muted">-</span>}
+                          </td>
+                          <td className="py-2.5 text-center text-success font-medium">{ps.good.length}</td>
+                          <td className="py-2.5">
+                            <div className="flex items-center gap-2">
+                              <Gauge percent={ps.avgHealth} height="h-1.5" />
+                              <span className="tabular-nums font-medium w-8 text-right">{ps.avgHealth}%</span>
+                            </div>
+                          </td>
+                          <td className="py-2.5 text-center tabular-nums">{ps.avgRul}일</td>
+                          <td className="py-2.5 text-center tabular-nums font-medium">{ps.stock}{ps.unit.charAt(0)}</td>
+                          <td className="py-2.5 text-center tabular-nums font-medium">{ps.need30d}대</td>
+                          <td className="py-2.5 text-center">
+                            {ps.shortage > 0 ? (
+                              <span className="text-danger font-bold">{ps.shortage}개 부족</span>
+                            ) : (
+                              <span className="text-success font-medium">충분</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Card>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Urgent replacement list */}
+                  <Card hover={false}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <AlertTriangle size={14} className="text-danger" />
+                      <h3 className="text-sm font-semibold text-text-primary">긴급 교체 필요</h3>
+                      {partsOverview.totalDanger > 0 && (
+                        <span className="text-[10px] font-bold bg-danger-bg text-danger px-1.5 py-0.5 rounded-full">{partsOverview.totalDanger}건</span>
+                      )}
+                    </div>
+                    {partsOverview.urgentItems.length === 0 ? (
+                      <div className="py-6 text-center text-sm text-text-muted">
+                        <CheckCircle2 size={24} className="text-success mx-auto mb-2" />
+                        긴급 교체가 필요한 부품이 없습니다
+                      </div>
+                    ) : (
+                      <div className="space-y-1.5">
+                        {partsOverview.urgentItems.map((item, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setSelectedPlate(item.plate)}
+                            className="flex items-center gap-2 w-full text-left py-2 px-2.5 -mx-1 rounded-[--radius-md] hover:bg-surface-secondary transition-colors cursor-pointer"
+                          >
+                            <span className={`w-2 h-2 rounded-full shrink-0 ${item.rul <= 20 ? "bg-danger alert-pulse" : "bg-warning"}`} />
+                            <span className="text-xs font-medium text-text-primary shrink-0 w-20 truncate">{item.part}</span>
+                            <span className="text-[10px] text-text-muted shrink-0">{item.plate}</span>
+                            <span className="text-xs font-bold tabular-nums text-danger shrink-0 w-8 text-right">{item.rul}일</span>
+                            <div className="w-12 shrink-0">
+                              <Gauge percent={item.health} height="h-1" />
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </Card>
+
+                  {/* Parts inventory + upcoming schedule */}
+                  <div className="flex flex-col gap-4">
+                    {/* Inventory status */}
+                    <Card hover={false}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <ShoppingCart size={14} className="text-text-muted" />
+                        <h3 className="text-sm font-semibold text-text-primary">부품 재고 vs 수요</h3>
+                        {partsOverview.totalShortage > 0 && (
+                          <span className="text-[10px] font-bold bg-danger-bg text-danger px-1.5 py-0.5 rounded-full">{partsOverview.totalShortage}건 부족</span>
+                        )}
+                      </div>
+                      <div className="space-y-2.5">
+                        {partsOverview.partStats.map((ps) => (
+                          <div key={ps.name} className="flex items-center gap-2">
+                            <span className="text-xs text-text-secondary w-20 shrink-0 truncate">{ps.name}</span>
+                            <div className="flex-1 flex items-center gap-1.5">
+                              {/* Stock bar */}
+                              <div className="flex-1 bg-border-light rounded-full h-3 overflow-hidden relative">
+                                <div
+                                  className="h-full bg-success/60 rounded-full"
+                                  style={{ width: `${Math.min(100, (ps.stock / Math.max(1, ps.need30d + ps.stock)) * 100)}%` }}
+                                />
+                                {ps.need30d > 0 && (
+                                  <div
+                                    className="absolute top-0 h-full bg-danger/30 rounded-full"
+                                    style={{ left: `${Math.min(100, (ps.stock / Math.max(1, ps.need30d + ps.stock)) * 100)}%`, width: `${Math.min(100 - (ps.stock / Math.max(1, ps.need30d + ps.stock)) * 100, (ps.need30d / Math.max(1, ps.need30d + ps.stock)) * 100)}%` }}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                            <span className="text-[10px] tabular-nums text-success font-medium w-6 text-right">{ps.stock}</span>
+                            <span className="text-[10px] text-text-muted">/</span>
+                            <span className="text-[10px] tabular-nums text-text-secondary font-medium w-4">{ps.need30d}</span>
+                          </div>
+                        ))}
+                        <p className="text-[10px] text-text-muted mt-1">녹색: 현재 재고 | 빨강: 30일 내 추가 필요</p>
+                      </div>
+                    </Card>
+
+                  </div>
+                </div>
+
+                {/* ── Maintenance Calendar (full width) ── */}
+                <Card hover={false}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Calendar size={16} className="text-text-muted" />
+                      <h3 className="text-sm font-semibold text-text-primary">정비 일정 캘린더</h3>
+                      <span className="text-[10px] text-text-muted">{partsOverview.schedules.length}건 예정</span>
+                    </div>
+                    {/* Month navigation */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCalMonth((p) => {
+                          const d = new Date(p.year, p.month - 1, 1);
+                          return { year: d.getFullYear(), month: d.getMonth() };
+                        })}
+                        className="p-1 hover:bg-surface-secondary rounded-[--radius-sm] transition-colors cursor-pointer"
+                      >
+                        <ChevronLeft size={14} className="text-text-muted" />
+                      </button>
+                      <span className="text-sm font-semibold text-text-primary tabular-nums w-24 text-center">
+                        {calMonth.year}년 {calMonth.month + 1}월
+                      </span>
+                      <button
+                        onClick={() => setCalMonth((p) => {
+                          const d = new Date(p.year, p.month + 1, 1);
+                          return { year: d.getFullYear(), month: d.getMonth() };
+                        })}
+                        className="p-1 hover:bg-surface-secondary rounded-[--radius-sm] transition-colors cursor-pointer"
+                      >
+                        <ChevronRight size={14} className="text-text-muted" />
+                      </button>
+                      <button
+                        onClick={() => setCalMonth({ year: 2026, month: 3 })}
+                        className="text-[10px] text-brand hover:underline cursor-pointer ml-1"
+                      >
+                        오늘
+                      </button>
+                    </div>
+                  </div>
+
+                  {(() => {
+                    // Build schedule map: "YYYY-MM-DD" -> events[]
+                    const schedMap = new Map<string, typeof partsOverview.schedules>();
+                    partsOverview.schedules.forEach((s) => {
+                      const arr = schedMap.get(s.date) || [];
+                      arr.push(s);
+                      schedMap.set(s.date, arr);
+                    });
+
+                    // Dynamic month calculation
+                    const firstDay = new Date(calMonth.year, calMonth.month, 1);
+                    const startDow = firstDay.getDay();
+                    const daysInMonth = new Date(calMonth.year, calMonth.month + 1, 0).getDate();
+                    const todayStr = "2026-04-15";
+
+                    const cells: (number | null)[] = [];
+                    for (let i = 0; i < startDow; i++) cells.push(null);
+                    for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+                    while (cells.length % 7 !== 0) cells.push(null);
+
+                    const dateStr = (day: number) =>
+                      `${calMonth.year}-${String(calMonth.month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+                    // Events in this month for the detail list
+                    const monthEvents = partsOverview.schedules.filter((s) => {
+                      const dt = new Date(s.date);
+                      return dt.getFullYear() === calMonth.year && dt.getMonth() === calMonth.month;
+                    });
+
+                    // Selected day events
+                    const selectedDayEvents = selectedCalDay ? (schedMap.get(selectedCalDay) ?? []) : [];
+
+                    const EVENT_COLORS = ["bg-warning", "bg-danger", "bg-brand", "bg-success"];
+
+                    return (
+                      <div className="grid grid-cols-[1fr_280px] gap-4">
+                        {/* Calendar grid */}
+                        <div>
+                          <div className="grid grid-cols-7 gap-1 mb-1">
+                            {["일", "월", "화", "수", "목", "금", "토"].map((d) => (
+                              <div key={d} className={`text-center text-[10px] font-semibold py-1 ${d === "일" ? "text-danger" : d === "토" ? "text-brand" : "text-text-muted"}`}>{d}</div>
+                            ))}
+                          </div>
+                          <div className="grid grid-cols-7 gap-1">
+                            {cells.map((day, i) => {
+                              if (day === null) return <div key={`e-${i}`} className="min-h-[56px]" />;
+                              const ds = dateStr(day);
+                              const events = schedMap.get(ds);
+                              const hasEvent = events && events.length > 0;
+                              const isToday = ds === todayStr;
+                              const isPast = ds < todayStr;
+                              const isSelected = ds === selectedCalDay;
+                              const dow = i % 7;
+                              return (
+                                <button
+                                  key={day}
+                                  onClick={() => setSelectedCalDay(isSelected ? null : ds)}
+                                  className={`relative min-h-[56px] p-1 rounded-[--radius-md] border text-left transition-all cursor-pointer
+                                    ${isSelected ? "border-brand ring-1 ring-brand/30 bg-brand-50" : "border-transparent hover:border-border-light hover:bg-surface-secondary"}
+                                    ${isToday && !isSelected ? "border-brand/40 bg-brand-50/50" : ""}
+                                  `}
+                                >
+                                  <span className={`text-[11px] tabular-nums block mb-0.5
+                                    ${isToday ? "text-brand font-bold" : ""}
+                                    ${isPast && !isToday ? "text-text-muted/50" : ""}
+                                    ${!isPast && !isToday ? "text-text-secondary" : ""}
+                                    ${dow === 0 ? "text-danger/70" : ""} ${dow === 6 ? "text-brand/70" : ""}
+                                  `}>
+                                    {day}
+                                    {isToday && <span className="text-[8px] ml-0.5 font-normal">오늘</span>}
+                                  </span>
+                                  {hasEvent && (
+                                    <div className="space-y-0.5">
+                                      {events.slice(0, 3).map((ev, ei) => (
+                                        <div
+                                          key={ei}
+                                          className={`text-[8px] leading-tight px-1 py-0.5 rounded truncate text-white font-medium
+                                            ${ev.autoExcluded ? EVENT_COLORS[1] : EVENT_COLORS[0]}
+                                          `}
+                                        >
+                                          {ev.plate.slice(-4)} {ev.type.slice(0, 6)}
+                                        </div>
+                                      ))}
+                                      {events.length > 3 && (
+                                        <span className="text-[8px] text-text-muted px-1">+{events.length - 3}건</span>
+                                      )}
+                                    </div>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          {/* Legend */}
+                          <div className="flex items-center gap-4 mt-2 text-[9px] text-text-muted">
+                            <span className="flex items-center gap-1"><span className="w-2 h-1.5 rounded-sm bg-warning" />정비 예정</span>
+                            <span className="flex items-center gap-1"><span className="w-2 h-1.5 rounded-sm bg-danger" />배차 제외</span>
+                            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-[--radius-sm] border border-brand/40 bg-brand-50/50" />오늘</span>
+                          </div>
+                        </div>
+
+                        {/* Right panel: selected day detail or month summary */}
+                        <div className="border-l border-border-light pl-4">
+                          {selectedCalDay && selectedDayEvents.length > 0 ? (
+                            <div>
+                              <p className="text-xs font-semibold text-text-primary mb-3">
+                                {new Date(selectedCalDay).getMonth() + 1}월 {new Date(selectedCalDay).getDate()}일 정비 ({selectedDayEvents.length}건)
+                              </p>
+                              <div className="space-y-2.5">
+                                {selectedDayEvents.map((ev, i) => (
+                                  <button
+                                    key={i}
+                                    onClick={() => setSelectedPlate(ev.plate)}
+                                    className="w-full text-left p-3 rounded-[--radius-md] border border-border-light hover:border-brand/30 hover:bg-brand-50/30 transition-all cursor-pointer"
+                                  >
+                                    <div className="flex items-center gap-2 mb-1.5">
+                                      <span className="text-xs font-bold text-text-primary">{ev.plate}</span>
+                                      {ev.autoExcluded && <Badge variant="danger">배차 제외</Badge>}
+                                    </div>
+                                    <p className="text-[11px] text-text-secondary">{ev.type}</p>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          ) : selectedCalDay ? (
+                            <div className="flex flex-col items-center justify-center h-full text-text-muted">
+                              <Calendar size={20} className="mb-2 opacity-30" />
+                              <p className="text-xs">예정된 정비가 없습니다</p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p className="text-xs font-semibold text-text-primary mb-3">
+                                {calMonth.month + 1}월 정비 요약 ({monthEvents.length}건)
+                              </p>
+                              {monthEvents.length === 0 ? (
+                                <p className="text-xs text-text-muted py-4 text-center">이 달에 예정된 정비가 없습니다</p>
+                              ) : (
+                                <div className="space-y-1.5">
+                                  {monthEvents.map((s, i) => {
+                                    const dt = new Date(s.date);
+                                    return (
+                                      <button
+                                        key={i}
+                                        onClick={() => setSelectedPlate(s.plate)}
+                                        className="flex items-center gap-2 w-full text-left py-1.5 px-2 rounded-[--radius-sm] hover:bg-surface-secondary transition-colors cursor-pointer"
+                                      >
+                                        <span className="text-[10px] tabular-nums text-text-muted w-9 shrink-0">{dt.getMonth() + 1}/{dt.getDate()}</span>
+                                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${s.autoExcluded ? "bg-danger" : "bg-warning"}`} />
+                                        <span className="text-[11px] font-medium text-text-primary shrink-0">{s.plate}</span>
+                                        <span className="text-[10px] text-text-muted flex-1 truncate">{s.type}</span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </Card>
+              </div>
             </motion.div>
           ) : (
             <motion.div
@@ -108,6 +500,15 @@ export default function MaintenancePage() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.25 }}
             >
+              {/* Back to overview */}
+              <button
+                onClick={() => setSelectedPlate(null)}
+                className="flex items-center gap-1.5 text-xs text-brand hover:text-brand-600 font-medium mb-3 cursor-pointer transition-colors"
+              >
+                <ChevronLeft size={14} />
+                전체 현황으로 돌아가기
+              </button>
+
               <div className="grid grid-cols-[1fr_1fr] gap-4">
                 {/* Left Column: Vehicle Info + RUL Gauges */}
                 <div className="flex flex-col gap-4">

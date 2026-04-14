@@ -543,39 +543,25 @@ export default function ForecastPage() {
                   <Legend iconSize={8} wrapperStyle={{ fontSize: 10 }} verticalAlign="top" align="right" />
 
                   {/* Background zones: past (green tint) vs future (blue tint) */}
-                  <ReferenceArea
-                    yAxisId="major"
-                    x1={cd.firstPastLabel}
-                    x2={cd.todayLabel}
-                    fill="var(--color-success)"
-                    fillOpacity={0.04}
-                    stroke="none"
-                  />
-                  <ReferenceArea
-                    yAxisId="major"
-                    x1={cd.todayLabel}
-                    x2={cd.lastFutureLabel}
-                    fill="var(--color-brand)"
-                    fillOpacity={0.04}
-                    stroke="none"
-                  />
-
-                  {/* "오늘" divider line */}
-                  <ReferenceLine
-                    yAxisId="major"
-                    x={cd.todayLabel}
-                    stroke="var(--color-text-primary)"
-                    strokeWidth={2}
-                    strokeDasharray="none"
-                    label={{
-                      value: "오늘",
-                      position: "insideTopLeft",
-                      fill: "var(--color-text-primary)",
-                      fontSize: 11,
-                      fontWeight: 700,
-                      offset: 6,
-                    }}
-                  />
+                  {(() => {
+                    // Use whichever axis has active data
+                    const isMajorOnly = productFilter === "전체" || ["N2", "O2", "AR"].includes(productFilter);
+                    const axisId = isMajorOnly ? "major" : "minor";
+                    return (
+                      <>
+                        <ReferenceArea yAxisId={axisId} x1={cd.firstPastLabel} x2={cd.todayLabel} fill="var(--color-success)" fillOpacity={0.04} stroke="none" />
+                        <ReferenceArea yAxisId={axisId} x1={cd.todayLabel} x2={cd.lastFutureLabel} fill="var(--color-brand)" fillOpacity={0.04} stroke="none" />
+                        <ReferenceLine
+                          yAxisId={axisId}
+                          x={cd.todayLabel}
+                          stroke="var(--color-text-primary)"
+                          strokeWidth={2}
+                          strokeDasharray="none"
+                          label={{ value: "오늘", position: "insideTopLeft", fill: "var(--color-text-primary)", fontSize: 11, fontWeight: 700, offset: 6 }}
+                        />
+                      </>
+                    );
+                  })()}
 
                   {/* Major products: Stacked Area (left axis) */}
                   {(productFilter === "전체" ? ["N2", "O2", "AR"] : [productFilter]).filter((p) => ["N2", "O2", "AR"].includes(p)).map((p) => (

@@ -314,9 +314,10 @@ export default function SafetyPage() {
   const [avPlaying, setAvPlaying] = useState(true);
   const avEvents = safetyEvents.filter((e) => e.direction);
 
-  // Driver ranking sort
+  // Driver ranking sort + selection
   const [sortKey, setSortKey] = useState<SortKey>("safetyScore");
   const [sortAsc, setSortAsc] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState<string | null>(null);
 
   const sortedDrivers = useMemo(() => {
     const arr = [...drivers];
@@ -720,10 +721,14 @@ export default function SafetyPage() {
                             : <span className="text-text-muted tabular-nums text-xs">{idx + 1}</span>
                       : <span className="text-text-muted tabular-nums text-xs">{idx + 1}</span>;
 
+                  const isSelected = selectedDriver === d.name;
                   return (
                     <tr
                       key={d.name}
-                      className="border-b border-border-light last:border-0 hover:bg-surface-secondary transition-colors"
+                      onClick={() => setSelectedDriver(isSelected ? null : d.name)}
+                      className={`border-b border-border-light last:border-0 cursor-pointer transition-colors ${
+                        isSelected ? "bg-brand-50" : "hover:bg-surface-secondary"
+                      }`}
                     >
                       <td className="px-3 py-2.5 text-center">{rankIcon}</td>
                       <td className="px-3 py-2.5 font-medium text-text-primary">{d.name}</td>
@@ -767,7 +772,17 @@ export default function SafetyPage() {
           <div className="px-4 py-3 border-b border-border-light flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Eye size={16} className="text-brand" />
-              <h3 className="text-base font-semibold text-text-primary">어라운드뷰 모니터링</h3>
+              <h3 className="text-base font-semibold text-text-primary">
+                어라운드뷰
+                {selectedDriver && (
+                  <span className="text-sm font-normal text-brand ml-2">
+                    {selectedDriver} ({drivers.find(d => d.name === selectedDriver)?.vehicle})
+                  </span>
+                )}
+                {!selectedDriver && (
+                  <span className="text-xs font-normal text-text-muted ml-2">기사를 선택하세요</span>
+                )}
+              </h3>
               {currentAvEvent && (
                 <Badge
                   variant={
