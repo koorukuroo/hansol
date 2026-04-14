@@ -4,3 +4,4 @@
 *.hwpx !text !filter !merge !diff
 *.hwp !text !filter !merge !diff
 *.pdf !text !filter !merge !diff
+/사업계획서_AI버전_v15.hwpx filter=lfs diff=lfs merge=lfs -text
