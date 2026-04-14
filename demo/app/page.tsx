@@ -13,7 +13,7 @@ import {
   Legend,
 } from "recharts";
 
-import { customers, vehicles, alerts, dailyDeliveries } from "@/lib/data";
+import { customers, vehicles, cylinderVehicles, allVehicles, alerts, dailyDeliveries } from "@/lib/data";
 import Card from "@/components/ui/Card";
 import StatusDot from "@/components/ui/StatusDot";
 import PageTransition from "@/components/PageTransition";
@@ -26,7 +26,9 @@ const DashboardMap = dynamic(() => import("@/components/DashboardMap"), {
 // ── Derived metrics ──
 const dangerCustomers = customers.filter((c) => c.riskLevel === "danger");
 const warningCustomers = customers.filter((c) => c.riskLevel === "warning");
-const runningVehicles = vehicles.filter((v) => v.status === "running");
+const runningVehicles = allVehicles.filter((v) => v.status === "running");
+const bulkRunning = vehicles.filter((v) => v.status === "running").length;
+const cylRunning = cylinderVehicles.filter((v) => v.status === "running").length;
 
 const productColors: Record<string, string> = {
   N2: "var(--color-product-n2)",
@@ -107,11 +109,10 @@ export default function DashboardPage() {
             <div>
               <p className="text-sm text-text-secondary">차량 가동</p>
               <p className="text-3xl font-bold tabular-nums leading-none mt-1">
-                {runningVehicles.length}/{vehicles.length}대
+                {runningVehicles.length}/{allVehicles.length}대
               </p>
               <p className="text-xs text-text-muted mt-1">
-                가동률{" "}
-                {((runningVehicles.length / vehicles.length) * 100).toFixed(1)}%
+                벌크 {bulkRunning}/{vehicles.length} · 실린더 {cylRunning}/{cylinderVehicles.length}
               </p>
             </div>
           </div>

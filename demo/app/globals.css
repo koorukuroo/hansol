@@ -146,6 +146,12 @@ h1, h2, h3, h4, .font-display {
   animation: alert-pulse 1.5s ease-in-out infinite;
 }
 
+/* ── Recharts focus outline removal ── */
+.recharts-wrapper:focus,
+.recharts-surface:focus {
+  outline: none;
+}
+
 /* ── Leaflet ── */
 .leaflet-container {
   width: 100%;

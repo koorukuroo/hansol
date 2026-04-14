@@ -66,6 +66,23 @@ export const vehicles: Vehicle[] = [
   { id:"V010", plateNumber:"93사9012", type:"bulk", typeName:"벌크(탱크로리)", product:"N2", productName:"액화질소", model:"트라고엑시언트", year:2022, age:4, mileage:76543, location:"무거동", driver:"송준호", status:"running", healthScore:98, lat:35.5456, lng:129.3456 },
 ];
 
+// ── Cylinder Vehicles ──
+export const cylinderVehicles: Vehicle[] = [
+  { id:"CV01", plateNumber:"97조5301", type:"cylinder", typeName:"실린더(탑차)", product:"NH3", productName:"암모니아", model:"탑차", year:2018, age:8, mileage:145000, location:"달천", driver:"이수완", status:"running", healthScore:82, lat:35.5180, lng:129.3390 },
+  { id:"CV02", plateNumber:"85다8222", type:"cylinder", typeName:"실린더(초장축)", product:"MIX", productName:"혼합가스", model:"초장축", year:2017, age:9, mileage:198000, location:"경산", driver:"장두섭", status:"running", healthScore:76, lat:35.5312, lng:129.3512 },
+  { id:"CV03", plateNumber:"86누0966", type:"cylinder", typeName:"실린더(초장축)", product:"MIX", productName:"혼합가스", model:"초장축", year:2019, age:7, mileage:134000, location:"현대차", driver:"반현민", status:"running", healthScore:89, lat:35.5456, lng:129.3678 },
+  { id:"CV04", plateNumber:"93마1011", type:"cylinder", typeName:"실린더(크레인)", product:"LAR", productName:"액화알곤", model:"크레인", year:2020, age:6, mileage:112000, location:"온산", driver:"정정석", status:"running", healthScore:91, lat:35.4312, lng:129.3156 },
+  { id:"CV05", plateNumber:"92구3548", type:"cylinder", typeName:"실린더(초장축)", product:"O2", productName:"산소", model:"초장축", year:2019, age:7, mileage:156000, location:"울산", driver:"신민현", status:"running", healthScore:84, lat:35.5523, lng:129.3289 },
+  { id:"CV06", plateNumber:"85다8607", type:"cylinder", typeName:"실린더(크레인)", product:"N2", productName:"질소", model:"크레인", year:2016, age:10, mileage:215000, location:"미포", driver:"신재규", status:"running", healthScore:71, lat:35.5012, lng:129.3857 },
+  { id:"CV07", plateNumber:"84어4500", type:"cylinder", typeName:"실린더(크레인)", product:"O2", productName:"산소", model:"크레인", year:2018, age:8, mileage:187000, location:"포항", driver:"김영율", status:"idle", healthScore:78, lat:35.4856, lng:129.3534 },
+  { id:"CV08", plateNumber:"88머2012", type:"cylinder", typeName:"실린더(초장축)", product:"N2", productName:"질소", model:"초장축", year:2020, age:6, mileage:98000, location:"석유화학", driver:"박재선", status:"running", healthScore:93, lat:35.4789, lng:129.3912 },
+  { id:"CV09", plateNumber:"81버4901", type:"cylinder", typeName:"실린더(초장축)", product:"N2", productName:"질소", model:"초장축", year:2015, age:11, mileage:267000, location:"충전소", driver:"변성욱", status:"warning", healthScore:55, lat:35.5401, lng:129.3178 },
+  { id:"CV10", plateNumber:"88소3476", type:"cylinder", typeName:"실린더(초장축)", product:"O2", productName:"산소", model:"초장축", year:2021, age:5, mileage:76000, location:"울대병원", driver:"김정빈", status:"running", healthScore:95, lat:35.5567, lng:129.3312 },
+];
+
+// Combined all vehicles
+export const allVehicles = [...vehicles, ...cylinderVehicles];
+
 // ── Alerts ──
 export interface Alert {
   time: string;

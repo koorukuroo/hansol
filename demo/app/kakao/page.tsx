@@ -7,10 +7,18 @@ import {
   ClipboardCheck,
   Pencil,
   Send,
+  X,
+  Truck,
+  Calendar,
+  Package,
+  FileText,
+  ArrowRight,
+  Printer,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { kakaoSamples } from "@/lib/data";
+import ProductDot from "@/components/ui/ProductDot";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
@@ -152,13 +160,30 @@ export default function KakaoPage() {
   }, [customInput, addToast]);
 
   const [orderedIds, setOrderedIds] = useState<Set<number>>(new Set());
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
+  const [addToDispatch, setAddToDispatch] = useState(true);
 
   const handleCreateOrder = useCallback(() => {
-    addToast("success", "ERP 주문이 생성되었습니다.");
+    setShowOrderModal(true);
+    setOrderSubmitted(false);
+  }, []);
+
+  const handleConfirmOrder = useCallback(() => {
+    setOrderSubmitted(true);
     if (selectedId !== null) {
       setOrderedIds((prev) => new Set(prev).add(selectedId));
     }
-  }, [addToast, selectedId]);
+    setTimeout(() => {
+      addToast("success", addToDispatch
+        ? "ERP 주문이 생성되고 배차최적화에 반영되었습니다."
+        : "ERP 주문이 생성되었습니다."
+      );
+    }, 500);
+  }, [addToast, selectedId, addToDispatch]);
+
+  // 주문번호 생성
+  const orderNumber = `ORD-${new Date().getFullYear()}${String(new Date().getMonth()+1).padStart(2,"0")}${String(new Date().getDate()).padStart(2,"0")}-${String(Math.floor(Math.random() * 900) + 100)}`;
 
   return (
     <PageTransition>
@@ -365,6 +390,211 @@ export default function KakaoPage() {
           </div>
         </div>
       </div>
+      {/* ── ERP Order Modal ── */}
+      <AnimatePresence>
+        {showOrderModal && activeParsed && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="absolute inset-0 bg-black/40" onClick={() => !orderSubmitted && setShowOrderModal(false)} />
+
+            <motion.div
+              className="relative bg-surface rounded-[--radius-xl] shadow-[--shadow-xl] w-[560px] max-h-[85vh] overflow-y-auto"
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ duration: 0.2 }}
+            >
+              {!orderSubmitted ? (
+                <>
+                  {/* Modal Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-border-light">
+                    <div className="flex items-center gap-2">
+                      <FileText size={18} className="text-brand" />
+                      <h2 className="text-lg font-semibold text-text-primary">ERP 주문 생성</h2>
+                    </div>
+                    <button onClick={() => setShowOrderModal(false)} className="p-1.5 text-text-muted hover:text-text-secondary hover:bg-surface-secondary rounded-[--radius-md] transition-colors">
+                      <X size={18} />
+                    </button>
+                  </div>
+
+                  {/* Order Details */}
+                  <div className="px-6 py-5 space-y-5">
+                    {/* Order number */}
+                    <div className="flex items-center justify-between bg-surface-secondary rounded-[--radius-md] px-4 py-3">
+                      <span className="text-xs text-text-muted">주문번호</span>
+                      <span className="text-sm font-semibold text-text-primary tabular-nums">{orderNumber}</span>
+                    </div>
+
+                    {/* Main info grid */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-xs text-text-muted">거래처</label>
+                        <div className="bg-surface-secondary rounded-[--radius-md] px-3 py-2.5 text-sm font-medium text-text-primary">
+                          {activeParsed.customer}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs text-text-muted">거래처 코드</label>
+                        <div className="bg-surface-secondary rounded-[--radius-md] px-3 py-2.5 text-sm font-medium text-text-primary tabular-nums">
+                          {activeParsed.customerId}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs text-text-muted flex items-center gap-1"><Package size={11} />제품</label>
+                        <div className="bg-surface-secondary rounded-[--radius-md] px-3 py-2.5 text-sm font-medium text-text-primary flex items-center gap-2">
+                          <ProductDot product={activeParsed.product} size={8} />
+                          {activeParsed.productName}
+                          <span className="text-xs text-text-muted ml-auto">{activeParsed.product}</span>
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs text-text-muted">수량</label>
+                        <div className="bg-surface-secondary rounded-[--radius-md] px-3 py-2.5 text-sm font-bold text-text-primary tabular-nums">
+                          {activeParsed.quantity.toLocaleString()} {activeParsed.unit}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs text-text-muted flex items-center gap-1"><Calendar size={11} />납기 요청</label>
+                        <div className="bg-surface-secondary rounded-[--radius-md] px-3 py-2.5 text-sm font-medium text-text-primary">
+                          {activeParsed.requestTime}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs text-text-muted">긴급도</label>
+                        <div className={`rounded-[--radius-md] px-3 py-2.5 text-sm font-semibold ${
+                          activeParsed.urgency === "urgent"
+                            ? "bg-danger-bg text-danger"
+                            : "bg-surface-secondary text-text-primary"
+                        }`}>
+                          {activeParsed.urgency === "urgent" ? "긴급" : "일반"}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* AI confidence */}
+                    <div className="bg-info-bg rounded-[--radius-md] px-4 py-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-info font-semibold">AI 인식 신뢰도</span>
+                        <span className="text-sm font-bold text-info tabular-nums">{activeParsed.confidence}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-info/10 rounded-full mt-2 overflow-hidden">
+                        <div className="h-full bg-info rounded-full" style={{ width: `${activeParsed.confidence}%` }} />
+                      </div>
+                    </div>
+
+                    {/* Options */}
+                    <div className="space-y-3">
+                      <label className="flex items-center gap-3 cursor-pointer bg-surface-secondary rounded-[--radius-md] px-4 py-3 hover:bg-border-light transition-colors">
+                        <input type="checkbox" checked={addToDispatch} onChange={(e) => setAddToDispatch(e.target.checked)} className="w-4.5 h-4.5 rounded border-border text-brand accent-brand" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-text-primary flex items-center gap-1.5">
+                            <Truck size={14} className="text-brand" />
+                            배차최적화에 자동 반영
+                          </p>
+                          <p className="text-xs text-text-muted mt-0.5">주문 생성 후 배차 최적화 대기열에 자동 추가됩니다</p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Source info */}
+                    <div className="bg-surface-secondary rounded-[--radius-md] px-4 py-3 text-xs text-text-muted space-y-1">
+                      <div className="flex justify-between">
+                        <span>발주 채널</span>
+                        <span className="text-text-secondary font-medium">카카오톡</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>원본 메시지</span>
+                        <span className="text-text-secondary font-medium italic">
+                          &quot;{selectedId && selectedId > 0 ? kakaoSamples.find(s => s.id === selectedId)?.message : customInput || "-"}&quot;
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>처리 담당</span>
+                        <span className="text-text-secondary font-medium">AI 자동 파싱</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer buttons */}
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-border-light bg-surface-secondary/50">
+                    <button onClick={() => setShowOrderModal(false)} className="px-4 py-2.5 text-sm text-text-muted hover:text-text-secondary hover:bg-surface-secondary rounded-[--radius-md] transition-colors">
+                      취소
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="flex items-center gap-1.5 px-4 py-2.5 text-sm text-text-secondary border border-border rounded-[--radius-md] hover:bg-surface-secondary transition-colors">
+                        <Printer size={14} />
+                        인쇄
+                      </button>
+                      <button
+                        onClick={handleConfirmOrder}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-brand text-white rounded-[--radius-md] font-semibold text-sm hover:bg-brand-700 transition-colors"
+                      >
+                        주문 확정
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                /* Success state */
+                <div className="px-6 py-10 flex flex-col items-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="w-16 h-16 rounded-full bg-success-bg flex items-center justify-center mb-4"
+                  >
+                    <CheckCircle2 size={32} className="text-success" />
+                  </motion.div>
+                  <h3 className="text-lg font-semibold text-text-primary">주문이 생성되었습니다</h3>
+                  <p className="text-sm text-text-muted mt-1 mb-6">
+                    주문번호 <span className="font-semibold text-text-secondary tabular-nums">{orderNumber}</span>
+                  </p>
+
+                  <div className="w-full space-y-2 mb-6">
+                    <div className="flex items-center gap-3 bg-surface-secondary rounded-[--radius-md] px-4 py-2.5 text-sm">
+                      <CheckCircle2 size={16} className="text-success shrink-0" />
+                      <span className="text-text-secondary">ERP 시스템에 주문 등록 완료</span>
+                    </div>
+                    {addToDispatch && (
+                      <div className="flex items-center gap-3 bg-surface-secondary rounded-[--radius-md] px-4 py-2.5 text-sm">
+                        <CheckCircle2 size={16} className="text-success shrink-0" />
+                        <span className="text-text-secondary">배차최적화 대기열에 추가됨</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 bg-surface-secondary rounded-[--radius-md] px-4 py-2.5 text-sm">
+                      <CheckCircle2 size={16} className="text-success shrink-0" />
+                      <span className="text-text-secondary">{activeParsed.customer}에 발주 확인 알림 발송</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setShowOrderModal(false)}
+                      className="px-5 py-2.5 bg-surface-secondary text-text-secondary rounded-[--radius-md] font-medium text-sm hover:bg-border-light transition-colors"
+                    >
+                      닫기
+                    </button>
+                    {addToDispatch && (
+                      <button
+                        onClick={() => { setShowOrderModal(false); window.location.href = "/dispatch"; }}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-brand text-white rounded-[--radius-md] font-semibold text-sm hover:bg-brand-700 transition-colors"
+                      >
+                        <Truck size={14} />
+                        배차최적화로 이동
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageTransition>
   );
 }
